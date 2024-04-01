@@ -18,7 +18,7 @@ set -o vi
 source "$HOME/dotfiles/zsh-plugins/zsh-vim-mode.plugin.zsh"
 
 
-# Brew completions
+# brew completions
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"

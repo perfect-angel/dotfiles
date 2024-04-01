@@ -13,7 +13,10 @@ vim.g.maplocalleader = ","
 vim.g.qf_join_changes = true -- for editing quickfix
 vim.o.hlsearch = false
 vim.o.expandtab = true
+vim.o.tabstop = 4
 vim.o.shiftwidth = 2
+vim.o.timeout = true
+vim.o.timeoutlen = 300
 vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.o.autochdir = false
 vim.o.clipboard = "unnamedplus"
@@ -25,12 +28,14 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.g.netrw_banner = 0
 vim.g["UltiSnipsSnippetDirectories"] = { "~/dotfiles/snippets" }
+vim.g["sneak#label"] = true
+vim.g["sneak#use_ic_ics"] = true
+
 vim.o.background = "dark"
-vim.cmd([[colo habamax]])
 -- vim.diagnostic.config({
--- 	virtual_text = false,
--- 	signs = true,
--- 	float = { border = "single" },
+-- virtual_text = false,
+-- signs = true,
+-- float = { border = "single" },
 -- })
 
 --------------------------------------------------------------------------------
@@ -56,21 +61,18 @@ vim.keymap.set("n", "<Up>", ":res +5<CR>")
 vim.keymap.set("n", "<Down>", ":res -5<CR>")
 
 -- terminal
-vim.keymap.set("t", "<C-/>", "<C-\\><C-n>")
+vim.keymap.set("t", "jj", "<C-\\><C-n>")
+vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h")
 vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j")
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 
 -- lsp
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "K", vim.lsp.buf.hover)
-vim.keymap.set("n", "gr", vim.lsp.buf.references)
 vim.keymap.set("n", "<localleader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<localleader>r", vim.lsp.buf.rename)
 vim.keymap.set("v", "<localleader>a", vim.lsp.buf.code_action)
 vim.keymap.set("n", "<localleader>a", vim.lsp.buf.code_action)
-vim.keymap.set("n", "<localleader>e", vim.diagnostic.open_float)
 
 -- others
 vim.keymap.set("i", "<C-c>", "<ESC>")      -- C-c actually ESC
@@ -88,7 +90,7 @@ vim.keymap.set("n", "<leader>/", ":FzfLua live_grep<CR>")
 vim.keymap.set("n", "<leader>;", ":FzfLua commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
 vim.keymap.set("n", "<leader><leader>", ":")
-vim.keymap.set("n", "<leader>a", ":ToggleTerm<CR>")
+vim.keymap.set("n", "<leader>a", ":te<CR>")
 vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>")
 vim.keymap.set("n", "<leader>c", ":FzfLua lsp_live_workspace_symbols<CR>")
 vim.keymap.set("n", "<leader>d", ":25Lex<CR>")
@@ -97,7 +99,7 @@ vim.keymap.set("n", "<leader>f", ":FzfLua git_files<CR>")
 vim.keymap.set("n", "<leader>gd", ":Git diff origin/main...HEAD %<CR>")
 vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":FzfLua help_tags<CR>")
-vim.keymap.set("n", "<leader>i", ":Neorg<CR>")
+vim.keymap.set("n", "<leader>i", ":echo unused<CR>")
 vim.keymap.set("n", '<leader>jf', ':lua require("fzf-lua").files({ cwd="~/notes" })<CR>')
 vim.keymap.set("n", "<leader>jj", ":e ~/notes/<CR>")
 vim.keymap.set("n", '<leader>jr', ':e ~/notes/read-watch-listen.md<CR>')
@@ -161,9 +163,8 @@ vim.g.AutoPairsMapCR = 0
 vim.g["test#strategy"] = "neovim"
 
 require("lazy").setup({
+  "catppuccin/nvim",
   { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
-  { "nvim-neorg/neorg",          build = ":Neorg sync-parsers" },
-  'gsuuon/llm.nvim',
   'neovim/nvim-lspconfig',
   'hrsh7th/cmp-nvim-lsp',
   'hrsh7th/nvim-cmp',
@@ -173,26 +174,32 @@ require("lazy").setup({
   "nvim-lualine/lualine.nvim",
   "vim-test/vim-test",
   'ibhagwan/fzf-lua',
+  'justinmk/vim-sneak',
   'nvim-tree/nvim-web-devicons',
   "stefandtw/quickfix-reflector.vim",
-  { "ggandor/lightspeed.nvim", opts = { ignore_case = true } },
   "jose-elias-alvarez/typescript.nvim",
-  "nvim-lua/plenary.nvim",                -- async lib for plugins
-  "windwp/nvim-autopairs",
-  "tpope/vim-rsi",                        -- emacs readline bindings
-  "tpope/vim-fugitive",                   -- git
-  "tpope/vim-rhubarb",                    -- github
-  "tpope/vim-abolish",                    -- substitution
-  "tpope/vim-vinegar",                    -- netrw improvements
-  "tpope/vim-dadbod",                     -- databases
-  "kristijanhusak/vim-dadbod-ui",         -- database UI
-  "kristijanhusak/vim-dadbod-completion", -- database completion
-  "tpope/vim-dispatch",                   -- used by other plugins
-  "radenling/vim-dispatch-neovim",        -- no one knows
-  "tpope/vim-surround",                   -- ysiw
-  "tpope/vim-commentary",                 -- comments
-  "tpope/vim-repeat",                     -- better .
-  "tpope/vim-sensible",                   -- good defaults
+  "nvim-lua/plenary.nvim",                    -- async lib for plugins
+  { "windwp/nvim-autopairs",     opts = {} }, -- auto parens
+  "tpope/vim-rsi",                            -- emacs readline bindings
+  "tpope/vim-fugitive",                       -- git
+  "tpope/vim-rhubarb",                        -- github
+  "tpope/vim-abolish",                        -- substitution
+  "tpope/vim-vinegar",                        -- netrw improvements
+  "tpope/vim-dadbod",                         -- databases
+  "kristijanhusak/vim-dadbod-ui",             -- database UI
+  "kristijanhusak/vim-dadbod-completion",     -- database completion
+  "tpope/vim-dispatch",                       -- used by other plug
+  "radenling/vim-dispatch-neovim",            -- no one knows
+  "kylechui/nvim-surround",                   -- ysiw
+  "tpope/vim-commentary",                     -- comments
+  "tpope/vim-repeat",                         -- better .
+  "tpope/vim-sensible",                       -- good defaults
+  {
+    "folke/which-key.nvim",
+    opts = {
+      triggers = { "<leader>", "<localleader>" }
+    }
+  }, -- leader key hints
   "nvim-treesitter/nvim-treesitter",
   "editorconfig/editorconfig-vim",
   "mracos/mermaid.vim",
@@ -200,40 +207,35 @@ require("lazy").setup({
   "mustache/vim-mustache-handlebars",
   "elixir-editors/vim-elixir",
   "AndrewRadev/tagalong.vim",
-  {
-    "akinsho/toggleterm.nvim",
-    config = function()
-      require("toggleterm").setup()
-    end
-  }
+  'mechatroner/rainbow_csv'
 })
 
-local lsp_zero = require('lsp-zero')
+vim.cmd('colo catppuccin')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_zero = require('lsp-zero')
+lsp_zero.on_attach(function(_client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({ buffer = bufnr })
 end)
 
+local language_servers = {
+  "bashls",
+  "cssls",
+  "dockerls",
+  "elixirls",
+  "ember",
+  "emmet_ls",
+  "eslint",
+  "jsonls",
+  "pyright",
+  "rust_analyzer",
+  "terraformls",
+  "tsserver"
+}
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {
-    "bashls",
-    "clojure_lsp",
-    "csharp_ls",
-    "cssls",
-    "dockerls",
-    "elixirls",
-    "ember",
-    "emmet_ls",
-    "eslint",
-    "jsonls",
-    "pyright",
-    "rust_analyzer",
-    "terraformls",
-    "tsserver"
-  },
+  ensure_installed = language_servers,
   handlers = {
     lsp_zero.default_setup,
   },
@@ -261,24 +263,6 @@ cmp.setup({
     end,
   },
 })
-
--- Neorg
-require("neorg").setup {
-  load = {
-    ["core.defaults"] = {},              -- Loads default behaviour
-    ["core.concealer"] = {},             -- Adds pretty icons to your documents
-    ["core.summary"] = {},               -- generate ToC
-    ["core.integrations.nvim-cmp"] = {}, -- cmp
-    ["core.dirman"] = {                  -- Manages Neorg workspaces
-      config = {
-        default_workspace = "notes",
-        workspaces = {
-          notes = "~/notes",
-        },
-      },
-    },
-  },
-}
 
 
 vim.cmd([[filetype plugin indent on]])
