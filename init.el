@@ -1,4 +1,9 @@
-;; straight.el
+;; init.el
+;; author: Angel Campbell
+;; description: This is not a good advertisement for me as a serious person
+;; ------------------------------------------
+
+;; GAY
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -13,37 +18,43 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; SETTINGS
-(set-frame-font "Fira Code 24") ;; granny-coded
 (setq confirm-kill-emacs 'yes-or-no-p ;; don't accidentally leave
+      evil-want-C-u-scroll 1 ;; old fashioned evil
+      ivy-use-virtual-buffers t ;; i dont know ivy shit ugh :FIXME:
+      evil-want-keybinding nil ;; evil wants
+      evil-want-integration t ;; what evil wants
+      tramp-default-method "ssh" ;; faster tramp with ssh
       visible-bell 1) ;; don't make noise
-(add-hook 'prog-mode-hook 'linum-mode) 
-(add-hook 'prog-mode-hook 'column-number-mode)
-(fset 'yes-or-no-p 'y-or-n-p)
-(tool-bar-mode -1)
-(menu-bar-mode -1) 
-(toggle-scroll-bar -1) 
-(electric-pair-mode 1)
-(recentf-mode 1)
-(show-paren-mode 1)
+(set-frame-font "Fira Code 26") ;; granny-coded
+(add-hook 'prog-mode-hook 'line-number-mode) ;; lines
+(add-hook 'prog-mode-hook 'column-number-mode) ;; columns
+(fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
+(tool-bar-mode -1)     ;; no gui
+(menu-bar-mode -1)     ;; no nothin
+(toggle-scroll-bar -1) ;; no how
+(electric-pair-mode 1) ;; birds of a feather
+(recentf-mode 1) ;; what was i doing?
+(show-paren-mode 1) ;; i believe in symmetry 
 
 ;; WM
-;; (straight-use-package 'exwm)
-;; (require 'exwm-config)
-;; (require 'exwm-randr)
-;; (exwm-randr-enable)
-;; (exwm-init)
+(straight-use-package 'exwm) 
+(require 'exwm-config)
+(require 'exwm-randr)
+(exwm-randr-enable)
+(exwm-config-ido)
+(exwm-init)
 
 ;; UTIL
+(straight-use-package 'zen-mode)
 (straight-use-package 'which-key)
 (which-key-mode)
 (straight-use-package 'vterm)
 (straight-use-package 'doom-themes)
 (straight-use-package 'nerd-icons)
-(load-theme 'doom-gruvbox t)
+(load-theme 'doom-badger t)
 (straight-use-package 'doom-modeline)
 (doom-modeline-mode)
 (straight-use-package 'iedit)
-(straight-use-package 'evil-iedit-state)
 
 ;; COMPLETION
 (straight-use-package 'company)
@@ -68,12 +79,12 @@
 (straight-use-package 'evil-surround)
 (straight-use-package 'evil-commentary)
 (straight-use-package 'evil-snipe)
+(straight-use-package 'evil-iedit-state)
+(straight-use-package 'evil-collection)
+(evil-mode 1)
+(evil-collection-init)
 (evil-commentary-mode 1)
 (evil-surround-mode 1)
-(evil-mode 1)
-(setq evil-snipe-scope 'buffer)
-(evil-snipe-mode 1)
-(evil-snipe-override-mode 1)
 (evil-global-set-key 'normal "H" 'tab-next)
 (evil-global-set-key 'normal "L" 'tab-previous)
 
@@ -82,21 +93,25 @@
 (global-evil-leader-mode)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  "/" 'swiper
+  "/" 'swiper-isearch
   "a" 'vterm
-  "b" 'switch-to-buffer
-  "e" 'find-file
-  "f" 'dired-jump-other-window
-  "h" 'counsel-apropos
-  "k" 'kill-buffer
-  "m" 'recentf-open-files
+  "b" 'ivy-switch-buffer
+  "e" 'counsel-find-file
+  "f" 'counsel-dired
+  "hf" 'counsel-describe-function
+  "hi" 'counsel-info-lookup-symbol
+  "hl" 'counsel-find-library
+  "hv" 'counsel-describe-variable
+  "k" 'kill-buffer-and-window
+  "m" 'counsel-recentf
+  "p" 'counsel-yank-pop
   "oa" 'org-agenda
   "oc" 'org-capture
   "sh" 'split-window-horizontally
   "sl" (lambda () (interactive) (split-window-horizontally) (windmove-right))
   "sk" 'split-window-vertically
   "sj" (lambda () (interactive) (split-window-vertically) (windmove-down))
-  "t" 'tabnew
+  "t" 'tab-new
   "u" 'eww
   "w" 'save-buffer
   "x" 'counsel-M-x)
