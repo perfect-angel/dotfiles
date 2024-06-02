@@ -3,7 +3,7 @@
 ;; description: This is not a good advertisement for me as a serious person
 ;; ------------------------------------------
 
-;; GAY
+;; BOOTSTRAP
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -40,7 +40,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Fira Code 22") ;; granny-coded
+(set-frame-font "Inconsolata Nerd Font Mono 28") ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -60,11 +60,16 @@
 (rainbow-delimiters-mode 1)
 (straight-use-package 'vterm) ;; erm? idk
 (straight-use-package 'doom-themes)
+(straight-use-package 'exec-path-from-shell) ;; set path to shellpath
 (straight-use-package 'nerd-icons)
 (load-theme 'doom-badger t)
 (straight-use-package 'doom-modeline)
 (doom-modeline-mode)
+(exec-path-from-shell-initialize)
+(load-theme 'doom-molokai t)
+(rainbow-delimiters-mode 1)
 (straight-use-package 'iedit) ;; yagni?
+(which-key-mode)
 
 ;; NAVIGATION
 (straight-use-package 'helm)
@@ -74,14 +79,16 @@
 (straight-use-package 'company) ;; replace with complete?
 (global-company-mode 1)
 
+;; GOD (repentence)
+;; (straight-use-package 'god-mode) ;; lord almighty
+;; (god-mode)
+;; (require 'viper)
+
 ;; EVIL (until i repent)
 (straight-use-package 'evil)
 (straight-use-package 'evil-surround)
 (straight-use-package 'evil-commentary)
-(straight-use-package 'evil-iedit-state)
-(straight-use-package 'evil-collection)
 (evil-mode 1)
-(evil-collection-init)
 (evil-commentary-mode 1)
 (evil-surround-mode 1)
 (evil-global-set-key 'normal "H" 'tab-next)
@@ -92,38 +99,36 @@
 (global-evil-leader-mode)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  "/" 'isearch
-  "a" 'eshell
-  "b" 'display-buffer
-  "e" 'find-file
-  "f" 'dired
-  "ha" 'apropos
-  "hf" 'describe-function
-  "hi" 'info-lookup-symbol
-  "hl" 'find-library
-  "hv" 'describe-variable
-  "k" 'kill-buffer-and-window
-  "m" 'recentf
-  ;; "o" 'unused
-  ;; "p" 'unused
-  "oa" 'org-agenda
-  "oc" 'org-capture
-  "sh" 'split-window-horizontally
-  "sl" (lambda () (interactive) (split-window-horizontally) (windmove-right))
-  "sk" 'split-window-vertically
-  "sj" (lambda () (interactive) (split-window-vertically) (windmove-down))
-  "t" 'tab-new
-  "u" 'eww
-  "w" 'save-buffer
-  "x" 'helm-M-x)
-
-;; ORG
-(straight-use-package 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
+ "/" 'isearch
+ "a" 'term
+ "b" 'display-buffer
+ "e" 'find-file
+ "f" 'dired
+ "ha" 'apropos
+ "hf" 'describe-function
+ "hi" 'info-lookup-symbol
+ "hp" 'info-display-manual
+ "hv" 'describe-variable
+ "hw" 'helm-man-woman
+ "k" 'kill-buffer-and-window
+ "m" 'recentf
+ ;; "o" 'unused
+ ;; "p" 'unused
+ "oa" 'org-agenda
+ "oc" 'org-capture
+ "of" 'org-agenda-files
+ "sh" 'split-window-horizontally
+ "sl" (lambda () (interactive) (split-window-horizontally) (windmove-right))
+ "sk" 'split-window-vertically
+ "sj" (lambda () (interactive) (split-window-vertically) (windmove-down))
+ "t" 'tab-new
+ "u" 'eww
+ "w" 'save-buffer
+ "x" 'helm-M-x)
 
 ;; LANG
 (straight-use-package 'handlebars-mode)
-
+(straight-use-package 'geiser-guile)
 
 ;; LSP
 (with-eval-after-load 'eglot
