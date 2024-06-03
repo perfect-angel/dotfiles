@@ -124,7 +124,8 @@
  "t" 'tab-new
  "u" 'eww
  "w" 'save-buffer
- "x" 'helm-M-x)
+ "x" 'helm-M-x
+ "z" 'writeroom-mode)
 
 ;; LANG
 (straight-use-package 'handlebars-mode)
