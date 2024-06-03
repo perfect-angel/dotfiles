@@ -79,20 +79,14 @@
 (straight-use-package 'company) ;; replace with complete?
 (global-company-mode 1)
 
-;; GOD (repentence)
-;; (straight-use-package 'god-mode) ;; lord almighty
-;; (god-mode)
-;; (require 'viper)
-
 ;; EVIL (until i repent)
 (straight-use-package 'evil)
-(straight-use-package 'evil-surround)
 (straight-use-package 'evil-commentary)
 (evil-mode 1)
 (evil-commentary-mode 1)
-(evil-surround-mode 1)
 (evil-global-set-key 'normal "H" 'tab-next)
 (evil-global-set-key 'normal "L" 'tab-previous)
+(evil-global-set-key 'normal "CR" 'helm-M-x)
 
 ;; LEADER (false idol)
 (straight-use-package 'evil-leader)
