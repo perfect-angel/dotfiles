@@ -86,7 +86,7 @@
 (evil-commentary-mode 1)
 (evil-global-set-key 'normal "H" 'tab-next)
 (evil-global-set-key 'normal "L" 'tab-previous)
-(evil-global-set-key 'normal "CR" 'helm-M-x)
+;; (evil-global-set-key 'normal "CR" 'helm-M-x)
 
 ;; LEADER (false idol)
 (straight-use-package 'evil-leader)
