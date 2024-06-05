@@ -104,7 +104,7 @@ vim.keymap.set("n", '<leader>jf', ':lua require("fzf-lua").files({ cwd="~/notes"
 vim.keymap.set("n", "<leader>jj", ":e ~/notes/<CR>")
 vim.keymap.set("n", '<leader>jr', ':e ~/notes/read-watch-listen.md<CR>')
 vim.keymap.set("n", '<leader>js', ':e ~/notes/shopping.md<CR>')
-vim.keymap.set("n", '<leader>jt', ':e ~/notes/todo.md<CR>')
+vim.keymap.set("n", '<leader>jt', ':e ~/notes/todo.txt<CR>')
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
@@ -181,31 +181,21 @@ require("lazy").setup({
   "nvim-lua/plenary.nvim",                    -- async lib for plugins
   { "windwp/nvim-autopairs",     opts = {} }, -- auto parens
   "tpope/vim-rsi",                            -- emacs readline bindings
-  "tpope/vim-fugitive",                       -- git
   "tpope/vim-rhubarb",                        -- github
   "tpope/vim-abolish",                        -- substitution
   "tpope/vim-vinegar",                        -- netrw improvements
   "tpope/vim-dadbod",                         -- databases
-  "kristijanhusak/vim-dadbod-ui",             -- database UI
-  "kristijanhusak/vim-dadbod-completion",     -- database completion
-  "tpope/vim-dispatch",                       -- used by other plug
-  "radenling/vim-dispatch-neovim",            -- no one knows
   "kylechui/nvim-surround",                   -- ysiw
   "tpope/vim-commentary",                     -- comments
   "tpope/vim-repeat",                         -- better .
   "tpope/vim-sensible",                       -- good defaults
   {
     "folke/which-key.nvim",
-    opts = {
-      triggers = { "<leader>", "<localleader>" }
-    }
+    opts = { triggers = { "<leader>", "<localleader>" } }
   }, -- leader key hints
   "nvim-treesitter/nvim-treesitter",
   "editorconfig/editorconfig-vim",
-  "mracos/mermaid.vim",
-  -- "mattn/emmet-vim",
-  "mustache/vim-mustache-handlebars",
-  "elixir-editors/vim-elixir",
+  "sheerun/vim-polyglot", -- languages
   "AndrewRadev/tagalong.vim",
   'mechatroner/rainbow_csv'
 })

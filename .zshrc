@@ -13,10 +13,6 @@ export PATH=$HOME/.cargo/bin:$PATH
 export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
 [ -f ~/.cargo/env ] && source ~/.cargo/env
 
-# vim it all
-set -o vi
-source "$HOME/dotfiles/zsh-plugins/zsh-vim-mode.plugin.zsh"
-
 
 # brew completions
 if type brew &>/dev/null
@@ -30,7 +26,7 @@ fi
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='nvr -s'
+  export EDITOR='nvim'
 fi
 
 export FZF_DEFAULT_COMMAND="rg --files --hidden"
