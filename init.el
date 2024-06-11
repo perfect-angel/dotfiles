@@ -1,6 +1,8 @@
 ;; init.el
 ;; author: Angel Campbell
-;; description: This is not a good advertisement for me as a serious person
+;; description: This is not a
+;;     good advertisement for
+;;           me as a serious person
 ;; ------------------------------------------
 
 ;; BOOTSTRAP
@@ -46,7 +48,7 @@
  backup-directory-alist '(("." . "/tmp")) ;; send backups to hell
  ring-bell-function 'ignore
  which-key-show-early-on-C-h t
- which-key-idle-delay 0.1
+ which-key-idle-delay 0.3
  visible-bell 1) ;; don't make noise
 
 (add-hook 'prog-mode-hook 'column-number-mode) ;; columns
@@ -56,7 +58,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Inconsolata Nerd Font Mono 30") ;; granny-coded
+(set-frame-font "Inconsolata Nerd Font Mono 20") ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -71,26 +73,30 @@
 
 ;; UTIL
 (straight-use-package 'which-key) ;; keep forgetting my binds
-(which-key-mode)
-(straight-use-package 'rainbow-delimiters)
-(rainbow-delimiters-mode 1)
+(straight-use-package 'magit) ;; magic git
 (straight-use-package 'vterm) ;; erm? idk
 (straight-use-package 'doom-themes)
 (straight-use-package 'exec-path-from-shell) ;; set path to shellpath
 (straight-use-package 'nerd-icons)
-(load-theme 'doom-horizon t)
 (straight-use-package 'doom-modeline)
-(straight-use-package 'zen-mode)
-(doom-modeline-mode)
+(straight-use-package 'writeroom-mode)
+(straight-use-package 'iedit) ;; exec?
+(straight-use-package 'rainbow-delimiters) ;; pretty 
+
 (exec-path-from-shell-initialize)
+(doom-modeline-mode)
 (rainbow-delimiters-mode 1)
-(straight-use-package 'iedit) ;; yagni?
 (which-key-mode)
+(rainbow-delimiters-mode 1)
+(which-key-mode)
+
+(load-theme 'misterioso t)
 
 ;; NAVIGATION
 (straight-use-package 'helm)
 (helm-mode 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 ;; COMPLETION
 (straight-use-package 'company) ;; replace with complete?
@@ -104,45 +110,13 @@
 ;; ORG
 (require 'org)
 
-(global-set-key (kbd "C-c a") #'org-agenda)
-(global-set-key (kbd "C-c c") #'org-capture)
-
-;; LEADER (false idol)
-;; (straight-use-package 'evil-leader)
-;; (global-evil-leader-mode)
-;; (evil-leader/set-leader "<SPC>")
-;; (evil-leader/set-key
-;;  "/" 'isearch
-;;  "a" 'term
-;;  "b" 'display-buffer
-;;  "e" 'find-file
-;;  "f" 'dired
-;;  "ha" 'apropos
-;;  "hf" 'describe-function
-;;  "hi" 'info-lookup-symbol
-;;  "hp" 'info-display-manual
-;;  "hv" 'describe-variable
-;;  "hw" 'helm-man-woman
-;;  "k" 'kill-buffer-and-window
-;;  "m" 'recentf
-;;  ;; "o" 'unused
-;;  ;; "p" 'unused
-;;  "oa" 'org-agenda
-;;  "oc" 'org-capture
-;;  "of" 'org-agenda-files
-;;  "sh" 'split-window-horizontally
-;;  "sl" (lambda () (interactive) (split-window-horizontally) (windmove-right))
-;;  "sk" 'split-window-vertically
-;;  "sj" (lambda () (interactive) (split-window-vertically) (windmove-down))
-;;  "t" 'tab-new
-;;  "u" 'eww
-;;  "w" 'save-buffer
-;;  "x" 'helm-M-x
-;;  "z" 'writeroom-mode)
+(global-set-key (kbd "C-c o a") #'org-agenda)
+(global-set-key (kbd "C-c o c") #'org-capture)
 
 ;; LANG
 (straight-use-package 'handlebars-mode)
 (straight-use-package 'geiser-guile)
+(straight-use-package 'kubernetes)
 
 ;; LSP
 (with-eval-after-load 'eglot
