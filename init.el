@@ -31,13 +31,15 @@
  browse-url-browser-function 'eww-browse-url
  confirm-kill-emacs 'yes-or-no-p 
  enable-recursive-minibuffers t
+ mastodon-active-user "perfect_angel"
+ mastodon-instance-url "https://mastodon.social"
  org-directory "~/org"
  org-default-notes-file "~/org/inbox.org"
  org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/inbox.org")
+      '(("t" "Todo" entry (file "~/org/inbox.org")
          "* TODO %?\n  %t")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U"))
+         "* %?"))
  org-agenda-files '("~/org/inbox.org"
 		    "~/org/someday.org")
  org-refile-targets '(("notes.org" :maxlevel . 2) ;; org refiles
@@ -53,12 +55,14 @@
 
 (add-hook 'prog-mode-hook 'column-number-mode) ;; columns
 (add-hook 'prog-mode-hook 'line-number-mode) ;; lines
+(add-hook 'prog-mode-hook #'auto-fill-mode) ;; word wrap
+(setq-default fill-column 80)
 (electric-pair-mode 1) ;; birds of a feather
 (electric-indent-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Inconsolata Nerd Font Mono 20") ;; granny-coded
+(set-frame-font "Inconsolata Nerd Font Mono 22") ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -76,12 +80,15 @@
 (straight-use-package 'magit) ;; magic git
 (straight-use-package 'vterm) ;; erm? idk
 (straight-use-package 'doom-themes)
+(straight-use-package 'emojify)
 (straight-use-package 'exec-path-from-shell) ;; set path to shellpath
 (straight-use-package 'nerd-icons)
 (straight-use-package 'doom-modeline)
 (straight-use-package 'writeroom-mode)
 (straight-use-package 'iedit) ;; exec?
 (straight-use-package 'rainbow-delimiters) ;; pretty 
+(straight-use-package 'discover) ;; learn betterer
+(straight-use-package 'lingva) ;; translate
 
 (exec-path-from-shell-initialize)
 (doom-modeline-mode)
@@ -90,13 +97,19 @@
 (rainbow-delimiters-mode 1)
 (which-key-mode)
 
-(load-theme 'misterioso t)
+(load-theme 'doom-miramare t)
 
 ;; NAVIGATION
 (straight-use-package 'helm)
 (helm-mode 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+;; INTERNET
+(straight-use-package 'mastodon)
+
+(require 'mastodon-discover)
+(with-eval-after-load 'mastodon (mastodon-discover))
 
 ;; COMPLETION
 (straight-use-package 'company) ;; replace with complete?
