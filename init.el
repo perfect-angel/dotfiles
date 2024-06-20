@@ -55,7 +55,7 @@
        :port 6697          ; Standard port for secure IRC
        :nick "perfect-angel"       ; Your nickname
        :encryption tls     ; Specify to use encryption
-       :channels ("#emacs")))
+       :channels ("#guix")))
  which-key-show-early-on-C-h t
  which-key-idle-delay 0.3
  visible-bell 1) ;; don't make noise
@@ -68,7 +68,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Inconsolata Nerd Font Mono 25") ;; granny-coded
+(set-frame-font "Inconsolata Nerd Font Mono 28") ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -93,6 +93,7 @@
 (straight-use-package 'iedit) ;; exec?
 (straight-use-package 'rainbow-delimiters) ;; pretty 
 (straight-use-package 'discover) ;; learn betterer
+(straight-use-package 'which-key) ;; keybinds
 (straight-use-package 'lingva) ;; translate
 
 (global-discover-mode 1)
@@ -100,7 +101,7 @@
 (doom-modeline-mode)
 (rainbow-delimiters-mode 1)
 
-(load-theme 'doom-miramare t)
+(load-theme 'doom-solarized-dark t)
 
 ;; NAVIGATION 🗺️
 (straight-use-package 'helm)
@@ -124,7 +125,7 @@
 (global-set-key (kbd "M-<return>") 'evil-mode)
 
 ;; ORG 📆
-(require 'org)
+(straight-use-package 'org)
 
 (global-set-key (kbd "C-c o a") #'org-agenda)
 (global-set-key (kbd "C-c o c") #'org-capture)
@@ -137,15 +138,9 @@
 (straight-use-package 'kubernetes)
 
 ;; LSP 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-      '(handlebars-mode . ("node",
-   "/home/angel/.emacs.d/ember-language-server/lib/start-server.js"
-   "--stdio"))))
+(straight-use-package 'lsp-mode)
 
 ;; HYPER 🤪
 (global-set-key (kbd "A-C-M-a") 'vterm)
-(global-set-key (kbd "A-C-M-/") 'helm-do-grep-ag)
-(global-set-key (kbd "A-C-M-f") 'helm-find-files)
 (global-set-key (kbd "A-C-M-e") 'emoji-insert)
 
