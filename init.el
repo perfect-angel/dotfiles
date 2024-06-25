@@ -56,22 +56,18 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Mononoki Nerd Font 23") ;; granny-coded
+(set-frame-font "Mononoki Nerd Font 29") ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
 (global-eldoc-mode 1) ;; documentation
 (global-set-key (kbd "C-c k") 'eldoc-print-current-symbol-info)
+(windmove-default-keybindings)
 
 (add-hook 'prog-mode-hook 'flymake-mode) ;; checker
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
 
-;;; Window movement
-(global-set-key (kbd "<left>")  'windmove-left)
-(global-set-key (kbd "<right>") 'windmove-right)
-(global-set-key (kbd "<up>")    'windmove-up)
-(global-set-key (kbd "<down>")  'windmove-down)
 
 ;; WM
 ;; (straight-use-package 'exwm) 
@@ -92,6 +88,7 @@
 (straight-use-package 'iedit) ;; exec?
 (straight-use-package 'rainbow-delimiters) ;; pretty 
 (straight-use-package 'lingva) ;; translate
+(straight-use-package 'treemacs) ;; project drawer
 
 (straight-use-package 'exec-path-from-shell) ;; set path to shellpath
 (exec-path-from-shell-initialize)
@@ -165,8 +162,6 @@
 
 ;; LSP 
 (straight-use-package 'eglot)
-(straight-use-package 'emacs-tree-sitter) ;; setup todo
-(require 'eglot)
 (add-to-list 'eglot-server-programs
 	     '(handlebars-mode "ember-language-server"))
 
