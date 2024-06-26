@@ -56,8 +56,8 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Mononoki Nerd Font 30")  ;; granny-coded
-(show-paren-mode 1) ;; i believe in symmetry 
+(set-frame-font "Mononoki Nerd Font 30" nil t)  ;; granny-coded
+(show-paren-mode 1) ;; i believe in symmetry
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
 (global-eldoc-mode 1) ;; documentation
@@ -129,9 +129,8 @@
 (straight-use-package 'evil)
 
 (global-set-key (kbd "M-<return>") 'evil-mode)
-
-;; GOD 🌅
-(straight-use-package 'god-mode)
+(require 'evil)
+(setq evil-want-C-u-scroll)
 
 ;; ORG 📆
 (straight-use-package 'org)
@@ -164,15 +163,14 @@
 (add-to-list 'eglot-server-programs
 	     '(handlebars-mode "ember-language-server"))
 
-;; HYPER 🤪
+;; LEADER 👑
 
-;; (global-set-key (kbd "A-C-M-/") 'helm-do-grep-ag)
-(global-set-key (kbd "A-C-M-a") 'vterm)
-(global-set-key (kbd "A-C-M-d") 'treemacs)
-(global-set-key (kbd "A-C-M-i") 'rcirc)
-(global-set-key (kbd "A-C-M-e") 'emojify-insert-emoji)
-;; (global-set-key (kbd "A-C-M-f") 'helm-multi-files) 
-(global-set-key (kbd "A-C-M-w") 'eww)
+;; (global-set-key (kbd "<ESC> /") 'helm-do-grep-ag)
+(global-set-key (kbd "<ESC> a") 'vterm)
+(global-set-key (kbd "<ESC> d") 'treemacs)
+(global-set-key (kbd "<ESC> e") 'emoji-search)
+(global-set-key (kbd "<ESC> f") 'counsel-find-files) 
+(global-set-key (kbd "<ESC> w") 'eww)
 
 ;; AMEN
 (provide 'init)
