@@ -56,7 +56,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Mononoki Nerd Font 29") ;; granny-coded
+(set-frame-font "Mononoki Nerd Font 30")  ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry 
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -104,7 +104,7 @@
 (setq  which-key-show-early-on-C-h t
        which-key-idle-delay 0.3)
 
-(load-theme 'doom-sourcerer t)
+(load-theme 'doom-lantern t)
 
 ;; NAVIGATION 🗺️
 (straight-use-package 'counsel)
@@ -133,8 +133,6 @@
 ;; GOD 🌅
 (straight-use-package 'god-mode)
 
-(global-set-key (kbd "C-<return>") 'god-mode)
-
 ;; ORG 📆
 (straight-use-package 'org)
 
@@ -162,6 +160,7 @@
 
 ;; LSP 
 (straight-use-package 'eglot)
+(require 'eglot)
 (add-to-list 'eglot-server-programs
 	     '(handlebars-mode "ember-language-server"))
 
