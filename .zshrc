@@ -38,7 +38,7 @@ export FZF_DEFAULT_COMMAND="rg --files --hidden"
 # Local (nonmanaged) zsh config ~/.zshrc.local
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # pnpm
 export PNPM_HOME="/Users/angel/Library/pnpm"

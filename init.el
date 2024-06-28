@@ -130,7 +130,7 @@
 
 (global-set-key (kbd "M-<return>") 'evil-mode)
 (require 'evil)
-(setq evil-want-C-u-scroll)
+(setq evil-want-C-u-scroll t)
 
 ;; ORG 📆
 (straight-use-package 'org)
@@ -153,6 +153,7 @@
 ;; LANG 📕
 (straight-use-package 'handlebars-mode)
 (straight-use-package 'geiser-guile)
+(straight-use-package 'rust-mode)
 
 ;; OPS 💻
 (straight-use-package 'kubernetes)
@@ -169,7 +170,7 @@
 (global-set-key (kbd "<ESC> a") 'vterm)
 (global-set-key (kbd "<ESC> d") 'treemacs)
 (global-set-key (kbd "<ESC> e") 'emoji-search)
-(global-set-key (kbd "<ESC> f") 'counsel-find-files) 
+(global-set-key (kbd "<ESC> f") 'counsel-find-file)
 (global-set-key (kbd "<ESC> w") 'eww)
 
 ;; AMEN
