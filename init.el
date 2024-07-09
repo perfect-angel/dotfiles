@@ -7,28 +7,21 @@
 
 ;;; Code:
 
-;; BOOTSTRAP
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-(url-retrieve-synchronously
-"https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;;; PACKAGE
+(require 'package)
+(add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+(require 'use-package)
+(setq use-package-always-ensure t)
 
 
-;; SETTINGS
+;;; SETTINGS
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-option-modifier 'meta)
   (setq mac-command-modifier 'alt)
-  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
-  )
-
+  (global-set-key [kp-delete] 'delete-char)) ;; sets fn-delete to be right-delete
+ 
 (setq-default fill-column 80)
 (setq
  browse-url-browser-function 'eww-browse-url
@@ -38,140 +31,147 @@
  auto-save-default nil ;; don't autosave
  make-backup-files nil ;; no backup files
  backup-directory-alist '(("." . "/tmp")) ;; send backups to hell
+ auto-save-default nil
+ custom-file "~/.emacs.d/emacs-custom.el"
  ring-bell-function 'ignore
- rcirc-server-alist
-      '(("irc.libera.chat" ; Hostname
-       :port 6697          ; Standard port for secure IRC
-       :nick "perfect-angel"       ; Your nickname
-       :encryption tls     ; Specify to use encryption
-       :channels ("#guix")))
-
- visible-bell 1) ;; don't make noise
+ visible-bell 1
+) ;; don't make noise
 
 (add-hook 'prog-mode-hook 'column-number-mode) ;; columns
-(add-hook 'prog-mode-hook 'line-number-mode) ;; lines
+(add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; lines
 (add-hook 'prog-mode-hook 'auto-fill-mode) ;; word wrap
 (electric-pair-mode 1) ;; birds of a feather
 (electric-indent-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "Mononoki Nerd Font 30" nil t)  ;; granny-coded
+(set-frame-font "FiraCode Nerd Font 20" nil t)  ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
 (global-eldoc-mode 1) ;; documentation
 (global-set-key (kbd "C-c k") 'eldoc-print-current-symbol-info)
 (windmove-default-keybindings)
-
-(add-hook 'prog-mode-hook 'flymake-mode) ;; checker
-(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
-(global-set-key (kbd "M-n") 'flymake-goto-next-error)
-
+(ffap-bindings)
 
 ;; WM
-;; (straight-use-package 'exwm) 
+;; (use-package 'exwm)
 ;; (require 'exwm-config)
 ;; (require 'exwm-randr)
 ;; (exwm-randr-enable)
 ;; (exwm-config-ido)
 ;; (exwm-init)
 
-;; UTIL
-(straight-use-package 'magit) ;; magic git
-(straight-use-package 'vterm) ;; erm? idk
-(straight-use-package 'doom-themes) ;; pretty colors
-(straight-use-package 'emojify) ;; 🦆
-(straight-use-package 'nerd-icons)
-(straight-use-package 'doom-modeline)
-(straight-use-package 'writeroom-mode)
-(straight-use-package 'iedit) ;; exec?
-(straight-use-package 'rainbow-delimiters) ;; pretty 
-(straight-use-package 'lingva) ;; translate
-(straight-use-package 'treemacs) ;; project drawer
+;; UTIL 🔧
+(use-package magit)
+(use-package vterm)
+(use-package iedit)
+(use-package lingva)
+(use-package yasnippet
+  :config
+  (yas-global-mode 1)
+  (global-set-key (kbd "C-x C-y") 'company-yasnippet))
+(use-package yasnippet-snippets)
 
-(straight-use-package 'exec-path-from-shell) ;; set path to shellpath
-(exec-path-from-shell-initialize)
+(use-package exec-path-from-shell ;; set path to shellpath
+  :config
+  (exec-path-from-shell-initialize))
 
-(straight-use-package 'discover) ;; learn betterer
-(global-discover-mode 1)
+;; CHECKING ✅
+(add-hook 'prog-mode-hook 'flymake-mode) ;; checker
+(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
+(global-set-key (kbd "M-n") 'flymake-goto-next-error)
 
-(doom-modeline-mode)
-(rainbow-delimiters-mode 1)
+;; DISCOVERY 🔍
+(use-package which-key
+  :config
+  (which-key-mode 1)) ;; keybinds
+(use-package discover
+  :init
+  (setq  which-key-show-early-on-C-h t
+	 which-key-idle-delay 0.5)
+  :config
+  (global-discover-mode 1))
 
-(straight-use-package 'which-key) ;; keybinds
-(which-key-mode 1)
-(setq  which-key-show-early-on-C-h t
-       which-key-idle-delay 0.3)
+;; PRETTY 💖
+(use-package emojify)
+(use-package nerd-icons)
+(use-package rainbow-delimiters
+  :config
+  (rainbow-delimiters-mode 1))
+(load-theme 'wombat)
 
-(load-theme 'doom-lantern t)
 
 ;; NAVIGATION 🗺️
-(straight-use-package 'counsel)
-(ivy-mode 1)
-(counsel-mode 1)
 
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(global-set-key (kbd "C-s") 'swiper-isearch)
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+	completion-category-defaults nil
+	completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package vertico
+  :config
+  (vertico-mode))
+;; (use-package counsel
+;;   :config
+;;   (setq ivy-use-virtual-buffers t)
+;;   (setq ivy-count-format "(%d/%d) ")
+;;   (ivy-mode 1)
+;;   (counsel-mode 1))
+
+;; (global-set-key (kbd "C-s") 'swiper-isearch)
+
+(use-package ace-window)
+(global-set-key (kbd "M-o") 'ace-window)
 
 ;; INTERNET 🌐
-(straight-use-package 'mastodon)
-(with-eval-after-load 'mastodon (mastodon-discover))
-(set #'mastodon-active-user "perfect_angel")
-(set #'instance-mastodon-url "https://mastodon.social")
+;; ???
 
 ;; COMPLETION 🧩
-(straight-use-package 'company) ;; replace with complete?
-(global-company-mode 1)
+(use-package company
+  :config
+  (global-company-mode 1)) ;; replace with complete?
 
 ;; EVIL (until i repent) 😈
-(straight-use-package 'evil)
-
-(global-set-key (kbd "M-<return>") 'evil-mode)
-(require 'evil)
-(setq evil-want-C-u-scroll t)
+(use-package evil
+  :init
+  (setq evil-want-C-u-scroll t)
+  :config
+  (global-set-key (kbd "M-<return>") 'evil-mode))
 
 ;; ORG 📆
-(straight-use-package 'org)
-
-(setq org-directory "~/org"
-      org-default-notes-file "~/org/inbox.org"
+(use-package org
+  :init
+  (setq org-default-notes-file "~/org/inbox.org"
+      org-agenda-files '("~/org/inbox.org")
       org-capture-templates
-      '(("t" "Todo" entry (file "~/org/inbox.org")
-	 "* TODO %?")
-	("j" "Journal" entry (file+datetree "~/org/journal.org")
-	 "* %?"))
-      org-agenda-files '("~/org/inbox.org"
-			 "~/org/someday.org")
-      org-refile-targets '(("notes.org" :maxlevel . 2) ;; org refiles
-			   ("someday.org" :maxlevel . 2)))
+      '(("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?")
+	("j" "Journal" entry (file+datetree "~/org/journal.org") "%?")))
+  :config
+  (global-set-key (kbd "C-c o a") #'org-agenda)
+  (global-set-key (kbd "C-c o c") #'org-capture))
 
-(global-set-key (kbd "C-c o a") #'org-agenda)
-(global-set-key (kbd "C-c o c") #'org-capture)
- 
 ;; LANG 📕
-(straight-use-package 'handlebars-mode)
-(straight-use-package 'geiser-guile)
-(straight-use-package 'rust-mode)
+(use-package handlebars-mode)
+(use-package geiser-guile)
+(use-package rust-ts-mode
+  :mode ("\\.rs\\'" . rust-ts-mode)
+  :hook ((rust-ts-mode . eglot-ensure)))
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
 
 ;; OPS 💻
-(straight-use-package 'kubernetes)
+(use-package kubernetes)
 
-;; LSP 
-(straight-use-package 'eglot)
-(require 'eglot)
-(add-to-list 'eglot-server-programs
-	     '(handlebars-mode "ember-language-server"))
+;; LSP
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs
+	     '(handlebars-mode "ember-language-server")))
 
-;; LEADER 👑
-
-;; (global-set-key (kbd "<ESC> /") 'helm-do-grep-ag)
-(global-set-key (kbd "<ESC> a") 'vterm)
-(global-set-key (kbd "<ESC> d") 'treemacs)
-(global-set-key (kbd "<ESC> e") 'emoji-search)
-(global-set-key (kbd "<ESC> f") 'counsel-find-file)
-(global-set-key (kbd "<ESC> w") 'eww)
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
 
 ;; AMEN
 (provide 'init)
