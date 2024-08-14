@@ -45,7 +45,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "FiraCode Nerd Font 20" nil t)  ;; granny-coded
+(set-frame-font "FiraCode Nerd Font 28" nil t)  ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -85,7 +85,8 @@
 ;; DISCOVERY 🔍
 (use-package which-key
   :config
-  (which-key-mode 1)) ;; keybinds
+  (which-key-mode 1)
+  (which-key-enable-god-mode-support)) ;; keybinds
 (use-package discover
   :init
   (setq  which-key-show-early-on-C-h t
@@ -94,6 +95,7 @@
   (global-discover-mode 1))
 
 ;; PRETTY 💖
+
 (use-package emojify)
 (use-package nerd-icons)
 (use-package rainbow-delimiters
@@ -103,24 +105,23 @@
 
 
 ;; NAVIGATION 🗺️
-
-(use-package orderless
-  :init
-  (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides '((file (styles partial-completion)))))
-
-(use-package vertico
+(use-package god-mode
   :config
-  (vertico-mode))
-;; (use-package counsel
-;;   :config
-;;   (setq ivy-use-virtual-buffers t)
-;;   (setq ivy-count-format "(%d/%d) ")
-;;   (ivy-mode 1)
-;;   (counsel-mode 1))
+  (define-key god-local-mode-map (kbd "z") #'repeat)
+  (global-set-key (kbd "<escape>") #'god-mode-all)
+  :init
+  (setq god-mode-enable-function-key-translation nil)
+  (setq god-exempt-major-modes nil)
+  (setq god-exempt-predicates nil))
+(use-package counsel
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (ivy-mode 1)
+  (counsel-mode 1))
 
-;; (global-set-key (kbd "C-s") 'swiper-isearch)
+
+(global-set-key (kbd "C-s") 'swiper-isearch)
 
 (use-package ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
@@ -133,13 +134,6 @@
   :config
   (global-company-mode 1)) ;; replace with complete?
 
-;; EVIL (until i repent) 😈
-(use-package evil
-  :init
-  (setq evil-want-C-u-scroll t)
-  :config
-  (global-set-key (kbd "M-<return>") 'evil-mode))
-
 ;; ORG 📆
 (use-package org
   :init
@@ -147,7 +141,7 @@
       org-agenda-files '("~/org/inbox.org")
       org-capture-templates
       '(("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?")
-	("j" "Journal" entry (file+datetree "~/org/journal.org") "%?")))
+	("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "%?")))
   :config
   (global-set-key (kbd "C-c o a") #'org-agenda)
   (global-set-key (kbd "C-c o c") #'org-capture))
