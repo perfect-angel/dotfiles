@@ -45,7 +45,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
 (menu-bar-mode -1) ;; no gui
 (recentf-mode 1) ;; what was i doing?
-(set-frame-font "FiraCode Nerd Font 28" nil t)  ;; granny-coded
+(set-frame-font "FiraCode Nerd Font 16" nil t)  ;; granny-coded
 (show-paren-mode 1) ;; i believe in symmetry
 (toggle-scroll-bar -1) ;; no gui
 (tool-bar-mode -1) ;; no gui
@@ -85,16 +85,21 @@
 ;; DISCOVERY 🔍
 (use-package which-key
   :config
-  (which-key-mode 1)
-  (which-key-enable-god-mode-support)) ;; keybinds
+  (which-key-mode 1))
 (use-package discover
   :init
-  (setq  which-key-show-early-on-C-h t
-	 which-key-idle-delay 0.5)
+  (setq which-key-show-early-on-C-h t
+        which-key-idle-delay 0.5)
   :config
   (global-discover-mode 1))
 
 ;; PRETTY 💖
+(use-package mood-line
+  ;; Enable mood-line
+  :config
+  (mood-line-mode)
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
 (use-package emojify)
 (use-package nerd-icons)
@@ -103,16 +108,8 @@
   (rainbow-delimiters-mode 1))
 (load-theme 'wombat)
 
-
 ;; NAVIGATION 🗺️
-(use-package god-mode
-  :config
-  (define-key god-local-mode-map (kbd "z") #'repeat)
-  (global-set-key (kbd "<escape>") #'god-mode-all)
-  :init
-  (setq god-mode-enable-function-key-translation nil)
-  (setq god-exempt-major-modes nil)
-  (setq god-exempt-predicates nil))
+;; todo helm?
 (use-package counsel
   :config
   (setq ivy-use-virtual-buffers t)
@@ -125,9 +122,6 @@
 
 (use-package ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
-
-;; INTERNET 🌐
-;; ???
 
 ;; COMPLETION 🧩
 (use-package company
