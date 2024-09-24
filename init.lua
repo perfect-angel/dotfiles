@@ -94,11 +94,7 @@ vim.keymap.set("n", "<leader>gd", ":Git diff origin/main...HEAD %<CR>")
 vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
 vim.keymap.set("n", "<leader>i", ":echo unused<CR>")
-vim.keymap.set("n", '<leader>jf', ':lua require("fzf-lua").files({ cwd="~/notes" })<CR>')
-vim.keymap.set("n", "<leader>jj", ":e ~/notes/<CR>")
-vim.keymap.set("n", '<leader>jr', ':e ~/notes/read-watch-listen.md<CR>')
-vim.keymap.set("n", '<leader>js', ':e ~/notes/shopping.md<CR>')
-vim.keymap.set("n", '<leader>jt', ':e ~/notes/todo.txt<CR>')
+vim.keymap.set("n", "<leader>j", ":e ~/org/<CR>")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
@@ -106,7 +102,6 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
--- vim.keymap.set("n", "<leader>o", ":FzfLua grep_curbuf<CR>")
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -195,7 +190,6 @@ require("lazy").setup({
       require('lspconfig').lua_ls.setup({})
       require('lspconfig').pyright.setup({})
       require('lspconfig').rust_analyzer.setup({})
-      require('lspconfig').stylua.setup({})
       require('lspconfig').terraformls.setup({})
       require('lspconfig').ts_ls.setup({})
     end
@@ -249,16 +243,6 @@ require("lazy").setup({
     "folke/which-key.nvim",           -- leader key hints
     opts = { triggers = { "<leader>", "<localleader>" } }
   },
-  -- lang
-  {
-    "jose-elias-alvarez/typescript.nvim",
-    opts = {
-      disable_commands = true,
-      go_to_source_definition = {
-        fallback = true,
-      }
-    }
-  },
   "nvim-treesitter/nvim-treesitter",
   -- util}
   "nvim-lua/plenary.nvim",                 -- async lib for plugins
@@ -273,6 +257,7 @@ require("lazy").setup({
   "tpope/vim-repeat",                      -- better .
   "tpope/vim-sensible",                    -- sensible defaults
   -- tools
+  { "michaelb/sniprun", branch = "master", build = "sh install.sh", opts = {} },
   {
     'nvim-orgmode/orgmode',
     event = 'VeryLazy',
@@ -281,6 +266,16 @@ require("lazy").setup({
       require('orgmode').setup({
         org_agenda_files = '~/org/**/*',
         org_default_notes_file = '~/org/refile.org',
+        org_capture_templates = {
+          t = { description = 'TODO', template = '* TODO %?\n  %u' },
+          j = {
+            description = 'Journal',
+            template = '\n    %?',
+            target = "~/org/journal.org",
+            datetree = true
+          },
+          s = { description = 'Shopping', template = '- %?', target = "~/org/shopping.org" },
+        }
       })
     end
   }
