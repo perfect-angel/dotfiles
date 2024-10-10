@@ -153,7 +153,6 @@ vim.g["test#strategy"] = "neovim"
 require("lazy").setup({
   -- cosmetic
   'stevearc/dressing.nvim',      -- better UI
-  "catppuccin/nvim",             -- colorscheme
   "nvim-lualine/lualine.nvim",   -- status line
   'nvim-tree/nvim-web-devicons', -- devicons
   'mechatroner/rainbow_csv',     -- pretty csv
@@ -281,7 +280,7 @@ require("lazy").setup({
   }
 })
 
-vim.cmd('colo catppuccin')
+vim.cmd('colo morning')
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
