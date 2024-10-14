@@ -119,9 +119,13 @@
     (kbd "<leader>n") 'tab-new
     (kbd "<leader>q") 'quit
     (kbd "<leader>sh") 'split-window-horizontally
-    (kbd "<leader>sj") 'split-window-below
+    (kbd "<leader>sj") (lambda () (interactive)
+			 (split-window-below)
+			 (windmove-down))
     (kbd "<leader>sk") 'split-window-vertically
-    (kbd "<leader>sl") 'split-window-right
+    (kbd "<leader>sl") (lambda () (interactive)
+			 (split-window-right)
+			 (windmove-right))
     (kbd "<leader>t") 'test-approximate
     (kbd "<leader>vv") (lambda () (interactive) (find-file "~/dotfiles/init.el"))
     (kbd "<leader>w") 'save-some-buffers
@@ -131,11 +135,12 @@
 (use-package evil-commentary
   :config
   (evil-commentary-mode))
-(use-package evil-snipe
+(use-package evil-org
+  :after org
+  :hook ((org-mode . evil-org-mode))
   :config
-  (setq evil-snipe-scope 'buffer)
-  (evil-snipe-mode 1)
-  (evil-snipe-override-mode 1))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
