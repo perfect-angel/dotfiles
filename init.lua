@@ -30,7 +30,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.g.netrw_banner = 0
 
-vim.o.background = "dark"
+vim.o.background = "light"
 
 --------------------------------------------------------------------------------
 
@@ -48,9 +48,11 @@ vim.keymap.set("n", "<C-l>", "<C-W>l")
 vim.keymap.set("n", "H", "gT")
 vim.keymap.set("n", "L", "gt")
 
+
 -- resize
 vim.keymap.set("n", "<Left>", ":vertical res -5<CR>")
 vim.keymap.set("n", "<Right>", ":vertical res +5<CR>")
+
 vim.keymap.set("n", "<Up>", ":res +5<CR>")
 vim.keymap.set("n", "<Down>", ":res -5<CR>")
 
@@ -317,3 +319,4 @@ end
 -- - snippets
 -- - email
 -- - watch org
+
