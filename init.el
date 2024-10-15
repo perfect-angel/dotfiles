@@ -39,7 +39,6 @@
   (visible-bell 1) ;; no sounds
 
   :hook ((prog-mode . column-number-mode) ;; columns
-	 (prog-mode . display-line-numbers-mode) ;; lines
 	 (prog-mode . flymake-mode) ;; checker
 	 ((prog-mode text-mode) . hs-minor-mode) ;; folding
 	 (prog-mode . auto-fill-mode));; word wrap
@@ -47,6 +46,18 @@
   :config
   (setq-default fill-column 80)
   (when (eq system-type 'darwin) ;; mac specific settings
+    (defun copy-from-osx ()
+      (shell-command-to-string "pbpaste"))
+
+    (defun paste-to-osx (text &optional push)
+      (let ((process-connection-type nil))
+	(let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	  (process-send-string proc text)
+	  (process-send-eof proc))))
+
+    (setq interprogram-cut-function 'paste-to-osx)
+    (setq interprogram-paste-function 'copy-from-osx)
+
     (setq mac-option-modifier 'alt)
     (setq mac-command-modifier 'meta)
     (global-set-key [kp-delete] 'delete-char)) ;; sets fn-delete to be right-delete
@@ -55,7 +66,7 @@
   (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
   (menu-bar-mode -1) ;; no gui
   (recentf-mode 1) ;; what was i doing?
-  (set-frame-font "FiraCode Nerd Font 16" nil t)  ;; granny-coded
+  (set-frame-font "FiraCode Nerd Font 22" nil t)  ;; granny-coded
   (show-paren-mode 1) ;; i believe in symmetry
   (toggle-scroll-bar -1) ;; no gui
   (tool-bar-mode -1) ;; no gui
@@ -97,12 +108,14 @@
     (kbd "<localleader>r") 'eglot-rename
     (kbd "<localleader>a") 'eglot-code-actions
 
+    (kbd "gd") 'xref-find-definitions
+
     (kbd "!") 'execute-extended-command
     (kbd "-") 'dired
 
     (kbd "<leader>/") 'counsel-rg
     (kbd "<leader>,") 'counsel-M-x
-    (kbd "<leader>a") 'term
+    (kbd "<leader>a") 'ansi-term
     (kbd "<leader>b") 'switch-to-buffer
     (kbd "<leader>d") 'project-dired
     (kbd "<leader>e") 'counsel-find-file
@@ -117,7 +130,8 @@
     (kbd "<leader>ln") 'flymake-goto-next-error
     (kbd "<leader>m") 'counsel-recentf
     (kbd "<leader>n") 'tab-new
-    (kbd "<leader>q") 'quit
+    (kbd "<leader>q") 'save-buffers-kill-terminal
+    (kbd "<leader>r") 'swiper
     (kbd "<leader>sh") 'split-window-horizontally
     (kbd "<leader>sj") (lambda () (interactive)
 			 (split-window-below)
@@ -135,6 +149,9 @@
 (use-package evil-commentary
   :config
   (evil-commentary-mode))
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode))
 (use-package evil-org
   :after org
   :hook ((org-mode . evil-org-mode))
@@ -142,7 +159,7 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
+;; Persist history over Emacs restarts.
 (use-package savehist
   :config
   (savehist-mode))
@@ -172,14 +189,14 @@
 
 ;; DISCOVERY 🔍
 (use-package which-key
+  :custom
+  (which-key-show-early-on-C-h t)
+  (which-key-idle-delay 0.5)
   :config
   (which-key-mode 1))
-(use-package discover
-  :init
-  (setq which-key-show-early-on-C-h t
-        which-key-idle-delay 0.5)
+(use-package eldoc-box
   :config
-  (global-discover-mode 1))
+  (eldoc-box-hover-at-point-mode))
 
 ;; PRETTY 💖
 (use-package mood-line
@@ -226,7 +243,10 @@
 (use-package rust-ts-mode
   :mode ("\\.rs\\'" . rust-ts-mode))
 (use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
   :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
 ;; OPS 💻
