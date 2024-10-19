@@ -1,0 +1,299 @@
+#+TITLE: ANGEL CAMPBELL'S WONDERFUL HORRIBLE EMACS CONFIG
+#+AUTHOR: Angel Campbell
+
+#+begin_center
+#+begin_src 
+YOU ARE *LOVED*
+YOU ARE *WORTHY* OF THAT LOVE
+YOU ARE *NOT* IN TROUBLE
+DRINK *WATER*
+#+end_src
+#+end_center
+
+* Settings
+#+begin_src emacs-lisp :tangle yes
+  (use-package emacs
+    :custom
+    (visual-fill-column-center-text t)
+    (browse-url-browser-function 'eww-browse-url)
+    (confirm-kill-emacs 'yes-or-no-p)
+    (enable-recursive-minibuffers t)
+    (tramp-default-method "ssh") ;; faster tramp with ssh
+    (auto-save-default nil) ;; don't autosave
+    (make-backup-files nil) ;; no backup files
+    (backup-directory-alist '(("." . "/tmp"))) ;; send backups to hell
+    (header-line-format " ")
+    (auto-save-default nil)
+    (custom-file "~/.emacs.d/emacs-custom.el") ;; custom custom
+    (ring-bell-function 'ignore) ;; no sounds
+    (visible-bell 1) ;; no sounds
+
+    :hook ((prog-mode . column-number-mode) ;; columns
+	   (prog-mode . flymake-mode) ;; checker
+	   ((prog-mode text-mode) . hs-minor-mode) ;; folding
+	   (prog-mode . auto-fill-mode));; word wrap
+
+    :config
+    (setq-default fill-column 80)
+    (when (eq system-type 'darwin) ;; mac specific settings
+      (defun copy-from-osx ()
+	(shell-command-to-string "pbpaste"))
+
+      (defun paste-to-osx (text &optional push)
+	(let ((process-connection-type nil))
+	  (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	    (process-send-string proc text)
+	    (process-send-eof proc))))
+
+      (setq interprogram-cut-function 'paste-to-osx)
+      (setq interprogram-paste-function 'copy-from-osx)
+
+      (setq mac-option-modifier 'alt)
+      (setq mac-command-modifier 'meta)
+      (global-set-key [kp-delete] 'delete-char))
+    (electric-pair-mode 1) ;; birds of a feather
+    (electric-indent-mode 1)
+    (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
+    (menu-bar-mode -1) ;; no gui
+    (recentf-mode 1) ;; what was i doing?
+    (set-frame-font "FiraCode Nerd Font 20" nil t)  ;; granny-coded
+    (show-paren-mode 1) ;; i believe in symmetry
+    (toggle-scroll-bar -1) ;; no gui
+    (tool-bar-mode -1) ;; no gui
+    (global-eldoc-mode 1) ;; documentation
+    (windmove-default-keybindings)
+    (ffap-bindings))
+#+end_src
+
+* Packages
+** Evil 😈
+#+begin_src emacs-lisp :tangle yes
+  (use-package evil ; evil
+    :custom
+    (evil-want-integration t)
+    (evil-want-integration t)
+    (evil-want-C-u-scroll 1)
+    (evil-undo-system 'undo-redo)
+
+    :config
+    (evil-mode 1)
+    (evil-set-leader nil (kbd "SPC"))
+    (evil-set-leader nil "," t)
+    (evil-define-key 'normal 'global
+      (kbd "H") 'tab-previous
+      (kbd "L") 'tab-next
+
+      (kbd "K") 'eldoc-print-current-symbol-info
+
+      (kbd "<localleader>f") 'eglot-format-buffer
+      (kbd "<localleader>r") 'eglot-rename
+      (kbd "<localleader>a") 'eglot-code-actions
+
+      (kbd "gd") 'xref-find-definitions
+
+      (kbd "!") 'execute-extended-command
+      (kbd "-") 'dired
+
+      (kbd "<leader>/") 'counsel-rg
+      (kbd "<leader>,") 'counsel-M-x
+      (kbd "<leader>a") 'ansi-term
+      (kbd "<leader>b") 'switch-to-buffer
+      (kbd "<leader>d") 'project-dired
+      (kbd "<leader>e") 'counsel-find-file
+      (kbd "<leader>f") 'project-find-file
+      (kbd "<leader>g") 'magit
+      (kbd "<leader>h") 'counsel-describe-symbol
+      (kbd "<leader>jp") 'org-present
+      (kbd "<leader>jc") 'org-capture
+      (kbd "<leader>ja") 'org-agenda
+      (kbd "<leader>k") 'delete-window
+      (kbd "<leader>ll") 'flymake-show-buffer-diagnostics
+      (kbd "<leader>lp") 'flymake-goto-prev-error
+      (kbd "<leader>ln") 'flymake-goto-next-error
+      (kbd "<leader>m") 'counsel-recentf
+      (kbd "<leader>n") 'tab-new
+      (kbd "<leader>q") 'save-buffers-kill-terminal
+      (kbd "<leader>r") 'swiper
+      (kbd "<leader>sh") 'split-window-horizontally
+      (kbd "<leader>sj") (lambda () (interactive)
+			   (split-window-below)
+			   (windmove-down))
+      (kbd "<leader>sk") 'split-window-vertically
+      (kbd "<leader>sl") (lambda () (interactive)
+			   (split-window-right)
+			   (windmove-right))
+      (kbd "<leader>t") 'test-approximate
+      (kbd "<leader>vv") (lambda () (interactive) (find-file "~/dotfiles/config.org"))
+      (kbd "<leader>w") 'save-buffer
+      (kbd "<leader>y") 'yas-visit-snippet-file
+      (kbd "<leader>zc") 'hs-hide-all
+      (kbd "<leader>zo") 'hs-show-all))
+  (use-package evil-commentary
+    :config
+    (evil-commentary-mode))
+  (use-package evil-surround
+    :config
+    (global-evil-surround-mode))
+  (use-package evil-org
+    :after org
+    :hook ((org-mode . evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+#+end_src
+
+#+RESULTS:
+| #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
+** Utility 🔧
+#+begin_src emacs-lisp :tangle yes
+  (use-package savehist
+    :config
+    (savehist-mode))
+
+  (use-package magit)
+  (use-package iedit)
+  (use-package lingva)
+  (use-package yasnippet
+    :config
+    (yas-global-mode 1)
+    (global-set-key (kbd "C-x C-y") 'company-yasnippet))
+  (use-package yasnippet-snippets)
+
+  (use-package exec-path-from-shell ;; set path to shellpath
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
+
+** Discovery 🔭
+#+begin_src emacs-lisp :tangle yes
+  (use-package which-key
+    :custom
+    (which-key-show-early-on-C-h t)
+    (which-key-idle-delay 0.5)
+    :config
+    (which-key-mode 1))
+  (use-package eldoc-box
+    :config
+    (eldoc-box-hover-at-point-mode))
+#+end_src
+
+** Pretty 💖
+#+begin_src emacs-lisp :tangle yes
+  (use-package mood-line
+    ;; Enable mood-line
+    :config
+    (mood-line-mode)
+    :custom
+    (mood-line-glyph-alist mood-line-glyphs-fira-code))
+
+  (use-package emojify)
+  (use-package writeroom-mode)
+  (use-package nerd-icons)
+  (use-package visual-fill-column
+    :custom
+    (visual-fill-colum-center-text t)
+    (visual-fill-column-width 80))
+  (use-package rainbow-delimiters
+    :config
+    (rainbow-delimiters-mode 1))
+  (load-theme 'modus-operandi 1)
+#+end_src
+
+** Navigation 🗺️
+#+begin_src emacs-lisp :tangle yes
+  (use-package counsel
+    :custom
+    (ivy-use-virtual-buffers t)
+    (ivy-count-format "(%d/%d) ")
+    :config
+    (ivy-mode 1)
+    (counsel-mode 1))
+#+end_src
+
+** Completion 🧩
+#+begin_src emacs-lisp :tangle yes
+  (use-package company
+    :config
+    (global-company-mode 1)) ;; replace with complete?
+#+end_src
+
+** Org 📆
+#+begin_src emacs-lisp :tangle yes
+  (use-package org
+    :custom
+    (org-babel-load-languages
+     '((emacs-lisp . t)
+       (shell . t)
+       (python . t)
+       (js . t)
+       (ruby . t)))
+
+    (org-default-notes-file "~/org/refile.org")
+    (org-agenda-files '("~/org/refile.org"))
+    (org-capture-templates
+     '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
+       ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "%?"))))
+
+  (defun my/org-present-mode-start ()
+    (org-display-inline-images)
+    (visual-fill-column-mode 1)
+    (visual-line-mode 1))
+  (defun my/org-present-mode-end ()
+    (org-remove-inline-images)
+    (visual-fill-column-mode 0)
+    (visual-line-mode 0))
+
+  (use-package org-present
+    :config
+    (evil-define-key 'normal 'org-mode-map
+      (kbd "H") 'org-present-prev
+      (kbd "L") 'org-present-next)
+    :hook ((org-present-mode . my/org-present-mode-start)
+	   (org-present-mode-quit . my/org-present-mode-end)))
+#+end_src
+
+** Lang 📕
+#+begin_src emacs-lisp :tangle yes
+  (use-package handlebars-mode)
+  (use-package geiser-guile)
+  (use-package rust-ts-mode
+    :mode ("\\.rs\\'" . rust-ts-mode))
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+  (use-package rmsbolt)
+#+end_src
+
+** Ops 💻
+#+begin_src emacs-lisp :tangle yes
+  (use-package kubernetes)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+'((1 2 3) (4 5 6))
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 |
+| 4 | 4 | 6 |
+
+#+begin_src js
+return [[1,2,3],[3,4,6]]
+#+end_src
+
+** LSP 🧬
+#+begin_src emacs-lisp :tangle yes
+  (use-package eglot
+    :hook ((typescript-ts-mode  . eglot-ensure)
+	   (rust-ts-mode  . eglot-ensure))
+    :config
+    (add-to-list 'eglot-server-programs
+		 '(handlebars-mode "ember-language-server")))
+#+end_src
+* Amen
+💜💜💜
+
