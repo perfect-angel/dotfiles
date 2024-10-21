@@ -142,9 +142,6 @@ DRINK *WATER*
     (evil-org-agenda-set-keys))
 #+end_src
 
-#+RESULTS:
-| #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
-
 ** Utility 🔧
 #+begin_src emacs-lisp :tangle yes
   (use-package savehist
@@ -233,7 +230,7 @@ DRINK *WATER*
     (org-agenda-files '("~/org/refile.org"))
     (org-capture-templates
      '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
-       ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "%?"))))
+       ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
 
   (defun my/org-present-mode-start ()
     (org-display-inline-images)
@@ -271,18 +268,6 @@ DRINK *WATER*
 ** Ops 💻
 #+begin_src emacs-lisp :tangle yes
   (use-package kubernetes)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-'((1 2 3) (4 5 6))
-#+end_src
-
-#+RESULTS:
-| 1 | 2 | 3 |
-| 4 | 4 | 6 |
-
-#+begin_src js
-return [[1,2,3],[3,4,6]]
 #+end_src
 
 ** LSP 🧬
