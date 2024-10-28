@@ -36,17 +36,6 @@ DRINK *WATER*
     :config
     (setq-default fill-column 80)
     (when (eq system-type 'darwin) ;; mac specific settings
-      (defun copy-from-osx ()
-	(shell-command-to-string "pbpaste"))
-
-      (defun paste-to-osx (text &optional push)
-	(let ((process-connection-type nil))
-	  (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-	    (process-send-string proc text)
-	    (process-send-eof proc))))
-
-      (setq interprogram-cut-function 'paste-to-osx)
-      (setq interprogram-paste-function 'copy-from-osx)
 
       (setq mac-option-modifier 'alt)
       (setq mac-command-modifier 'meta)
@@ -94,7 +83,7 @@ DRINK *WATER*
 
       (kbd "<leader>/") 'counsel-rg
       (kbd "<leader>,") 'counsel-M-x
-      (kbd "<leader>a") 'ansi-term
+      (kbd "<leader>a") 'vterm
       (kbd "<leader>b") 'switch-to-buffer
       (kbd "<leader>d") 'project-dired
       (kbd "<leader>e") 'counsel-find-file
@@ -184,7 +173,6 @@ DRINK *WATER*
     (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
   (use-package emojify)
-  (use-package writeroom-mode)
   (use-package nerd-icons)
   (use-package visual-fill-column
     :custom
@@ -233,15 +221,11 @@ DRINK *WATER*
   (defun my/org-present-mode-start ()
     (org-display-inline-images)
     (visual-fill-column-mode 1)
-    (org-present-big)
-    (visual-line-mode 1)
-    (writeroom-mode 1))
+    (visual-line-mode 1))
   (defun my/org-present-mode-end ()
     (org-remove-inline-images)
     (visual-fill-column-mode 0)
-    (org-present-small)
-    (visual-line-mode 0)
-    (writeroom-mode 0))
+    (visual-line-mode 0))
 
   (use-package org-present
     :config
