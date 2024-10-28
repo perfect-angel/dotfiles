@@ -11,7 +11,7 @@ DRINK *WATER*
 #+end_center
 
 * Settings
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
     (visual-fill-column-center-text t)
@@ -56,7 +56,7 @@ DRINK *WATER*
     (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
     (menu-bar-mode -1) ;; no gui
     (recentf-mode 1) ;; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 20" nil t)  ;; granny-coded
+    (set-frame-font "FiraCode Nerd Font 18" nil t)  ;; granny-coded
     (show-paren-mode 1) ;; i believe in symmetry
     (toggle-scroll-bar -1) ;; no gui
     (tool-bar-mode -1) ;; no gui
@@ -65,9 +65,10 @@ DRINK *WATER*
     (ffap-bindings))
 #+end_src
 
+
 * Packages
 ** Evil 😈
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package evil ; evil
     :custom
     (evil-want-integration t)
@@ -80,9 +81,6 @@ DRINK *WATER*
     (evil-set-leader nil (kbd "SPC"))
     (evil-set-leader nil "," t)
     (evil-define-key 'normal 'global
-      (kbd "H") 'tab-previous
-      (kbd "L") 'tab-next
-
       (kbd "K") 'eldoc-print-current-symbol-info
 
       (kbd "<localleader>f") 'eglot-format-buffer
@@ -143,7 +141,7 @@ DRINK *WATER*
 #+end_src
 
 ** Utility 🔧
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package savehist
     :config
     (savehist-mode))
@@ -151,6 +149,7 @@ DRINK *WATER*
   (use-package magit)
   (use-package iedit)
   (use-package lingva)
+  (use-package simple-httpd)
   (use-package yasnippet
     :config
     (yas-global-mode 1)
@@ -163,7 +162,7 @@ DRINK *WATER*
 #+end_src
 
 ** Discovery 🔭
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package which-key
     :custom
     (which-key-show-early-on-C-h t)
@@ -176,7 +175,7 @@ DRINK *WATER*
 #+end_src
 
 ** Pretty 💖
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package mood-line
     ;; Enable mood-line
     :config
@@ -192,13 +191,12 @@ DRINK *WATER*
     (visual-fill-colum-center-text t)
     (visual-fill-column-width 80))
   (use-package rainbow-delimiters
-    :config
-    (rainbow-delimiters-mode 1))
-  (load-theme 'modus-operandi 1)
+    :hook ((prog-mode . rainbow-delimiters-mode)))
+  (load-theme 'modus-vivendi 1)
 #+end_src
 
 ** Navigation 🗺️
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package counsel
     :custom
     (ivy-use-virtual-buffers t)
@@ -209,14 +207,14 @@ DRINK *WATER*
 #+end_src
 
 ** Completion 🧩
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package company
     :config
     (global-company-mode 1)) ;; replace with complete?
 #+end_src
 
 ** Org 📆
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package org
     :custom
     (org-babel-load-languages
@@ -235,23 +233,27 @@ DRINK *WATER*
   (defun my/org-present-mode-start ()
     (org-display-inline-images)
     (visual-fill-column-mode 1)
-    (visual-line-mode 1))
+    (org-present-big)
+    (visual-line-mode 1)
+    (writeroom-mode 1))
   (defun my/org-present-mode-end ()
     (org-remove-inline-images)
     (visual-fill-column-mode 0)
-    (visual-line-mode 0))
+    (org-present-small)
+    (visual-line-mode 0)
+    (writeroom-mode 0))
 
   (use-package org-present
     :config
-    (evil-define-key 'normal 'org-mode-map
-      (kbd "H") 'org-present-prev
-      (kbd "L") 'org-present-next)
+    (define-key org-present-mode-keymap (kbd "C-l") 'org-present-next)
+    (define-key org-present-mode-keymap (kbd "C-h") 'org-present-prev)
+
     :hook ((org-present-mode . my/org-present-mode-start)
 	   (org-present-mode-quit . my/org-present-mode-end)))
 #+end_src
 
 ** Lang 📕
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package handlebars-mode)
   (use-package geiser-guile)
   (use-package rust-ts-mode
@@ -266,19 +268,23 @@ DRINK *WATER*
 #+end_src
 
 ** Ops 💻
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package kubernetes)
 #+end_src
 
 ** LSP 🧬
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes :results none
   (use-package eglot
-    :hook ((typescript-ts-mode  . eglot-ensure)
+    :hook ((js-ts-mode  . eglot-ensure)
+	   (typescript-ts-mode  . eglot-ensure)
 	   (rust-ts-mode  . eglot-ensure))
     :config
     (add-to-list 'eglot-server-programs
 		 '(handlebars-mode "ember-language-server")))
 #+end_src
-* Amen
+
+* End
+💜💜💜
+Amen
 💜💜💜
 
