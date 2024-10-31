@@ -282,7 +282,7 @@ require("lazy").setup({
   }
 })
 
-vim.cmd('colo morning')
+vim.cmd('colo habamax')
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
@@ -319,4 +319,3 @@ end
 -- - snippets
 -- - email
 -- - watch org
-

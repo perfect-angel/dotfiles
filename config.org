@@ -15,6 +15,7 @@ DRINK *WATER*
   (use-package emacs
     :custom
     (visual-fill-column-center-text t)
+    (visual-fill-column-width 80)
     (browse-url-browser-function 'eww-browse-url)
     (confirm-kill-emacs 'yes-or-no-p)
     (enable-recursive-minibuffers t)
@@ -37,15 +38,17 @@ DRINK *WATER*
     (setq-default fill-column 80)
     (when (eq system-type 'darwin) ;; mac specific settings
 
+      (setq mac-frame-tabbing nil)
       (setq mac-option-modifier 'alt)
       (setq mac-command-modifier 'meta)
       (global-set-key [kp-delete] 'delete-char))
+    (ido-mode 1)
     (electric-pair-mode 1) ;; birds of a feather
     (electric-indent-mode 1)
     (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
     (menu-bar-mode -1) ;; no gui
     (recentf-mode 1) ;; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 18" nil t)  ;; granny-coded
+    (set-frame-font "FiraCode Nerd Font 26" nil t)  ;; granny-coded
     (show-paren-mode 1) ;; i believe in symmetry
     (toggle-scroll-bar -1) ;; no gui
     (tool-bar-mode -1) ;; no gui
@@ -53,7 +56,6 @@ DRINK *WATER*
     (windmove-default-keybindings)
     (ffap-bindings))
 #+end_src
-
 
 * Packages
 ** Evil 😈
@@ -174,10 +176,7 @@ DRINK *WATER*
 
   (use-package emojify)
   (use-package nerd-icons)
-  (use-package visual-fill-column
-    :custom
-    (visual-fill-colum-center-text t)
-    (visual-fill-column-width 80))
+  (use-package visual-fill-column)
   (use-package rainbow-delimiters
     :hook ((prog-mode . rainbow-delimiters-mode)))
   (load-theme 'modus-vivendi 1)
@@ -205,6 +204,7 @@ DRINK *WATER*
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package org
     :custom
+    (org-image-actual-width  nil)
     (org-babel-load-languages
      '((emacs-lisp . t)
        (shell . t)
@@ -212,8 +212,9 @@ DRINK *WATER*
        (js . t)
        (ruby . t)))
 
-    (org-default-notes-file "~/org/refile.org")
-    (org-agenda-files '("~/org/refile.org"))
+    (org-directory "~/org")
+    (org-default-notes-file "refile.org")
+    (org-agenda-files '("today.org" "refile.org"))
     (org-capture-templates
      '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
@@ -234,6 +235,9 @@ DRINK *WATER*
 
     :hook ((org-present-mode . my/org-present-mode-start)
 	   (org-present-mode-quit . my/org-present-mode-end)))
+
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
 #+end_src
 
 ** Lang 📕
