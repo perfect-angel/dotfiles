@@ -14,8 +14,6 @@ DRINK *WATER*
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
-    (visual-fill-column-center-text t)
-    (visual-fill-column-width 80)
     (browse-url-browser-function 'eww-browse-url)
     (confirm-kill-emacs 'yes-or-no-p)
     (enable-recursive-minibuffers t)
@@ -167,19 +165,21 @@ DRINK *WATER*
 
 ** Pretty 💖
 #+begin_src emacs-lisp :tangle yes :results none
-  (use-package mood-line
-    ;; Enable mood-line
-    :config
-    (mood-line-mode)
-    :custom
-    (mood-line-glyph-alist mood-line-glyphs-fira-code))
+    (use-package mood-line
+      ;; Enable mood-line
+      :config
+      (mood-line-mode)
+      :custom
+      (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
-  (use-package emojify)
-  (use-package nerd-icons)
-  (use-package visual-fill-column)
-  (use-package rainbow-delimiters
-    :hook ((prog-mode . rainbow-delimiters-mode)))
-  (load-theme 'modus-vivendi 1)
+    (use-package emojify)
+    (use-package nerd-icons)
+    (use-package writeroom-mode
+      :custom
+      (writeroom-width 60))
+    (use-package rainbow-delimiters
+      :hook ((prog-mode . rainbow-delimiters-mode)))
+    (load-theme 'modus-vivendi 1)
 #+end_src
 
 ** Navigation 🗺️
@@ -221,11 +221,11 @@ DRINK *WATER*
 
   (defun my/org-present-mode-start ()
     (org-display-inline-images)
-    (visual-fill-column-mode 1)
+    (writeroom-mode 1)
     (visual-line-mode 1))
   (defun my/org-present-mode-end ()
     (org-remove-inline-images)
-    (visual-fill-column-mode 0)
+    (writeroom-mode 0)
     (visual-line-mode 0))
 
   (use-package org-present
