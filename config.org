@@ -10,6 +10,25 @@ DRINK *WATER*
 #+end_src
 #+end_center
 
+* Functions
+#+begin_src emacs-lisp :tangle yes :results none
+  (defun angel/widen-next-narrow ()
+    "widens region, goes to next heading, then narrows. minimal version of
+    org-present"
+    (interactive)
+    (widen)
+    (org-next-visible-heading 1)
+    (org-narrow-to-subtree))
+  
+  (defun angel/widen-prev-narrow ()
+    "widens region, goes to previous heading, then narrows. minimal version of
+    org-present"
+    (interactive)
+    (widen)
+    (org-previous-visible-heading 1)
+    (org-narrow-to-subtree))
+#+end_src
+
 * Settings
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
@@ -90,7 +109,8 @@ DRINK *WATER*
       (kbd "<leader>f") 'project-find-file
       (kbd "<leader>g") 'magit
       (kbd "<leader>h") 'counsel-describe-symbol
-      (kbd "<leader>jp") 'org-present
+      (kbd "<leader>jp") 'angel/widen-prev-narrow
+      (kbd "<leader>jn") 'angel/widen-next-narrow
       (kbd "<leader>jc") 'org-capture
       (kbd "<leader>ja") 'org-agenda
       (kbd "<leader>k") 'delete-window
@@ -218,23 +238,6 @@ DRINK *WATER*
     (org-capture-templates
      '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
-
-  (defun my/org-present-mode-start ()
-    (org-display-inline-images)
-    (writeroom-mode 1)
-    (visual-line-mode 1))
-  (defun my/org-present-mode-end ()
-    (org-remove-inline-images)
-    (writeroom-mode 0)
-    (visual-line-mode 0))
-
-  (use-package org-present
-    :config
-    (define-key org-present-mode-keymap (kbd "C-l") 'org-present-next)
-    (define-key org-present-mode-keymap (kbd "C-h") 'org-present-prev)
-
-    :hook ((org-present-mode . my/org-present-mode-start)
-	   (org-present-mode-quit . my/org-present-mode-end)))
 
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
