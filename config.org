@@ -10,19 +10,26 @@ DRINK *WATER*
 #+end_src
 #+end_center
 
+This is a horrible version of my old vim config
+I am holding onto too much of my vim/neovim muscle memory
+but I am old and this is mine
+you'd get better mileage with pure emacsen
+and maybe god mode
+I don't know, I'm pure evil
+
 * Functions
 #+begin_src emacs-lisp :tangle yes :results none
   (defun angel/widen-next-narrow ()
     "widens region, goes to next heading, then narrows. minimal version of
-    org-present"
+    org-present-next"
     (interactive)
     (widen)
     (org-next-visible-heading 1)
     (org-narrow-to-subtree))
-  
+
   (defun angel/widen-prev-narrow ()
     "widens region, goes to previous heading, then narrows. minimal version of
-    org-present"
+    org-present-prev"
     (interactive)
     (widen)
     (org-previous-visible-heading 1)
@@ -33,53 +40,55 @@ DRINK *WATER*
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
-    (browse-url-browser-function 'eww-browse-url)
-    (confirm-kill-emacs 'yes-or-no-p)
-    (enable-recursive-minibuffers t)
-    (tramp-default-method "ssh") ;; faster tramp with ssh
-    (auto-save-default nil) ;; don't autosave
-    (make-backup-files nil) ;; no backup files
-    (backup-directory-alist '(("." . "/tmp"))) ;; send backups to hell
-    (header-line-format " ")
-    (auto-save-default nil)
-    (custom-file "~/.emacs.d/emacs-custom.el") ;; custom custom
-    (ring-bell-function 'ignore) ;; no sounds
-    (visible-bell 1) ;; no sounds
+    (browse-url-browser-function 'eww-browse-url) ; use eww to browse
+    (confirm-kill-emacs 'yes-or-no-p) ; faster quit
+    (enable-recursive-minibuffers t) ; i forgot why i do this
+    (tramp-default-method "ssh") ; faster tramp with ssh
+    (auto-save-default nil) ; don't autosave
+    (make-backup-files nil) ; no backup files
+    (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
+    (auto-save-default nil) ; don't autosave
+    (custom-file "~/.emacs.d/emacs-custom.el") ; custom custom file
+    (ring-bell-function 'ignore) ; no sounds
+    (visible-bell 1) ; no sounds
 
-    :hook ((prog-mode . column-number-mode) ;; columns
-	   (prog-mode . flymake-mode) ;; checker
-	   ((prog-mode text-mode) . hs-minor-mode) ;; folding
-	   (prog-mode . auto-fill-mode));; word wrap
+    :hook ((prog-mode . column-number-mode) ; columns
+	   (prog-mode . flymake-mode) ; checker
+	   ((prog-mode text-mode) . hs-minor-mode) ; folding
+	   (prog-mode . auto-fill-mode)) ; word wrap
 
     :config
     (setq-default fill-column 80)
-    (when (eq system-type 'darwin) ;; mac specific settings
+    (when (eq system-type 'darwin) ; mac specific settings
 
-      (setq mac-frame-tabbing nil)
-      (setq mac-option-modifier 'alt)
-      (setq mac-command-modifier 'meta)
-      (global-set-key [kp-delete] 'delete-char))
-    (ido-mode 1)
-    (electric-pair-mode 1) ;; birds of a feather
-    (electric-indent-mode 1)
-    (fset 'yes-or-no-p 'y-or-n-p) ;; i'm lazy
-    (menu-bar-mode -1) ;; no gui
-    (recentf-mode 1) ;; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 26" nil t)  ;; granny-coded
-    (show-paren-mode 1) ;; i believe in symmetry
-    (toggle-scroll-bar -1) ;; no gui
-    (tool-bar-mode -1) ;; no gui
-    (global-eldoc-mode 1) ;; documentation
-    (windmove-default-keybindings)
-    (ffap-bindings))
+      (setq mac-option-modifier 'alt) ; option is alt
+      (setq mac-command-modifier 'meta) ; command is meta
+      (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
+    (electric-pair-mode 1) ; auto-pair
+    (electric-indent-mode 1) ; auto-indent
+    (fset 'yes-or-no-p 'y-or-n-p) ; 2 lazy 2 type yes
+    (menu-bar-mode -1) ; no gui
+    (toggle-scroll-bar -1) ; no gui
+    (tool-bar-mode -1) ; no gui
+    (recentf-mode 1) ; what was i doing?
+    (set-frame-font "FiraCode Nerd Font 26" nil t)  ; granny-coded
+    (show-paren-mode 1) ; i believe in symmetry
+    (global-eldoc-mode 1)) ; global documentation
 #+end_src
 
 * Packages
 ** Evil 😈
+
+I love vim bindings
+evil is the my fave vim emulator
+the built in leader is enough for me to not
+  need =evil-leader=
+i do like commentary and surround
+and stick to =evil-org= for my org bindings
+
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package evil ; evil
     :custom
-    (evil-want-integration t)
     (evil-want-integration t)
     (evil-want-C-u-scroll 1)
     (evil-undo-system 'undo-redo)
@@ -150,6 +159,9 @@ DRINK *WATER*
 #+end_src
 
 ** Utility 🔧
+
+Junk drawer...
+
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package savehist
     :config
@@ -179,8 +191,7 @@ DRINK *WATER*
     :config
     (which-key-mode 1))
   (use-package eldoc-box
-    :config
-    (eldoc-box-hover-at-point-mode))
+    :hook ((prog-mode . eldoc-box-hover-at-point-mode)))
 #+end_src
 
 ** Pretty 💖
