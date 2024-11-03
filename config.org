@@ -40,22 +40,23 @@ I don't know, I'm pure evil
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
+    (auto-save-default nil) ; don't autosave
+    (auto-save-default nil) ; don't autosave
+    (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
     (browse-url-browser-function 'eww-browse-url) ; use eww to browse
     (confirm-kill-emacs 'yes-or-no-p) ; faster quit
-    (enable-recursive-minibuffers t) ; i forgot why i do this
-    (tramp-default-method "ssh") ; faster tramp with ssh
-    (auto-save-default nil) ; don't autosave
-    (make-backup-files nil) ; no backup files
-    (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
-    (auto-save-default nil) ; don't autosave
     (custom-file "~/.emacs.d/emacs-custom.el") ; custom custom file
+    (enable-recursive-minibuffers t) ; i forgot why i do this
+    (make-backup-files nil) ; no backup files
     (ring-bell-function 'ignore) ; no sounds
+    (tramp-default-method "ssh") ; faster tramp with ssh
     (visible-bell 1) ; no sounds
 
     :hook ((prog-mode . column-number-mode) ; columns
 	   (prog-mode . flymake-mode) ; checker
 	   ((prog-mode text-mode) . hs-minor-mode) ; folding
-	   (prog-mode . auto-fill-mode)) ; word wrap
+	   ((prog-mode text-mode) . visual-line-mode) ; word wrap
+	   (prog-mode . auto-fill-mode)) ; auto word wrap
 
     :config
     (setq-default fill-column 80)
@@ -71,7 +72,7 @@ I don't know, I'm pure evil
     (toggle-scroll-bar -1) ; no gui
     (tool-bar-mode -1) ; no gui
     (recentf-mode 1) ; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 26" nil t)  ; granny-coded
+    (set-frame-font "FiraCode Nerd Font 18" nil t)  ; granny-coded
     (show-paren-mode 1) ; i believe in symmetry
     (global-eldoc-mode 1)) ; global documentation
 #+end_src
@@ -109,15 +110,15 @@ and stick to =evil-org= for my org bindings
       (kbd "!") 'execute-extended-command
       (kbd "-") 'dired
 
-      (kbd "<leader>/") 'counsel-rg
-      (kbd "<leader>,") 'counsel-M-x
+      (kbd "<leader>/") 'todo-global-search-ag
+      (kbd "<leader>,") 'execute-extended-command
       (kbd "<leader>a") 'vterm
       (kbd "<leader>b") 'switch-to-buffer
       (kbd "<leader>d") 'project-dired
-      (kbd "<leader>e") 'counsel-find-file
+      (kbd "<leader>e") 'find-file
       (kbd "<leader>f") 'project-find-file
       (kbd "<leader>g") 'magit
-      (kbd "<leader>h") 'counsel-describe-symbol
+      (kbd "<leader>h") 'describe-symbol
       (kbd "<leader>jp") 'angel/widen-prev-narrow
       (kbd "<leader>jn") 'angel/widen-next-narrow
       (kbd "<leader>jc") 'org-capture
@@ -126,10 +127,10 @@ and stick to =evil-org= for my org bindings
       (kbd "<leader>ll") 'flymake-show-buffer-diagnostics
       (kbd "<leader>lp") 'flymake-goto-prev-error
       (kbd "<leader>ln") 'flymake-goto-next-error
-      (kbd "<leader>m") 'counsel-recentf
+      (kbd "<leader>m") 'recentf
       (kbd "<leader>n") 'tab-new
       (kbd "<leader>q") 'save-buffers-kill-terminal
-      (kbd "<leader>r") 'swiper
+      (kbd "<leader>r") 'isearch-forward
       (kbd "<leader>sh") 'split-window-horizontally
       (kbd "<leader>sj") (lambda () (interactive)
 			   (split-window-below)
@@ -220,8 +221,7 @@ Junk drawer...
     (ivy-use-virtual-buffers t)
     (ivy-count-format "(%d/%d) ")
     :config
-    (ivy-mode 1)
-    (counsel-mode 1))
+    (ivy-mode 1))
 #+end_src
 
 ** Completion 🧩
