@@ -10,11 +10,9 @@ DRINK *WATER*
 #+end_src
 #+end_center
 
-This is a horrible version of my old vim config
-I am holding onto too much of my vim/neovim muscle memory
-but I am old and this is mine
-you'd get better mileage with pure emacsen
-and maybe god mode
+I am old and this is mine
+you'd might could get better
+mileage with god
 I don't know, I'm pure evil
 
 * Functions
@@ -41,25 +39,25 @@ I don't know, I'm pure evil
   (use-package emacs
     :custom
     (auto-save-default nil) ; don't autosave
-    (auto-save-default nil) ; don't autosave
     (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
     (browse-url-browser-function 'eww-browse-url) ; use eww to browse
     (confirm-kill-emacs 'yes-or-no-p) ; faster quit
     (custom-file "~/.emacs.d/emacs-custom.el") ; custom custom file
     (enable-recursive-minibuffers t) ; i forgot why i do this
     (make-backup-files nil) ; no backup files
+    (rcirc-default-nick "perfect-angel") ; i've never even sinned
     (ring-bell-function 'ignore) ; no sounds
     (tramp-default-method "ssh") ; faster tramp with ssh
     (visible-bell 1) ; no sounds
 
     :hook ((prog-mode . column-number-mode) ; columns
-	   (prog-mode . flymake-mode) ; checker
-	   ((prog-mode text-mode) . hs-minor-mode) ; folding
-	   ((prog-mode text-mode) . visual-line-mode) ; word wrap
-	   (prog-mode . auto-fill-mode)) ; auto word wrap
+  	   (prog-mode . flymake-mode) ; checker
+  	   ((prog-mode text-mode) . hs-minor-mode) ; folding
+  	   ((prog-mode text-mode) . visual-line-mode) ; word wrap
+  	   (prog-mode . auto-fill-mode)) ; auto word wrap
 
     :config
-    (setq-default fill-column 80)
+    (setq-default fill-column 80) ; tty geezer
     (when (eq system-type 'darwin) ; mac specific settings
 
       (setq mac-option-modifier 'alt) ; option is alt
@@ -80,12 +78,7 @@ I don't know, I'm pure evil
 * Packages
 ** Evil 😈
 
-I love vim bindings
-evil is the my fave vim emulator
-the built in leader is enough for me to not
-  need =evil-leader=
-i do like commentary and surround
-and stick to =evil-org= for my org bindings
+I love vim I suck lol
 
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package evil ; evil
@@ -99,7 +92,7 @@ and stick to =evil-org= for my org bindings
     (evil-set-leader nil (kbd "SPC"))
     (evil-set-leader nil "," t)
     (evil-define-key 'normal 'global
-      (kbd "K") 'eldoc-print-current-symbol-info
+      (kbd "K") 'eldoc-box-help-at-point
 
       (kbd "<localleader>f") 'eglot-format-buffer
       (kbd "<localleader>r") 'eglot-rename
@@ -133,15 +126,17 @@ and stick to =evil-org= for my org bindings
       (kbd "<leader>r") 'isearch-forward
       (kbd "<leader>sh") 'split-window-horizontally
       (kbd "<leader>sj") (lambda () (interactive)
-			   (split-window-below)
-			   (windmove-down))
+  			   (split-window-below)
+  			   (windmove-down))
       (kbd "<leader>sk") 'split-window-vertically
       (kbd "<leader>sl") (lambda () (interactive)
-			   (split-window-right)
-			   (windmove-right))
+  			   (split-window-right)
+  			   (windmove-right))
       (kbd "<leader>t") 'test-approximate
+      (kbd "<leader>u") 'writeroom-mode
       (kbd "<leader>vv") (lambda () (interactive) (find-file "~/dotfiles/config.org"))
       (kbd "<leader>w") 'save-buffer
+      (kbd "<leader>x") 'xwidget-webkit-browse-url
       (kbd "<leader>y") 'yas-visit-snippet-file
       (kbd "<leader>zc") 'hs-hide-all
       (kbd "<leader>zo") 'hs-show-all))
@@ -167,10 +162,10 @@ Junk drawer...
   (use-package savehist
     :config
     (savehist-mode))
-
-  (use-package magit)
-  (use-package iedit)
+  (use-package magit) ; git gud
+  (use-package iedit) ; TODO: why do i have this? edit quickfix?
   (use-package lingva)
+  (use-package vterm)
   (use-package simple-httpd)
   (use-package yasnippet
     :config
@@ -191,8 +186,7 @@ Junk drawer...
     (which-key-idle-delay 0.5)
     :config
     (which-key-mode 1))
-  (use-package eldoc-box
-    :hook ((prog-mode . eldoc-box-hover-at-point-mode)))
+  (use-package eldoc-box)
 #+end_src
 
 ** Pretty 💖
@@ -236,10 +230,12 @@ Junk drawer...
   (use-package org
     :custom
     (org-image-actual-width  nil)
+    (org-babel-clojure-backend 'cider)
     (org-babel-load-languages
      '((emacs-lisp . t)
        (shell . t)
        (python . t)
+       (clojure . t)
        (js . t)
        (ruby . t)))
 
@@ -267,6 +263,7 @@ Junk drawer...
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
   (use-package rmsbolt)
+  (use-package cider)
 #+end_src
 
 ** Ops 💻
