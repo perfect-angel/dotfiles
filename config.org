@@ -38,6 +38,13 @@ I don't know, I'm pure evil
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
+    (rcirc-default-nick "perfect-angel") ; i've never even sinned
+    (rcirc-server-alist
+     '(("irc.libera.chat"
+       :channels ("#emacs" "##rust" "#guix")
+       :nick "perfect-angel"
+       :port 6697
+       :encryption tls))) ; yappin
     (auto-save-default nil) ; don't autosave
     (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
     (browse-url-browser-function 'eww-browse-url) ; use eww to browse
@@ -45,7 +52,6 @@ I don't know, I'm pure evil
     (custom-file "~/.emacs.d/emacs-custom.el") ; custom custom file
     (enable-recursive-minibuffers t) ; i forgot why i do this
     (make-backup-files nil) ; no backup files
-    (rcirc-default-nick "perfect-angel") ; i've never even sinned
     (ring-bell-function 'ignore) ; no sounds
     (tramp-default-method "ssh") ; faster tramp with ssh
     (visible-bell 1) ; no sounds
@@ -67,6 +73,7 @@ I don't know, I'm pure evil
     (electric-indent-mode 1) ; auto-indent
     (fset 'yes-or-no-p 'y-or-n-p) ; 2 lazy 2 type yes
     (menu-bar-mode -1) ; no gui
+    (rcirc-track-minor-mode 1) ;; irc
     (toggle-scroll-bar -1) ; no gui
     (tool-bar-mode -1) ; no gui
     (recentf-mode 1) ; what was i doing?
@@ -191,21 +198,22 @@ Junk drawer...
 
 ** Pretty 💖
 #+begin_src emacs-lisp :tangle yes :results none
-    (use-package mood-line
-      ;; Enable mood-line
-      :config
-      (mood-line-mode)
-      :custom
-      (mood-line-glyph-alist mood-line-glyphs-fira-code))
+  (use-package mood-line
+    ;; Enable mood-line
+    :config
+    (mood-line-mode)
+    :custom
+    (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
-    (use-package emojify)
-    (use-package nerd-icons)
-    (use-package writeroom-mode
-      :custom
-      (writeroom-width 60))
-    (use-package rainbow-delimiters
-      :hook ((prog-mode . rainbow-delimiters-mode)))
-    (load-theme 'modus-vivendi 1)
+  (use-package emojify)
+  (use-package nerd-icons)
+  (use-package writeroom-mode
+    :custom
+    (writeroom-width 60))
+  (use-package rainbow-delimiters
+    :hook ((prog-mode . rainbow-delimiters-mode)))
+  (use-package doom-themes)
+  (load-theme 'doom-city-lights 1)
 #+end_src
 
 ** Navigation 🗺️
