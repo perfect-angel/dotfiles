@@ -77,7 +77,8 @@ I don't know, I'm pure evil
     (toggle-scroll-bar -1) ; no gui
     (tool-bar-mode -1) ; no gui
     (recentf-mode 1) ; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 24" nil t)  ; granny-coded
+    (set-frame-font "FiraCode Nerd Font 16" nil t)  ; granny-coded
+
     (show-paren-mode 1) ; i believe in symmetry
     (global-eldoc-mode 1)) ; global documentation
 #+end_src
@@ -213,7 +214,7 @@ Junk drawer...
   (use-package rainbow-delimiters
     :hook ((prog-mode . rainbow-delimiters-mode)))
   (use-package doom-themes)
-  (load-theme 'doom-solarized-light 1)
+  (load-theme 'doom-horizon 1)
 #+end_src
 
 ** Navigation 🗺️
