@@ -85,6 +85,32 @@ I don't know, I'm pure evil
     (global-eldoc-mode 1)) ; global documentation
 #+end_src
 
+* Org 📆
+#+begin_src emacs-lisp :tangle yes :results none
+  (use-package org
+    :custom
+    (org-image-actual-width  nil)
+    (org-babel-clojure-backend 'cider)
+    (org-babel-load-languages
+     '((emacs-lisp . t)
+       (shell . t)
+       (python . t)
+       (clojure . t)
+       (js . t)
+       (ruby . t)))
+
+    (org-directory "~/org")
+    (org-default-notes-file "refile.org")
+    (org-agenda-files '("today.org" "refile.org"))
+    (org-capture-templates
+     '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
+       ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
+  (use-package org-modern
+    :config
+    (global-org-modern-mode 1))
+
+#+end_src
+
 * Packages
 ** Evil 😈
 
@@ -101,6 +127,10 @@ I love vim I suck lol
     (evil-mode 1)
     (evil-set-leader nil (kbd "SPC"))
     (evil-set-leader nil "," t)
+    (evil-set-initial-state 'vterm-mode 'emacs)
+    (evil-set-initial-state 'term-mode 'emacs)
+    (evil-set-initial-state 'help-mode 'emacs)
+    (evil-set-initial-state 'nrepl-mode 'emacs)
     (evil-define-key 'normal 'global
       (kbd "K") 'eldoc-box-help-at-point
 
@@ -156,6 +186,7 @@ I love vim I suck lol
   (use-package evil-surround
     :config
     (global-evil-surround-mode))
+  (use-package evil-textobj-tree-sitter)
   (use-package evil-org
     :after org
     :hook ((org-mode . evil-org-mode))
@@ -231,31 +262,6 @@ Junk drawer...
   (use-package company
     :config
     (global-company-mode 1)) ;; replace with complete?
-#+end_src
-
-** Org 📆
-#+begin_src emacs-lisp :tangle yes :results none
-      (use-package org
-        :custom
-        (org-image-actual-width  nil)
-        (org-babel-clojure-backend 'cider)
-        (org-babel-load-languages
-         '((emacs-lisp . t)
-           (shell . t)
-           (python . t)
-           (clojure . t)
-           (js . t)
-           (ruby . t)))
-
-        (org-directory "~/org")
-        (org-default-notes-file "refile.org")
-        (org-agenda-files '("today.org" "refile.org"))
-        (org-capture-templates
-         '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
-           ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
-
-      (use-package org-bullets
-        :hook (org-mode . org-bullets-mode))
 #+end_src
 
 ** Lang 📕
