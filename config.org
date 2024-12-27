@@ -77,18 +77,26 @@ add melpa nongnu and elpa; initialize use-package
   (when (display-graphic-p)
     (context-menu-mode 1)
     (tool-bar-mode -1)
+    (menu-bar-mode -1)
     (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)
     (setq visible-bell 1
-  	confirm-kill-emacs 'yes-or-no-p ; faster quit
+  	confirm-kill-emacs 'yes-or-no-p
   	ring-bell-function 'ignore
   	frame-inhibit-implied-resize t))
+
+
+  
+  (use-package doom-themes)
+  (load-theme 'doom-gruvbox 1)
+  (set-frame-font "FiraCode Nerd Font 20" nil t)
 #+end_src
 
-Icons
+Icons 
+*Note:* Install everything with the function, =all-the-icons-install-fonts=.
 
 #+begin_src emacs-lisp
-(use-package all-the-icons)
+  (use-package all-the-icons)
 #+end_src
 
 mode lineee
@@ -127,17 +135,11 @@ I get issues with Magic and Dimmer, so let’s turn off this feature in certain 
   (use-package nerd-icons)
   (use-package rainbow-delimiters
     :hook ((prog-mode . rainbow-delimiters-mode)))
-  (use-package doom-themes)
-  (load-theme 'doom-gruvbox 1)
 #+end_src
 
-
 ** Programming Hooks
-
 #+begin_src emacs-lisp :tangle yes
 (use-package emacs
-
-
     :hook ((prog-mode . column-number-mode) ; columns
   	 (prog-mode . flymake-mode) ; checker
   	 ((prog-mode text-mode) . hs-minor-mode) ; folding
@@ -149,37 +151,33 @@ I get issues with Magic and Dimmer, so let’s turn off this feature in certain 
   (use-package emacs
     :config
     (setq rcirc-default-nick "perfect_angel" ; i've never even sinned
+	  rcirc-track-minor-mode 1
   	rcirc-server-alist
   	'(("irc.libera.chat"
   	   :channels ("#emacs" "##rust" "#guix")
-  	   :nick "perfect-angel"
+  	   :nick "perfect_angel"
   	   :port 6697
   	   :encryption tls))))
 #+end_src
 
-* Settings
+** Web Browser
 
-** TODO
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (setq browse-url-browser-function 'xwidget-webkit-browse-url)) ; use xwidget to browse
+
+#+end_src
+
+** Etc
+
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
-    (backup-directory-alist '(("." . "/tmp"))) ; send backups to hell
-    (browse-url-browser-function 'eww-browse-url) ; use eww to browse
-    (confirm-kill-emacs 'yes-or-no-p) ; faster quit
-    (custom-file "~/.emacs.d/emacs-custom.el") ; custom custom file
     (enable-recursive-minibuffers t) ; i forgot why i do this
-    (make-backup-files nil) ; no backup files
-    (ring-bell-function 'ignore) ; no sounds
     (tramp-default-method "ssh") ; faster tramp with ssh
     (visual-fill-column-center-text t)
     (visual-fill-column-width 60)
-    (visible-bell 1) ; no sounds
-
-    :hook ((prog-mode . column-number-mode) ; columns
-  	   (prog-mode . flymake-mode) ; checker
-  	   ((prog-mode text-mode) . hs-minor-mode) ; folding
-  	   ((prog-mode text-mode) . visual-line-mode) ; word wrap
-  	   (prog-mode . auto-fill-mode)) ; auto word wrap
 
     :config
     (setq-default fill-column 80) ; tty geezer
@@ -188,13 +186,7 @@ I get issues with Magic and Dimmer, so let’s turn off this feature in certain 
     (electric-pair-mode 1) ; auto-pair
     (electric-indent-mode 1) ; auto-indent
     (fset 'yes-or-no-p 'y-or-n-p) ; 2 lazy 2 type yes
-    (menu-bar-mode -1) ; no gui
-    (rcirc-track-minor-mode 1) ;; irc
-    (toggle-scroll-bar -1) ; no gui
-    (tool-bar-mode -1) ; no gui
     (recentf-mode 1) ; what was i doing?
-    (set-frame-font "FiraCode Nerd Font 20" nil t)  ; granny-coded
-
     (show-paren-mode 1) ; i believe in symmetry
     (global-eldoc-mode 1)) ; global documentation
 #+end_src
@@ -227,7 +219,6 @@ make a few things prettier
       (add-hook 'org-mode-hook 'org-appear-mode))
 #+end_src
 
-Trying out  org appear
 ** Babel
 
 set up my backends for babel code evaluation in org buffers
@@ -296,8 +287,7 @@ Make headers big and pretty
 
  #+end_src
 
-* Packages
-** Evil 😈
+* Evil 😈
 
 I love vim I suck lol
 
@@ -324,7 +314,7 @@ I love vim I suck lol
       (kbd "!") 'execute-extended-command
       (kbd "-") 'dired
 
-      (kbd "<leader>/") 'todo-global-search-ag
+      (kbd "<leader>/") 'counsel-ag
       (kbd "<leader>,") 'execute-extended-command
       (kbd "<leader>a") 'vterm
       (kbd "<leader>b") 'switch-to-buffer
@@ -375,7 +365,7 @@ I love vim I suck lol
     (evil-org-agenda-set-keys))
 #+end_src
 
-** Utility 🔧
+* Utility 🔧
 
 Junk drawer...
 
@@ -396,7 +386,7 @@ Junk drawer...
 
 #+end_src
 
-** Discovery 🔭
+* Discovery 🔭
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package which-key
     :custom
@@ -407,7 +397,7 @@ Junk drawer...
   (use-package eldoc-box)
 #+end_src
 
-** Navigation 🗺️
+* Navigation 🗺️
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package avy)
   (use-package counsel
@@ -418,14 +408,14 @@ Junk drawer...
     (ivy-mode 1))
 #+end_src
 
-** Completion 🧩
+* Completion 🧩
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package company
     :config
     (global-company-mode 1)) ;; replace with complete?
 #+end_src
 
-** Lang 📕
+* Lang 📕
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package handlebars-mode)
   (use-package geiser-guile)
@@ -441,12 +431,12 @@ Junk drawer...
   (use-package cider)
 #+end_src
 
-** Ops 💻
+* Ops 💻
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package kubernetes)
 #+end_src
 
-** LSP 🧬
+* LSP 🧬
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package eglot
     :hook ((js-ts-mode  . eglot-ensure)
@@ -458,10 +448,13 @@ Junk drawer...
 #+end_src
 
 * End
-💜💜💜
-Amen
-💜💜💜
 
+#+begin_center
+				     💜💜💜
+				      Amen
+				     💜💜💜
+#+end_center
+					
 
 #+property:    header-args:emacs-lisp  :tangle yes
 #+property:    header-args    :results none :eval no-export :comments no mkdirp yes
