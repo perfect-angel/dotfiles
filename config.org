@@ -59,7 +59,6 @@ add melpa nongnu and elpa; initialize use-package
     (exec-path-from-shell-initialize))
 #+end_src
 
-* Emacs
 ** Autosave/Backups/Custom
 
 #+begin_src emacs-lisp
@@ -86,7 +85,7 @@ add melpa nongnu and elpa; initialize use-package
   	frame-inhibit-implied-resize t))
 
 
-  
+
   (use-package doom-themes)
   (load-theme 'doom-gruvbox 1)
   (set-frame-font "FiraCode Nerd Font 20" nil t)
@@ -146,6 +145,7 @@ I get issues with Magic and Dimmer, so let’s turn off this feature in certain 
   	 ((prog-mode text-mode) . visual-line-mode) ; word wrap
   	 (prog-mode . auto-fill-mode))) ; auto word wrap
 #+end_src
+* Tools 🔨
 ** IRC
 #+begin_src emacs-lisp
   (use-package emacs
@@ -169,17 +169,18 @@ I get issues with Magic and Dimmer, so let’s turn off this feature in certain 
 
 #+end_src
 
-** Etc
+** settings
 
 #+begin_src emacs-lisp :tangle yes :results none
   (use-package emacs
     :custom
-    (enable-recursive-minibuffers t) ; i forgot why i do this
-    (tramp-default-method "ssh") ; faster tramp with ssh
-    (visual-fill-column-center-text t)
-    (visual-fill-column-width 60)
 
     :config
+    
+    (setq enable-recursive-minibuffers t ; i forgot why i do this
+  	tramp-default-method "ssh" ; faster tramp with ssh
+  	visual-fill-column-center-text t
+  	visual-fill-column-width 60)
     (setq-default fill-column 80) ; tty geezer
     (when (eq system-type 'darwin) ; mac specific settings
       (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
@@ -325,6 +326,7 @@ I love vim I suck lol
       (kbd "<leader>h") 'describe-symbol
       (kbd "<leader>jp") 'angel/widen-prev-narrow
       (kbd "<leader>jn") 'angel/widen-next-narrow
+      (kbd "<leader>js") 'counsel-outline
       (kbd "<leader>jc") 'org-capture
       (kbd "<leader>ja") 'org-agenda
       (kbd "<leader>k") 'delete-window
@@ -380,6 +382,7 @@ Junk drawer...
   (use-package simple-httpd)
   (use-package yasnippet
     :config
+    (setq yasnippet-snippets-dir "~/dotfiles/snippets/")
     (yas-global-mode 1)
     (global-set-key (kbd "C-x C-y") 'company-yasnippet))
   (use-package yasnippet-snippets)
@@ -417,18 +420,25 @@ Junk drawer...
 
 * Lang 📕
 #+begin_src emacs-lisp :tangle yes :results none
-  (use-package handlebars-mode)
-  (use-package geiser-guile)
+        (use-package handlebars-mode)
+        (use-package geiser-guile)
+        (use-package emmet-mode
+          :config
+          (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+          (add-hook 'html-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+          (add-hook 'html-ts-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+  	(add-hook 'css-mode-hook  'emmet-mode)) ;; enable Emmet's css abbreviation.
+
   (use-package rust-ts-mode
-    :mode ("\\.rs\\'" . rust-ts-mode))
-  (use-package treesit-auto
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode))
-  (use-package rmsbolt)
-  (use-package cider)
+          :mode ("\\.rs\\'" . rust-ts-mode))
+        (use-package treesit-auto
+          :custom
+          (treesit-auto-install 'prompt)
+          :config
+          (treesit-auto-add-to-auto-mode-alist 'all)
+          (global-treesit-auto-mode))
+        (use-package rmsbolt)
+        (use-package cider)
 #+end_src
 
 * Ops 💻
