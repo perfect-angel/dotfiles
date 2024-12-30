@@ -132,7 +132,7 @@ vim.keymap.set("n", "<leader>z", function()
 end)
 
 
---------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------
 
 -- XXX PACKAGES
 vim.cmd([[packadd cfilter]])
@@ -158,6 +158,7 @@ require("lazy").setup({
   "nvim-lualine/lualine.nvim",   -- status line
   'nvim-tree/nvim-web-devicons', -- devicons
   'mechatroner/rainbow_csv',     -- pretty csv
+  "rebelot/kanagawa.nvim",
   -- lsp
   {
     'neovim/nvim-lspconfig',
@@ -258,31 +259,33 @@ require("lazy").setup({
   "tpope/vim-repeat",                      -- better .
   "tpope/vim-sensible",                    -- sensible defaults
   -- tools
-  { "michaelb/sniprun", branch = "master", build = "sh install.sh", opts = {} },
+  { "michaelb/sniprun",    branch = "master", build = "sh install.sh", opts = {} },
+  { "folke/zen-mode.nvim", opts = {} },
   {
-    'nvim-orgmode/orgmode',
-    event = 'VeryLazy',
-    ft = { 'org' },
+    "nvim-neorg/neorg",
+    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+    run = ":Neorg sync-parsers",
     config = function()
-      require('orgmode').setup({
-        org_agenda_files = '~/org/**/*',
-        org_default_notes_file = '~/org/refile.org',
-        org_capture_templates = {
-          t = { description = 'TODO', template = '* TODO %?\n  %u' },
-          j = {
-            description = 'Journal',
-            template = '\n    %?',
-            target = "~/org/journal.org",
-            datetree = true
+      require('neorg').setup {
+        load = {
+          ["core.defaults"] = {},
+          ["core.concealer"] = {},
+          ["core.presenter"] = { config = { zen_mode = "zen-mode" } },
+          ["core.dirman"] = {
+            config = {
+              workspaces = {
+                notes = "~/norg"
+              },
+              default_workspace = "notes"
+            }
           },
-          s = { description = 'Shopping', template = '- %?', target = "~/org/shopping.org" },
         }
-      })
+      }
     end
   }
 })
 
-vim.cmd('colo habamax')
+vim.cmd('colo kanagawa')
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
@@ -290,19 +293,19 @@ vim.cmd([[syntax enable]])
 --------------------------------------------------------------------------------
 
 -- XXX AUTOCOMMANDS
-vim.cmd [[au! FileType fugitive nm <buffer> <TAB> =]]
-vim.cmd [[au! FileType netrw nm <buffer> <C-l> <C-w>l]]
-vim.cmd [[au! BufEnter *.heex setlocal ft=eelixir]]
-vim.cmd [[au! BufEnter *.mdx setlocal ft=markdown]]
-vim.cmd [[au! TermOpen * setlocal nonumber norelativenumber bufhidden=hide]]
-vim.cmd [[au! FileType typescript,typescriptreact setlocal foldmethod=indent]]
-vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>i :lua require("typescript").actions.addMissingImports()<CR>]]
-vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>u :lua require("typescript").actions.removeUnused()<CR>]]
-vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>x :lua require("typescript").actions.fixAll()<CR>]]
-vim.cmd [[au! BufEnter journal.md nn <C-n> <C-x>k ]]
-vim.cmd [[au! BufEnter journal.md lua require('cmp').setup.buffer { enabled = false }]]
-vim.cmd [[au! BufWritePre *.json,*.lua,*.tf lua vim.lsp.buf.format()]]
-vim.cmd [[au! BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll]]
+
+-- vim.cmd [[au! FileType netrw nm <buffer> <C-l> <C-w>l]]
+-- vim.cmd [[au! BufEnter *.heex setlocal ft=eelixir]]
+-- vim.cmd [[au! BufEnter *.mdx setlocal ft=markdown]]
+-- vim.cmd [[au! TermOpen * setlocal nonumber norelativenumber bufhidden=hide]]
+-- vim.cmd [[au! FileType typescript,typescriptreact setlocal foldmethod=indent]]
+-- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>i :lua require("typescript").actions.addMissingImports()<CR>]]
+-- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>u :lua require("typescript").actions.removeUnused()<CR>]]
+-- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>x :lua require("typescript").actions.fixAll()<CR>]]
+-- vim.cmd [[au! BufEnter journal.md nn <C-n> <C-x>k ]]
+-- vim.cmd [[au! BufEnter journal.md lua require('cmp').setup.buffer { enabled = false }]]
+-- vim.cmd [[au! BufWritePre *.json,*.lua,*.tf lua vim.lsp.buf.format()]]
+-- vim.cmd [[au! BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll]]
 --------------------------------------------------------------------------------
 
 -- XXX CONFIGS
@@ -318,4 +321,3 @@ end
 -- TODO
 -- - snippets
 -- - email
--- - watch org
