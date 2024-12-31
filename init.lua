@@ -43,11 +43,10 @@ vim.keymap.set("n", "<C-j>", "<C-W>j")
 vim.keymap.set("n", "<C-k>", "<C-W>k")
 vim.keymap.set("n", "<C-h>", "<C-W>h")
 vim.keymap.set("n", "<C-l>", "<C-W>l")
---
+
 --tabs
 vim.keymap.set("n", "H", "gT")
 vim.keymap.set("n", "L", "gt")
-
 
 -- resize
 vim.keymap.set("n", "<Left>", ":vertical res -5<CR>")
@@ -95,7 +94,8 @@ vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>")
 vim.keymap.set("n", "<leader>gd", ":Git diff origin/main...HEAD %<CR>")
 vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
-vim.keymap.set("n", "<leader>i", ":echo unused<CR>")
+vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
+vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
 vim.keymap.set("n", "<leader>j", ":e ~/org/<CR>")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
