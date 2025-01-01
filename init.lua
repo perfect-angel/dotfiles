@@ -18,6 +18,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 2
 vim.o.timeout = true
 vim.o.timeoutlen = 300
+vim.o.textwidth = 80
 vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.o.autochdir = false
 vim.o.clipboard = "unnamedplus"
@@ -39,10 +40,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- windows
-vim.keymap.set("n", "<C-j>", "<C-W>j")
-vim.keymap.set("n", "<C-k>", "<C-W>k")
-vim.keymap.set("n", "<C-h>", "<C-W>h")
-vim.keymap.set("n", "<C-l>", "<C-W>l")
+-- vim.keymap.set("n", "<C-j>", "<C-W>j")
+-- vim.keymap.set("n", "<C-k>", "<C-W>k")
+-- vim.keymap.set("n", "<C-h>", "<C-W>h")
+-- vim.keymap.set("n", "<C-l>", "<C-W>l")
 
 --tabs
 vim.keymap.set("n", "H", "gT")
@@ -213,6 +214,7 @@ require("lazy").setup({
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           { name = "path" },
+          { name = "snippet" },
         }, {
           { name = "buffer" },
         }),
@@ -243,10 +245,24 @@ require("lazy").setup({
   "stefandtw/quickfix-reflector.vim", -- edit quickfix search
   {
     "folke/which-key.nvim",           -- leader key hints
-    opts = { triggers = { "<leader>", "<localleader>" } }
+    event = "VeryLazy",
+    opts = { preset = "modern" },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
   },
   "nvim-treesitter/nvim-treesitter",
-  -- util}
+  -- util
+  {
+    "knubie/vim-kitty-navigator",
+    build = "cp ./*.py ~/.config/kitty/",
+  },
   "nvim-lua/plenary.nvim",                 -- async lib for plugins
   { 'windwp/nvim-autopairs',  opts = {} }, -- autopairs
   { "kylechui/nvim-surround", opts = {} }, -- ysiw
@@ -270,6 +286,7 @@ require("lazy").setup({
         load = {
           ["core.defaults"] = {},
           ["core.concealer"] = {},
+          ["core.completion"] = { config = { engine = "nvim-cmp" } },
           ["core.presenter"] = { config = { zen_mode = "zen-mode" } },
           ["core.dirman"] = {
             config = {
