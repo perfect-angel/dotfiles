@@ -269,6 +269,10 @@ require("lazy").setup({
       require('orgmode').setup({
         org_agenda_files = '~/org/**/*',
         org_default_notes_file = '~/org/refile.org',
+        org_adapt_indentation = false,
+        org_capture_templates = {
+          t = { description = 'Task', template = '* TODO %?'}
+        }
       })
 
     end,
