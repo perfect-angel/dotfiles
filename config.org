@@ -1,3 +1,4 @@
+
 #+TITLE: ANGEL CAMPBELL'S WONDERFUL HORRIBLE EMACS CONFIG
 #+AUTHOR: Angel D. Campbell
 #+DATE: 2024-12-26
@@ -33,9 +34,7 @@ A literate configuration file for my emacs and system.
 
 * Bootstrap 👢
 
-First thing's first
-
-** Package Initialization
+First thing's first, initialize emacs packages
 
 add melpa nongnu and elpa; initialize use-package
 
@@ -51,7 +50,7 @@ add melpa nongnu and elpa; initialize use-package
 (setq use-package-always-ensure t)
 #+end_src
 
-** Exec Path
+use this package to make sure my =PATH= is set correctly
 
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell ;; set path to shellpath
@@ -59,7 +58,7 @@ add melpa nongnu and elpa; initialize use-package
     (exec-path-from-shell-initialize))
 #+end_src
 
-** Autosave/Backups/Custom
+not a big fan of backup/swap/custom files
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -70,9 +69,9 @@ add melpa nongnu and elpa; initialize use-package
   	custom-file "~/.emacs.d/emacs-custom.el")) ; custom custom file
 #+end_src
 
-** UI
+Pretty stuff, themes and font
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (when (display-graphic-p)
     (context-menu-mode 1)
     (tool-bar-mode -1)

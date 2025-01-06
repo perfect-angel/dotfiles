@@ -22,7 +22,6 @@ vim.o.textwidth = 80
 vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.o.autochdir = false
 vim.o.clipboard = "unnamedplus"
-vim.o.signcolumn = 'yes'
 vim.o.foldmethod = "expr"
 vim.o.wrap = false
 vim.o.foldlevel = 99
@@ -30,6 +29,8 @@ vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.g.netrw_banner = 0
+vim.o.conceallevel = 2
+vim.o.concealcursor = 'nc'
 
 vim.o.background = "light"
 
@@ -64,7 +65,7 @@ vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j")
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 
--- lsp
+-- lsp TODO: change
 vim.keymap.set("n", "<localleader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<localleader>r", vim.lsp.buf.rename)
 vim.keymap.set("v", "<localleader>a", vim.lsp.buf.code_action)
@@ -97,7 +98,7 @@ vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
 vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
 vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
-vim.keymap.set("n", "<leader>j", ":Neorg<CR>")
+vim.keymap.set("n", "<leader>j", ":e ~/org/")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
@@ -105,6 +106,7 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
+-- vim.keymap.set("n", "<leader>o", "used by orgmode")
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -159,7 +161,6 @@ require("lazy").setup({
   "nvim-lualine/lualine.nvim",   -- status line
   'nvim-tree/nvim-web-devicons', -- devicons
   'mechatroner/rainbow_csv',     -- pretty csv
-  "rebelot/kanagawa.nvim",
   -- lsp
   {
     'neovim/nvim-lspconfig',
@@ -258,6 +259,20 @@ require("lazy").setup({
     },
   },
   "nvim-treesitter/nvim-treesitter",
+  -- org
+  {
+    'nvim-orgmode/orgmode',
+    event = 'VeryLazy',
+    ft = { 'org' },
+    config = function()
+      -- Setup orgmode
+      require('orgmode').setup({
+        org_agenda_files = '~/org/**/*',
+        org_default_notes_file = '~/org/refile.org',
+      })
+
+    end,
+  },
   -- util
   {
     "knubie/vim-kitty-navigator",
@@ -277,35 +292,12 @@ require("lazy").setup({
   -- tools
   { "michaelb/sniprun",    branch = "master", build = "sh install.sh", opts = {} },
   { "folke/zen-mode.nvim", opts = {} },
-  {
-    "nvim-neorg/neorg",
-    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
-    run = ":Neorg sync-parsers",
-    config = function()
-      require('neorg').setup {
-        load = {
-          ["core.defaults"] = {},
-          ["core.concealer"] = {},
-          ["core.completion"] = { config = { engine = "nvim-cmp" } },
-          ["core.presenter"] = { config = { zen_mode = "zen-mode" } },
-          ["core.dirman"] = {
-            config = {
-              workspaces = {
-                notes = "~/norg"
-              },
-              default_workspace = "notes"
-            }
-          },
-        }
-      }
-    end
-  }
 })
 
-vim.cmd('colo kanagawa')
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
+vim.cmd([[colo habamax]])
 
 --------------------------------------------------------------------------------
 
