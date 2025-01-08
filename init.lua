@@ -18,6 +18,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 2
 vim.o.timeout = true
 vim.o.timeoutlen = 300
+vim.o.swapfile = false
 vim.o.textwidth = 80
 vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.o.autochdir = false
@@ -271,7 +272,13 @@ require("lazy").setup({
         org_default_notes_file = '~/org/refile.org',
         org_adapt_indentation = false,
         org_capture_templates = {
-          t = { description = 'Task', template = '* TODO %?'}
+          t = { description = 'Task', template = '* TODO %?'},
+          j = {
+            description = 'Journal',
+            target = '~/org/journal.org',
+            template = '%?',
+            datetree = true
+          }
         }
       })
 

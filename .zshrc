@@ -3,6 +3,9 @@
 #     A NOVEL
 
 
+# Simple Prompt
+export PS1="${PWD/*\//} > "
+
 # America's favorite paths time
 export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/bin:$PATH
