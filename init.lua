@@ -84,7 +84,7 @@ vim.keymap.set("n", "Q", "@q")             -- One button macros
 vim.keymap.set("n", "q:", ":q")            -- No q:
 
 -- leader mappings
-vim.keymap.set("n", "<leader>/", ":Telescope find_files<CR>")
+vim.keymap.set("n", "<leader>/", ":Telescope grep_string<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
 -- vim.keymap.set("n", "<leader><leader>", ":")
@@ -106,7 +106,7 @@ vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
 vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
-vim.keymap.set("n", "<leader>n", ":tabe<CR>")
+-- vim.keymap.set("n", "<leader>n", ":tabe<CR>") used by org roam
 -- vim.keymap.set("n", "<leader>o", "used by orgmode")
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
@@ -226,7 +226,10 @@ require("lazy").setup({
             vim.snippet.expand(args.body)
           end,
         },
-        mapping = cmp.mapping.preset.insert({}),
+        mapping = cmp.mapping.preset.insert({
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
       })
     end
   },
@@ -261,8 +264,7 @@ require("lazy").setup({
   },
   "nvim-treesitter/nvim-treesitter",
   -- org
-  {
-    'nvim-orgmode/orgmode',
+  { 'nvim-orgmode/orgmode',
     event = 'VeryLazy',
     ft = { 'org' },
     config = function()
@@ -272,7 +274,7 @@ require("lazy").setup({
         org_default_notes_file = '~/org/refile.org',
         org_adapt_indentation = false,
         org_capture_templates = {
-          t = { description = 'Task', template = '* TODO %?'},
+          t = { description = 'Task', template = '* TODO %?' },
           j = {
             description = 'Journal',
             target = '~/org/journal.org',
@@ -281,8 +283,14 @@ require("lazy").setup({
           }
         }
       })
-
     end,
+  },
+  {
+    "chipsenkbeil/org-roam.nvim",
+    opts = {
+      directory = "~/org/words",
+      org_files = {"~/org"}
+    }
   },
   -- util
   {

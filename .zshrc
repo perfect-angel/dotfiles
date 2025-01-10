@@ -1,10 +1,7 @@
 #     "ZSHRC"
 # BY ANGEL CAMPBELL
 #     A NOVEL
-
-
-# Simple Prompt
-export PS1="${PWD/*\//} > "
+export PS1="%~ > "
 
 # America's favorite paths time
 export PATH=$HOME/bin:$PATH
