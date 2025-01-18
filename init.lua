@@ -41,12 +41,6 @@ vim.o.background = "light"
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
--- windows
--- vim.keymap.set("n", "<C-j>", "<C-W>j")
--- vim.keymap.set("n", "<C-k>", "<C-W>k")
--- vim.keymap.set("n", "<C-h>", "<C-W>h")
--- vim.keymap.set("n", "<C-l>", "<C-W>l")
-
 --tabs
 vim.keymap.set("n", "H", "gT")
 vim.keymap.set("n", "L", "gt")
@@ -291,6 +285,7 @@ require("lazy").setup({
       org_files = {"~/org"}
     }
   },
+  "bullets-vim/bullets.vim",
   -- util
   {
     "knubie/vim-kitty-navigator",
@@ -309,7 +304,7 @@ require("lazy").setup({
   "tpope/vim-sensible",                    -- sensible defaults
   -- tools
   { "michaelb/sniprun",    branch = "master", build = "sh install.sh", opts = {} },
-  { "folke/zen-mode.nvim", opts = {} },
+  { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
 })
 
 
