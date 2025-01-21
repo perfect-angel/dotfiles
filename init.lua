@@ -19,7 +19,7 @@ vim.o.shiftwidth = 2
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 vim.o.swapfile = false
-vim.o.textwidth = 80
+vim.o.textwidth = 60
 vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.o.autochdir = false
 vim.o.clipboard = "unnamedplus"
@@ -32,6 +32,8 @@ vim.o.smartcase = true
 vim.g.netrw_banner = 0
 vim.o.conceallevel = 2
 vim.o.concealcursor = 'nc'
+
+vim.g.UltiSnipsSnippetDirectories = {"~/dotfiles/snippets"}
 
 vim.o.background = "light"
 
@@ -202,31 +204,36 @@ require("lazy").setup({
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "saadparwaiz1/cmp_luasnip"
     },
     config = function()
       local cmp = require('cmp')
       cmp.setup({
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "path" },
-          { name = "snippet" },
+          { name = "ultisnips" },
+
         }, {
           { name = "buffer" },
         }),
         snippet = {
           expand = function(args)
-            -- You need Neovim v0.10 to use vim.snippet
-            vim.snippet.expand(args.body)
+            vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
           end,
         },
         mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items
         }),
       })
     end
   },
-  -- testing
+  -- snippets
+  "SirVer/ultisnips",
+  -- testing TODO: test in virtual window
   "vim-test/vim-test",
   -- navigation
   'nvim-telescope/telescope.nvim',
@@ -257,7 +264,8 @@ require("lazy").setup({
   },
   "nvim-treesitter/nvim-treesitter",
   -- org
-  { 'nvim-orgmode/orgmode',
+  {
+    'nvim-orgmode/orgmode',
     event = 'VeryLazy',
     ft = { 'org' },
     config = function()
@@ -282,7 +290,7 @@ require("lazy").setup({
     "chipsenkbeil/org-roam.nvim",
     opts = {
       directory = "~/org/words",
-      org_files = {"~/org"}
+      org_files = { "~/org" }
     }
   },
   "bullets-vim/bullets.vim",
@@ -303,7 +311,7 @@ require("lazy").setup({
   "tpope/vim-repeat",                      -- better .
   "tpope/vim-sensible",                    -- sensible defaults
   -- tools
-  { "michaelb/sniprun",    branch = "master", build = "sh install.sh", opts = {} },
+  { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
   { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
 })
 
