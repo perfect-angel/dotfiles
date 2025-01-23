@@ -87,7 +87,7 @@ vim.keymap.set("n", "q:", ":q")            -- No q:
 vim.keymap.set("n", "<leader>/", ":Telescope grep_string<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
--- vim.keymap.set("n", "<leader><leader>", ":")
+-- vim.keymap.set("n", "<leader><leader>", "Telescope current_buffer_fuzzy_find")
 vim.keymap.set("n", "<leader>a", ":te<CR>")
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 vim.keymap.set("n", "<leader>c", ":Telescope lsp_dynamic_workspace_symbols<CR>")
@@ -99,7 +99,7 @@ vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
 vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
 vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
-vim.keymap.set("n", "<leader>j", ":e ~/org/")
+vim.keymap.set("n", "<leader>j", ":Telescope current_buffer_fuzzy_find")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
@@ -135,7 +135,6 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
-
 -- ------------------------------------------------------------------------------
 
 -- XXX PACKAGES
@@ -154,7 +153,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.AutoPairsMapCR = 0
-vim.g["test#strategy"] = "neovim"
+vim.g["test#strategy"] = "asyncrun"
 
 require("lazy").setup({
   -- cosmetic
@@ -346,6 +345,3 @@ end
 --   dofile(os.getenv("home") .. "local-init.lua")
 -- end
 --
--- TODO
--- - snippets
--- - email
