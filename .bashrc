@@ -115,3 +115,8 @@ fi
 
 export PATH="$PATH:/opt/nvim-linux64/bin"
 . "$HOME/.cargo/env"
+
+
+GUIX_PROFILE="/home/angel/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
+
