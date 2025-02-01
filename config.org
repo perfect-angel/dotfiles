@@ -164,84 +164,6 @@ I get issues with Magit and Dimmer, so let’s turn off this feature in certain 
 #+end_src
 
 * Programming 💻
-** Evil
-
-I love vim I suck lol
-
-#+begin_src emacs-lisp :tangle yes :results none
-  (use-package evil ; evil
-    :custom
-    (evil-want-integration t)
-    (evil-want-C-u-scroll 1)
-    (evil-undo-system 'undo-redo)
-
-    :config
-    (evil-mode 1)
-    (evil-set-leader nil (kbd "SPC"))
-    (evil-set-leader nil "," t)
-    (evil-define-key 'normal 'global
-      (kbd "K") 'eldoc-box-help-at-point
-
-      (kbd "<localleader>f") 'eglot-format-buffer
-      (kbd "<localleader>r") 'eglot-rename
-      (kbd "<localleader>a") 'eglot-code-actions
-
-      (kbd "gd") 'xref-find-definitions
-
-      (kbd "!") 'execute-extended-command
-      (kbd "-") 'dired
-
-      (kbd "<leader>/") 'counsel-ag
-      (kbd "<leader>,") 'execute-extended-command
-      (kbd "<leader>a") 'vterm
-      (kbd "<leader>b") 'switch-to-buffer
-      (kbd "<leader>d") 'project-dired
-      (kbd "<leader>e") 'find-file
-      (kbd "<leader>f") 'project-find-file
-      (kbd "<leader>g") 'magit
-      (kbd "<leader>h") 'describe-symbol
-      (kbd "<leader>jp") 'angel/widen-prev-narrow
-      (kbd "<leader>jn") 'angel/widen-next-narrow
-      (kbd "<leader>js") 'counsel-outline
-      (kbd "<leader>jc") 'org-capture
-      (kbd "<leader>ja") 'org-agenda
-      (kbd "<leader>k") 'delete-window
-      (kbd "<leader>ll") 'flymake-show-buffer-diagnostics
-      (kbd "<leader>lp") 'flymake-goto-prev-error
-      (kbd "<leader>ln") 'flymake-goto-next-error
-      (kbd "<leader>m") 'recentf
-      (kbd "<leader>n") 'tab-new
-      (kbd "<leader>q") 'save-buffers-kill-terminal
-      (kbd "<leader>r") 'isearch-forward
-      (kbd "<leader>sh") 'split-window-horizontally
-      (kbd "<leader>sj") (lambda () (interactive)
-  			   (split-window-below)
-  			   (windmove-down))
-      (kbd "<leader>sk") 'split-window-vertically
-      (kbd "<leader>sl") (lambda () (interactive)
-  			   (split-window-right)
-  			   (windmove-right))
-      (kbd "<leader>t") 'test-approximate
-      (kbd "<leader>u") 'visual-fill-column-mode
-      (kbd "<leader>vv") (lambda () (interactive) (find-file "~/dotfiles/config.org"))
-      (kbd "<leader>w") 'save-buffer
-      (kbd "<leader>x") 'xwidget-webkit-browse-url
-      (kbd "<leader>y") 'yas-visit-snippet-file
-      (kbd "<leader>zc") 'hs-hide-all
-      (kbd "<leader>zo") 'hs-show-all))
-  (use-package evil-commentary
-    :config
-    (evil-commentary-mode))
-  (use-package evil-surround
-    :config
-    (global-evil-surround-mode))
-  (use-package evil-org
-    :after org
-    :hook ((org-mode . evil-org-mode))
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
-#+end_src
 
 ** Discovery
 #+begin_src emacs-lisp :tangle yes :results none
@@ -321,7 +243,6 @@ make a few things prettier
           org-ellipsis "⤵"                ; …, ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
           org-catch-invisible-edits 'show-and-error
 	  org-image-actual-width  nil
-          org-special-ctrl-a/e t ; Note: Need to get this working with Evil!
           org-src-fontify-natively t      ; Pretty code blocks
           org-agenda-breadcrumbs-separator " ❱ "))
 #+end_src
