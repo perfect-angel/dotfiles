@@ -430,7 +430,7 @@ Junk drawer...
   (use-package simple-httpd)
   (use-package yasnippet
     :config
-    (setq yasnippet-snippets-dir "~/dotfiles/snippets/")
+    (setq yasnippet-snippet-dirs '("~/dotfiles/snippets/"))
     (yas-global-mode 1)
     (global-set-key (kbd "C-x C-y") 'company-yasnippet))
   (use-package yasnippet-snippets)
