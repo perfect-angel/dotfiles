@@ -151,7 +151,7 @@ I get issues with Magit and Dimmer, so let’s turn off this feature in certain 
     (setq enable-recursive-minibuffers t ; i forgot why i do this
   	tramp-default-method "ssh" ; faster tramp with ssh
   	visual-fill-column-center-text t
-  	visual-fill-column-width 60)
+  	visual-fill-column-width 80)
     (setq-default fill-column 80) ; tty geezer
     (when (eq system-type 'darwin) ; mac specific settings
       (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
@@ -397,6 +397,7 @@ set up capture templates, refile target, and agenda files
 #+end_src
 
 ** Mastodon
+
 ** AI
 #+begin_src emacs-lisp
 
@@ -406,8 +407,8 @@ set up capture templates, refile target, and agenda files
   			:host "localhost:11434"
   			:stream t
   			:models '(deepseek-coder-v2:latest))
-  	gptel-default-model "deepseek-coder-v2:latest"
-  	gptel-model "deepseek-coder-v2:latest"
+  	gptel-default-model 'deepseek-coder-v2:latest
+  	gptel-model 'deepseek-coder-v2:latest
   	gptel-default-mode 'org-mode))
 #+end_src
 
