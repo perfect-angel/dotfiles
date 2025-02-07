@@ -85,7 +85,7 @@ Pretty stuff, themes and font
 
 
 
-  (load-theme 'modus-vivendi-tinted 1)
+  (load-theme 'doom-moonlight 1)
   (set-frame-font "FiraCode Nerd Font 20" nil t)
 #+end_src
 
