@@ -31,13 +31,13 @@
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil) ; Stop creating ~ backup files
 (setq rcirc-default-nick "perfect_angel" ; yapper
-	  rcirc-track-minor-mode 1
-  	rcirc-server-alist
-  	'(("irc.libera.chat"
-  	   :channels ("#emacs" "##rust")
-  	   :nick "perfect_angel"
-  	   :port 6697
-  	   :encryption tls))
+      rcirc-track-minor-mode 1
+      rcirc-server-alist
+      '(("irc.libera.chat"
+  	 :channels ("#emacs" "##rust")
+  	 :nick "perfect_angel"
+  	 :port 6697
+  	 :encryption tls)))
 (setq visible-bell t) ; Set up the visible bell
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 200) ; font
 
