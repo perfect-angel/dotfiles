@@ -32,9 +32,8 @@ A literate configuration file for my emacs and system.
 				 DRINK *WATER*
 #+end_center
 
-* Bootstrap 👢
 
-First thing's first, initialize emacs packages
+* Package
 
 add melpa nongnu and elpa; initialize use-package
 
@@ -58,17 +57,6 @@ use this package to make sure my =PATH= is set correctly
     (exec-path-from-shell-initialize))
 #+end_src
 
-not a big fan of backup/swap/custom files
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    (setq auto-save-default nil ; don't autosave
-  	backup-directory-alist '(("." . "/tmp")) ; send backups to hell
-  	make-backup-files nil ; no backup files
-  	custom-file "~/.emacs.d/emacs-custom.el")) ; custom custom file
-#+end_src
-
 Pretty stuff, themes and font
 
 #+begin_src emacs-lisp
@@ -85,7 +73,7 @@ Pretty stuff, themes and font
 
 
 
-  (load-theme 'doom-moonlight 1)
+  (load-theme 'tango 1)
   (set-frame-font "FiraCode Nerd Font 20" nil t)
 #+end_src
 
@@ -107,25 +95,7 @@ modeline, my HUD
     (mood-line-glyph-alist mood-line-glyphs-fira-code))
 #+end_src
 
-To make the active window /more noticeable/, we /dim/ the in-active windows with the [[https://github.com/gonewest818/dimmer.el][dimmer project]].
-
-#+begin_src emacs-lisp
-  (use-package dimmer
-    :custom (dimmer-adjustment-mode :foreground))
-#+end_src
-
-
-I get issues with Magit and Dimmer, so let’s turn off this feature in certain windows:
-
-#+begin_src emacs-lisp
-   (use-package dimmer
-     :config
-     (dimmer-configure-which-key)    ; Do not dim these special windows
-     (dimmer-configure-hydra)
-     (dimmer-configure-magit)
-
-     (dimmer-mode t))
-#+end_src
+pretty stuff
 
 #+begin_src elisp
   (use-package emojify)
