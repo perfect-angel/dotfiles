@@ -135,7 +135,7 @@
 (setq org-agenda-files '("today.org" "refile.org"))
 (setq org-capture-templates
       '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
-        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))
+        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
 
 ;; completion
 ;;; Vertico
