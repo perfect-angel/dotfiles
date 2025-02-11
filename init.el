@@ -16,7 +16,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
 (global-auto-revert-mode 1)          ; Auto revert changed buffers
 (global-eldoc-mode 1)                ; global documentation
-(load-theme 'adwaita)                ; theme
+(load-theme 'modus-vivendi)          ; theme
 (menu-bar-mode -1)                   ; Disable the menu bar
 (recentf-mode 1)                     ; what was i doing?
 (scroll-bar-mode -1)                 ; Disable visible scrollbar
