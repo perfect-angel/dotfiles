@@ -51,7 +51,7 @@
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
-(add-hook 'prog-mode-hook 'global-display-line-numbers-mode) ; line numbers
+(add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
 
 ;; Mac os specific settings
 (when (eq system-type 'darwin) ; mac specific settings
