@@ -16,13 +16,14 @@
 (fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
 (global-auto-revert-mode 1)          ; Auto revert changed buffers
 (global-eldoc-mode 1)                ; global documentation
-(load-theme 'modus-vivendi)          ; theme
+(load-theme 'tango)                 ; theme
 (menu-bar-mode -1)                   ; Disable the menu bar
 (recentf-mode 1)                     ; what was i doing?
 (scroll-bar-mode -1)                 ; Disable visible scrollbar
 (set-fringe-mode 10)                 ; Give some breathing room
 (tool-bar-mode -1)                   ; Disable the toolbar
 (tooltip-mode -1)                    ; Disable tooltips
+(visual-line-mode 1)                 ; Wrap lines
 
 ;; Variables
 (setq-default fill-column 80) ; tty width
@@ -76,8 +77,9 @@
 (use-package magit) ; git gud
 (use-package vterm) ; better terminal
 (use-package kubernetes) ; k8s
-(use-package elisp-demos)
-(use-package emojify)
+(use-package elisp-demos) ; examples in help
+(use-package emojify) ; 😀
+(use-package spray) ; speedreading
 
 ;; set path to shellpath
 (use-package exec-path-from-shell
@@ -123,6 +125,21 @@
 (use-package org-appear
   :config
   (add-hook 'org-mode-hook 'org-appear-mode))
+(use-package org-roam
+  :custom
+  (org-roam-directory (file-truename "~/org/words/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
 (setq org-babel-load-languages
       '((emacs-lisp . t)
        (shell . t)
@@ -174,6 +191,7 @@
          ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+	 ("C-s" . consult-line)
          ;; M-g bindings in `goto-map'
          ("M-g e" . consult-compile-error)
          ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
@@ -241,7 +259,6 @@
                           '((file (styles . (partial-completion))))))
 
 ;;; Corfu
-(use-package corfu-terminal)
 (use-package corfu
   :init
   ;; Setup corfu for popup like completion
@@ -257,7 +274,7 @@
     (keymap-set corfu-map "M-n" #'corfu-popupinfo-scroll-up)
     (keymap-set corfu-map "M-d" #'corfu-popupinfo-toggle)))
 
-;;; Cape TODO: add more cape stuff
+;;; Cape
 (use-package cape
   :init
   ;; Add useful defaults completion sources from cape
@@ -292,9 +309,9 @@
   (setq gptel-backend (gptel-make-ollama "Ollama"
   					 :host "localhost:11434"
   					 :stream t
-  					 :models '(deepseek-r1:latest))
-        gptel-default-model 'deepseek-r1:latest
-        gptel-model 'deepseek-r1:latest
+  					 :models '(deepseek-coder-v2:latest))
+        gptel-default-model 'deepseek-coder-v2:latest
+        gptel-model 'deepseek-coder-v2:latest
         gptel-default-mode 'org-mode))
 
 ;; amen
