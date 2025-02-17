@@ -23,7 +23,7 @@
 (set-fringe-mode 10)                 ; Give some breathing room
 (tool-bar-mode -1)                   ; Disable the toolbar
 (tooltip-mode -1)                    ; Disable tooltips
-(visual-line-mode 1)                 ; Wrap lines
+(global-visual-line-mode 1)                 ; Wrap lines
 
 ;; Variables
 (setq-default fill-column 80) ; tty width
@@ -111,8 +111,8 @@
 (use-package breadcrumb
   :init (breadcrumb-mode))
 
-
-(use-package rainbow-delimiters ; colored parens
+;; colored parens
+(use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)) 
 
 ;; language support
@@ -132,9 +132,7 @@
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
          ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
+         ("C-c n c" . org-roam-capture))
   :config
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
@@ -144,9 +142,7 @@
       '((emacs-lisp . t)
        (shell . t)
        (python . t)
-       (clojure . t)
-       (js . t)
-       (ruby . t)))
+       (js . t)))
 (setq org-directory "~/org")
 (setq org-default-notes-file "refile.org")
 (setq org-agenda-files '("today.org" "refile.org"))
@@ -163,13 +159,7 @@
   (customize-set-variable 'vertico-cycle t)
 
   ;; Start Vertico
-  (vertico-mode 1)
-
-  ;; Turn off the built-in fido-vertical-mode and icomplete-vertical-mode, if
-  (fido-mode -1)
-  (fido-vertical-mode -1)
-  (icomplete-mode -1)
-  (icomplete-vertical-mode -1))
+  (vertico-mode 1))
 
 
 ;; Consult
