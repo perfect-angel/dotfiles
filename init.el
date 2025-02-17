@@ -16,7 +16,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
 (global-auto-revert-mode 1)          ; Auto revert changed buffers
 (global-eldoc-mode 1)                ; global documentation
-(load-theme 'tango)                 ; theme
 (menu-bar-mode -1)                   ; Disable the menu bar
 (recentf-mode 1)                     ; what was i doing?
 (scroll-bar-mode -1)                 ; Disable visible scrollbar
@@ -40,7 +39,7 @@
   	 :port 6697
   	 :encryption tls)))
 (setq visible-bell t) ; Set up the visible bell
-(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 200) ; font
+(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 120) ; font
 
 ;; Keymaps
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
@@ -75,11 +74,14 @@
 
 ;; General purpose packages
 (use-package magit) ; git gud
-(use-package vterm) ; better terminal
+;; (use-package vterm) ; better terminal
 (use-package kubernetes) ; k8s
 (use-package elisp-demos) ; examples in help
 (use-package emojify) ; 😀
 (use-package spray) ; speedreading
+(use-package doom-themes
+  :config
+  (load-theme 'doom-moonlight 1))
 
 ;; set path to shellpath
 (use-package exec-path-from-shell
