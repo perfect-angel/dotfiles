@@ -38,13 +38,10 @@
   	 :port 6697
   	 :encryption tls)))
 (setq visible-bell t) ; Set up the visible bell
-(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 120) ; font
+(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 150) ; font
 
 ;; Keymaps
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
-
-(keymap-set prog-mode-map "C-c e n" #'flymake-goto-next-error) 
-(keymap-set prog-mode-map "C-c e p" #'flymake-goto-prev-error)
 
 ;; Hooks
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
@@ -73,7 +70,6 @@
 
 ;; General purpose packages
 (use-package magit) ; git gud
-;; (use-package vterm) ; better terminal
 (use-package kubernetes) ; k8s
 (use-package elisp-demos) ; examples in help
 (use-package emojify) ; 😀
@@ -293,6 +289,16 @@
 (use-package tree-sitter-ispell)
 (use-package tree-sitter-langs)
 (use-package treesit-auto)
+
+;; Speaking/Transcribing
+(use-package whisper
+  :load-path "~/lib/whisper.el"
+  :config
+  (setq whisper-install-directory "/tmp/"
+        whisper-model "base"
+        whisper-language "en"
+        whisper-translate nil
+        whisper-use-threads (/ (num-processors) 2)))
 
 ;; AI
 (use-package gptel
