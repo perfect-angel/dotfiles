@@ -12,14 +12,13 @@
 
 ;; Settings
 (column-number-mode 1)               ; Column numbers
-(flymake-mode 1)                     ; syntax checking
+(flymake-mode-on)                    ; syntax checking
 (fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
 (global-auto-revert-mode 1)          ; Auto revert changed buffers
 (global-eldoc-mode 1)                ; global documentation
 (menu-bar-mode -1)                   ; Disable the menu bar
 (recentf-mode 1)                     ; what was i doing?
 (scroll-bar-mode -1)                 ; Disable visible scrollbar
-(set-fringe-mode 10)                 ; Give some breathing room
 (tool-bar-mode -1)                   ; Disable the toolbar
 (tooltip-mode -1)                    ; Disable tooltips
 (global-visual-line-mode 1)                 ; Wrap lines
