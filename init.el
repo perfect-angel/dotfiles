@@ -115,8 +115,15 @@
 ;; language support
 (use-package markdown-mode)
 (use-package geiser-guile)
-(use-package rust-ts-mode
-  :mode ("\\.rs\\'" . rust-ts-mode))
+(use-package rust-mode
+  :init
+  (setq rust-mode-treesitter-derive t))
+(use-package rustic
+  :config
+  (setq rustic-format-on-save t)
+  (setq rustic-lsp-client 'eglot)
+  :custom
+  (rustic-cargo-use-last-stored-arguments t))
 
 ;; org mode
 (use-package org-appear
