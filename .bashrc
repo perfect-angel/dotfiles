@@ -119,4 +119,3 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 
 GUIX_PROFILE="/home/angel/.guix-profile"
 . "$GUIX_PROFILE/etc/profile"
-

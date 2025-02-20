@@ -10,7 +10,7 @@
 ;;			    YOU ARE *NOT* IN TROUBLE
 ;;				 DRINK *WATER*
 
-;; Settings
+;;; Settings:
 (column-number-mode 1)               ; Column numbers
 (flymake-mode-on)                    ; syntax checking
 (fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
@@ -23,7 +23,7 @@
 (tooltip-mode -1)                    ; Disable tooltips
 (global-visual-line-mode 1)                 ; Wrap lines
 
-;; Variables
+;;; Variables:
 (setq-default fill-column 80) ; tty width
 (setq auto-save-default nil) ; Stop creating # auto save files
 (setq custom-file "~/.emacs-custom.el") ; Use non-source managed custom file
@@ -38,23 +38,33 @@
   	 :port 6697
   	 :encryption tls)))
 (setq visible-bell t) ; Set up the visible bell
+(setq org-babel-load-languages
+      '((emacs-lisp . t)
+	(shell . t)
+	(python . t)
+	(js . t)))
+(setq org-directory "~/org")
+(setq org-default-notes-file "refile.org")
+(setq org-agenda-files '("today.org" "refile.org"))
+(setq org-capture-templates
+      '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
+        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 150) ; font
 
-;; Keymaps
+;;; Keymaps:
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
 
-;; Hooks
+;;; Hooks:
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
 
-;; Mac os specific settings
+;;; Mac os specific settings:
 (when (eq system-type 'darwin) ; mac specific settings
   (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
 
-;; Packages
-
+;;; Packages:
 (require 'package)
 (when (version< emacs-version "28")
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
@@ -68,52 +78,55 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; General purpose packages
-(use-package magit) ; git gud
-(use-package kubernetes) ; k8s
+;;; Discovery:
 (use-package elisp-demos) ; examples in help
-(use-package emojify) ; 😀
-(use-package spray) ; speedreading
+(use-package marginalia
+  :init
+  ;; Configure Marginalia
+  (customize-set-variable 'marginalia-annotators
+                          '(marginalia-annotators-heavy
+                            marginalia-annotators-light
+                            nil))
+  :config
+  (marginalia-mode 1))
+
+
+(use-package which-key
+  :config
+  (which-key-mode 1))
+;;; Cosmetic:
 (use-package doom-themes
   :config
-  (load-theme 'doom-moonlight 1))
+  (load-theme 'doom-oceanic-next 1))
+(use-package doom-modeline ; modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 15)))
+(use-package breadcrumb
+  :init (breadcrumb-mode))
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)) 
+(use-package all-the-icons) ; Cute icons
+(use-package emojify) ; 😀
+(use-package spray) ; speedreading
 
-;; set path to shellpath
-(use-package exec-path-from-shell
+;;; Util:
+(use-package exec-path-from-shell ; set path to shellpath
   :config
   (exec-path-from-shell-initialize))
-
-;; save command history
-(use-package savehist
+(use-package savehist ; save command history
   :config
   (savehist-mode))
 
-;; snippets
+;;; Snippets:
 (use-package yasnippet
   :config
   (setq yasnippet-snippet-dirs '("~/dotfiles/snippets/"))
   (yas-global-mode 1))
 (use-package yasnippet-snippets)
 
-;; modeline
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
-
-;; Cute icons
-;; note: run all-the-icons-install-fonts
-(use-package all-the-icons)
-
-;; breadcrumbs 
-(use-package breadcrumb
-  :init (breadcrumb-mode))
-
-;; colored parens
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)) 
-
-;; language support
+;;; Languages:
 (use-package markdown-mode)
+(use-package kubernetes)
 (use-package geiser-guile)
 (use-package rust-mode
   :init
@@ -125,7 +138,7 @@
   :custom
   (rustic-cargo-use-last-stored-arguments t))
 
-;; org mode
+;;; Org:
 (use-package org-appear
   :config
   (add-hook 'org-mode-hook 'org-appear-mode))
@@ -142,31 +155,14 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
-(setq org-babel-load-languages
-      '((emacs-lisp . t)
-       (shell . t)
-       (python . t)
-       (js . t)))
-(setq org-directory "~/org")
-(setq org-default-notes-file "refile.org")
-(setq org-agenda-files '("today.org" "refile.org"))
-(setq org-capture-templates
-      '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
-        ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
-
-;; completion
-;;; Vertico
+;;; Navigation:
+(use-package magit) ; git gud
 (use-package vertico
   :config
   (require 'vertico-directory)
   ;; Cycle back to top/bottom result when the edge is reached
   (customize-set-variable 'vertico-cycle t)
-
-  ;; Start Vertico
   (vertico-mode 1))
-
-
-;; Consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
@@ -176,28 +172,28 @@
          ("C-c i" . consult-info)
          ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("C-x M-:" . consult-complex-command)
+         ("C-x b" . consult-buffer)                
+         ("C-x 4 b" . consult-buffer-other-window) 
+         ("C-x 5 b" . consult-buffer-other-frame)  
+         ("C-x t b" . consult-buffer-other-tab)    
+         ("C-x r b" . consult-bookmark)            
+         ("C-x p b" . consult-project-buffer)      
+         
+         ("M-y" . consult-yank-pop)                
 	 ("C-s" . consult-line)
-         ;; M-g bindings in `goto-map'
+         
          ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g f" . consult-flymake)               
+         ("M-g g" . consult-goto-line)             
+         ("M-g M-g" . consult-goto-line)           
+         ("M-g o" . consult-outline)               
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
          ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings in `search-map'
-         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         
+         ("M-s d" . consult-find)                  
          ("M-s c" . consult-locate)
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
@@ -206,22 +202,20 @@
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
+         
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
+         ("M-e" . consult-isearch-history)         
+         ("M-s e" . consult-isearch-history)       
+         ("M-s l" . consult-line)                  
+         ("M-s L" . consult-line-multi)            
+         
          :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-s" . consult-history)                 
          ("M-r" . consult-history))
   :init 
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
-
-;; Embark
 (use-package embark
   :config
   (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
@@ -233,29 +227,10 @@
   :config
    (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
-;;; Marginalia
-(use-package marginalia
-  :init
-  ;; Configure Marginalia
-  (customize-set-variable 'marginalia-annotators
-                          '(marginalia-annotators-heavy
-                            marginalia-annotators-light
-                            nil))
-  :config
-  (marginalia-mode 1))
-
-;;; Orderless
-(use-package orderless
-  :init
-  ;; Set up Orderless for better fuzzy matching
-  (customize-set-variable 'completion-styles '(orderless basic))
-  (customize-set-variable 'completion-category-overrides
-                          '((file (styles . (partial-completion))))))
-
-;;; Corfu
+;;; Completion:
 (use-package corfu
   :init
-  ;; Setup corfu for popup like completion
+  
   (customize-set-variable 'corfu-cycle t)        ; Allows cycling through candidates
   (customize-set-variable 'corfu-auto t)         ; Enable auto completion
   (customize-set-variable 'corfu-auto-prefix 2)  ; Complete with less prefix keys
@@ -267,28 +242,24 @@
     (keymap-set corfu-map "M-p" #'corfu-popupinfo-scroll-down)
     (keymap-set corfu-map "M-n" #'corfu-popupinfo-scroll-up)
     (keymap-set corfu-map "M-d" #'corfu-popupinfo-toggle)))
-
-;;; Cape
+(use-package orderless
+  :init
+  (customize-set-variable 'completion-styles '(orderless basic))
+  (customize-set-variable 'completion-category-overrides
+                          '((file (styles . (partial-completion))))))
 (use-package cape
   :init
-  ;; Add useful defaults completion sources from cape
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-
-  ;; Silence the pcomplete capf, no errors or messages!
-  ;; Important for corfu
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-
-  ;; Ensure that pcomplete does not write to the buffer
-  ;; and behaves as a pure `completion-at-point-function'.
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
-;; LSP
-(use-package eglot)
-(add-hook 'js-ts-mode-hook 'eglot-ensure)
-(add-hook 'rust-ts-mode 'eglot-ensure)
-(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
-(add-hook 'terraform-mode-hook 'eglot-ensure)
+;;; LSP:
+(use-package eglot
+  :hook ((rust-ts-mode
+	  typescript-ts-mode
+	  javascript-ts-mode
+	  terraform-mode) . eglot-ensure))
 
 ;; Treesitter
 (use-package tree-sitter)
@@ -297,17 +268,17 @@
 (use-package tree-sitter-langs)
 (use-package treesit-auto)
 
-;; Speaking/Transcribing
+;;; Voice: 
 (use-package whisper
   :load-path "~/lib/whisper.el"
   :config
-  (setq whisper-install-directory "/tmp/"
+  (setq whisper-install-directory "~/lib/whisper"
         whisper-model "base"
         whisper-language "en"
         whisper-translate nil
         whisper-use-threads (/ (num-processors) 2)))
 
-;; AI
+;;; AI:
 (use-package gptel
   :config
   (setq gptel-backend (gptel-make-ollama "Ollama"
@@ -318,6 +289,6 @@
         gptel-model 'deepseek-coder-v2:latest
         gptel-default-mode 'org-mode))
 
-;; amen
+
 (provide 'init)
-;;; init.el ends here
+
