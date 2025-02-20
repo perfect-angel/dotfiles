@@ -26,7 +26,7 @@
 ;;; Variables:
 (setq-default fill-column 80) ; tty width
 (setq auto-save-default nil) ; Stop creating # auto save files
-(setq custom-file "~/.emacs-custom.el") ; Use non-source managed custom file
+(setq custom-file "~/.emacs.d/emacs-custom.el") ; Use non-source managed custom file
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil) ; Stop creating ~ backup files
 (setq rcirc-default-nick "perfect_angel" ; yapper
@@ -154,6 +154,9 @@
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
+
+;;; Internet:
+(use-package elfeed)
 
 ;;; Navigation:
 (use-package magit) ; git gud
