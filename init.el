@@ -21,7 +21,7 @@
 (scroll-bar-mode -1)                 ; Disable visible scrollbar
 (tool-bar-mode -1)                   ; Disable the toolbar
 (tooltip-mode -1)                    ; Disable tooltips
-(global-visual-line-mode 1)                 ; Wrap lines
+(global-visual-line-mode 1)          ; Wrap lines
 
 ;;; Variables:
 (setq-default fill-column 80) ; tty width
@@ -49,7 +49,7 @@
 (setq org-capture-templates
       '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
         ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
-(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 150) ; font
+(set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 120) ; font
 
 ;;; Keymaps:
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
@@ -90,14 +90,11 @@
   :config
   (marginalia-mode 1))
 
-
 (use-package which-key
   :config
   (which-key-mode 1))
 ;;; Cosmetic:
-(use-package doom-themes
-  :config
-  (load-theme 'doom-oceanic-next 1))
+(load-theme 'modus-vivendi)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
@@ -163,11 +160,10 @@
 (use-package vertico
   :config
   (require 'vertico-directory)
-  ;; Cycle back to top/bottom result when the edge is reached
-  (customize-set-variable 'vertico-cycle t)
+  (setq vertico-cycle t)
   (vertico-mode 1))
 (use-package consult
-  :bind (;; C-c bindings in `mode-specific-map'
+  :bind (;; stolen from consult, todo clean this
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
          ("C-c k" . consult-kmacro)
@@ -219,6 +215,7 @@
   :init 
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
+
 (use-package embark
   :config
   (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
@@ -228,12 +225,11 @@
 (use-package embark-consult
   :after embark
   :config
-   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
+  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
 ;;; Completion:
 (use-package corfu
   :init
-  
   (customize-set-variable 'corfu-cycle t)        ; Allows cycling through candidates
   (customize-set-variable 'corfu-auto t)         ; Enable auto completion
   (customize-set-variable 'corfu-auto-prefix 2)  ; Complete with less prefix keys
@@ -241,10 +237,8 @@
   (global-corfu-mode 1)
   (when (require 'corfu-popupinfo nil :noerror)
     (corfu-popupinfo-mode 1)
-    (eldoc-add-command #'corfu-insert)
-    (keymap-set corfu-map "M-p" #'corfu-popupinfo-scroll-down)
-    (keymap-set corfu-map "M-n" #'corfu-popupinfo-scroll-up)
-    (keymap-set corfu-map "M-d" #'corfu-popupinfo-toggle)))
+    (eldoc-add-command #'corfu-insert)))
+
 (use-package orderless
   :init
   (customize-set-variable 'completion-styles '(orderless basic))
