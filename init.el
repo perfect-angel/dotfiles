@@ -24,6 +24,8 @@
 (global-visual-line-mode 1)          ; Wrap lines
 
 ;;; Variables:
+(setq user-full-name "Angel")
+(setq user-mail-address "angel@acidburn.tech")
 (setq-default fill-column 80) ; tty width
 (setq auto-save-default nil) ; Stop creating # auto save files
 (setq custom-file "~/.emacs.d/emacs-custom.el") ; Use non-source managed custom file
@@ -154,6 +156,21 @@
 
 ;;; Internet:
 (use-package elfeed)
+(use-package mu4e
+  :config
+
+  ;; This is set to 't' to avoid mail syncing issues when using mbsync
+  (setq mu4e-change-filenames-when-moving t)
+
+  ;; Refresh mail using isync every 10 minutes
+  (setq mu4e-update-interval (* 10 60))
+  (setq mu4e-get-mail-command "mbsync -a")
+  (setq mu4e-maildir "~/Maildir")
+  (setq
+   message-send-mail-function   'smtpmail-send-it
+   smtpmail-smtp-service        465
+   smtpmail-stream-type         'ssl
+   smtpmail-smtp-server         "smtp.fastmail.com"))
 
 ;;; Navigation:
 (use-package magit) ; git gud
@@ -244,6 +261,7 @@
   (customize-set-variable 'completion-styles '(orderless basic))
   (customize-set-variable 'completion-category-overrides
                           '((file (styles . (partial-completion))))))
+
 (use-package cape
   :init
   (add-to-list 'completion-at-point-functions #'cape-file)
