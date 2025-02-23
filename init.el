@@ -51,7 +51,7 @@
 (setq org-capture-templates
       '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
         ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
-(set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 120) ; font
+(set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 180) ; font
 
 ;;; Keymaps:
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
@@ -218,7 +218,6 @@
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
-         
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
          ("M-e" . consult-isearch-history)         
@@ -232,6 +231,7 @@
   :init 
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
+(use-package consult-eglot)
 
 (use-package embark
   :config
@@ -243,6 +243,9 @@
   :after embark
   :config
   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
+(use-package consult-eglot-embark
+  :config
+  (consult-eglot-embark-mode))
 
 ;;; Completion:
 (use-package corfu
