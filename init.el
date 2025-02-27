@@ -22,6 +22,7 @@
 (tool-bar-mode -1)                   ; Disable the toolbar
 (tooltip-mode -1)                    ; Disable tooltips
 (global-visual-line-mode 1)          ; Wrap lines
+(set-fill-column 80)                 ; TTY length
 
 ;;; Variables:
 (setq user-full-name "Angel")
@@ -60,7 +61,7 @@
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
-(add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
+;; (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
 
 ;;; Mac os specific settings:
 (when (eq system-type 'darwin) ; mac specific settings
@@ -92,11 +93,8 @@
   :config
   (marginalia-mode 1))
 
-(use-package which-key
-  :config
-  (which-key-mode 1))
 ;;; Cosmetic:
-(load-theme 'modus-vivendi)
+(load-theme 'wombat)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
@@ -115,6 +113,9 @@
 (use-package savehist ; save command history
   :config
   (savehist-mode))
+(use-package visual-fill-column
+  :init
+  (setq visual-fill-column-center-text t))
 
 ;;; Snippets:
 (use-package yasnippet
@@ -130,12 +131,6 @@
 (use-package rust-mode
   :init
   (setq rust-mode-treesitter-derive t))
-(use-package rustic
-  :config
-  (setq rustic-format-on-save t)
-  (setq rustic-lsp-client 'eglot)
-  :custom
-  (rustic-cargo-use-last-stored-arguments t))
 
 ;;; Org:
 (use-package org-appear
@@ -275,6 +270,7 @@
 ;;; LSP:
 (use-package eglot
   :hook ((rust-ts-mode
+	  rust-mode
 	  typescript-ts-mode
 	  javascript-ts-mode
 	  terraform-mode) . eglot-ensure))
@@ -289,6 +285,7 @@
 ;;; Voice: 
 (use-package whisper
   :load-path "~/lib/whisper.el"
+  :bind (("C-x w" . whisper-run))
   :config
   (setq whisper-install-directory "~/lib/whisper"
         whisper-model "base"
@@ -310,3 +307,5 @@
 
 (provide 'init)
 
+;; TODO:
+;; - set certain packages to lazy to speed up load time
