@@ -32,14 +32,7 @@
 (setq custom-file "~/.emacs.d/emacs-custom.el") ; Use non-source managed custom file
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil) ; Stop creating ~ backup files
-(setq rcirc-default-nick "perfect_angel" ; yapper
-      rcirc-track-minor-mode 1
-      rcirc-server-alist
-      '(("irc.libera.chat"
-  	 :channels ("#emacs" "##rust")
-  	 :nick "perfect_angel"
-  	 :port 6697
-  	 :encryption tls)))
+
 (setq visible-bell t) ; Set up the visible bell
 (setq org-babel-load-languages
       '((emacs-lisp . t)
@@ -94,7 +87,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'wombat)
+(load-theme 'modus-vivendi)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
@@ -104,7 +97,9 @@
   :hook (prog-mode . rainbow-delimiters-mode)) 
 (use-package all-the-icons) ; Cute icons
 (use-package emojify) ; 😀
-(use-package spray) ; speedreading
+(use-package spray ; speedreading
+  :init
+  (setq spray-wpm 500))
 
 ;;; Util:
 (use-package exec-path-from-shell ; set path to shellpath
@@ -150,6 +145,14 @@
   (require 'org-roam-protocol))
 
 ;;; Internet:
+(setq rcirc-default-nick "perfect_angel" ; yapper
+      rcirc-track-minor-mode 1
+      rcirc-server-alist
+      '(("irc.libera.chat"
+  	 :channels ("#emacs" "##rust")
+  	 :nick "perfect_angel"
+  	 :port 6697
+  	 :encryption tls)))
 (use-package elfeed)
 (use-package mu4e
   :config
@@ -267,6 +270,11 @@
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
+;;; Debugging
+(use-package dap-mode
+  :config
+  (setq dap-gdb-debug-program '("rust-gdb" "-i" "dap"))
+  (require 'dap-gdb))
 ;;; LSP:
 (use-package eglot
   :hook ((rust-ts-mode
@@ -309,3 +317,5 @@
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
+;; - ement matrix client
+;; - mastodon
