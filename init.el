@@ -32,7 +32,7 @@
 (setq custom-file "~/.emacs.d/emacs-custom.el") ; Use non-source managed custom file
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil) ; Stop creating ~ backup files
-
+(setq y-or-n-p-use-read-key t) ; for embark
 (setq visible-bell t) ; Set up the visible bell
 (setq org-babel-load-languages
       '((emacs-lisp . t)
@@ -45,7 +45,7 @@
 (setq org-capture-templates
       '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
         ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?")))
-(set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 180) ; font
+(set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 200) ; font
 
 ;;; Keymaps:
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
@@ -58,7 +58,8 @@
 
 ;;; Mac os specific settings:
 (when (eq system-type 'darwin) ; mac specific settings
-  (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
+   (setq mac-command-modifier 'meta)
+    (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
 
 ;;; Packages:
 (require 'package)
@@ -87,7 +88,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'modus-vivendi)
+(load-theme 'wombat)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
@@ -172,6 +173,9 @@
 
 ;;; Navigation:
 (use-package magit) ; git gud
+(use-package ace-window
+  :bind
+  (("M-o" . ace-window)))
 (use-package vertico
   :config
   (require 'vertico-directory)
@@ -235,12 +239,14 @@
   :config
   (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
   (keymap-global-set "C-." 'embark-act)
+  (keymap-global-set "C-;" 'embark-dwim)
   (setq prefix-help-command #'embark-prefix-help-command))
 
 (use-package embark-consult
   :after embark
-  :config
+  :config 
   (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
+
 (use-package consult-eglot-embark
   :config
   (consult-eglot-embark-mode))
