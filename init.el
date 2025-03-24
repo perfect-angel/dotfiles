@@ -90,8 +90,7 @@
 ;;; Cosmetic:
 (load-theme 'wombat)
 (use-package doom-modeline ; modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  :init (doom-modeline-mode 1))
 (use-package breadcrumb
   :init (breadcrumb-mode))
 (use-package rainbow-delimiters
@@ -295,17 +294,6 @@
 (use-package tree-sitter-ispell)
 (use-package tree-sitter-langs)
 (use-package treesit-auto)
-
-;;; Voice: 
-(use-package whisper
-  :load-path "~/lib/whisper.el"
-  :bind (("C-x w" . whisper-run))
-  :config
-  (setq whisper-install-directory "~/lib/whisper"
-        whisper-model "base"
-        whisper-language "en"
-        whisper-translate nil
-        whisper-use-threads (/ (num-processors) 2)))
 
 ;;; AI:
 (use-package gptel
