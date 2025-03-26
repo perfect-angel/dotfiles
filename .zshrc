@@ -11,6 +11,7 @@ export PATH=/opt/homebrew/sbin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
+export PATH=$HOME/opt/homebrew/Cellar/erlang/27.3/lib/erlang/erts-15.2.3/bin:$PATH
 [ -f ~/.cargo/env ] && source ~/.cargo/env
 
 
@@ -47,3 +48,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+

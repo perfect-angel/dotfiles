@@ -286,7 +286,11 @@
 	  rust-mode
 	  typescript-ts-mode
 	  javascript-ts-mode
-	  terraform-mode) . eglot-ensure))
+	  elixir-ts-mode
+	  terraform-ts-mode
+	  terraform-mode) . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
 
 ;; Treesitter
 (use-package tree-sitter)
