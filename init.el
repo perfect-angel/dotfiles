@@ -111,6 +111,7 @@
 (use-package visual-fill-column
   :init
   (setq visual-fill-column-center-text t))
+(use-package eat)
 
 ;;; Snippets:
 (use-package yasnippet
@@ -131,6 +132,9 @@
 (use-package org-appear
   :config
   (add-hook 'org-mode-hook 'org-appear-mode))
+(use-package org-modern
+  :config
+  (global-org-modern-mode 1))
 (use-package org-roam
   :custom
   (org-roam-directory (file-truename "~/org/words/"))

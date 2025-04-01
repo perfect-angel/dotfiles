@@ -49,3 +49,7 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+
+
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+  source "$EAT_SHELL_INTEGRATION_DIR/zsh"
