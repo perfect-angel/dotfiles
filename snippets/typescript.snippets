@@ -1,0 +1,62 @@
+snippet cl "console.log"
+console.log($1);
+endsnippet
+
+snippet ir "Import React"
+import React from 'react';
+endsnippet
+
+snippet us "Use State"
+const [$1, $2] = React.useState($0);
+endsnippet
+
+snippet tsi "ts-ignore"
+// @ts-ignore
+endsnippet
+
+snippet esi "eslint ts-ignore"
+// eslint-disable-next-line $0
+endsnippet
+
+snippet if "if"
+if ($1) {
+  $2
+}
+endsnippet
+
+snippet switch "switch"
+switch ($1) {
+  case $2:
+    return $3;
+}
+endsnippet
+
+snippet desc "Jest describe"
+describe("$1", () => {
+  $2
+});
+endsnippet
+
+snippet it "Jest it"
+it("$1", () => {
+  $2
+});
+endsnippet
+
+snippet serv "SOLID Service"
+import { sessionSingleton } from "@volley/solid-gev";
+import { Container } from "inversify";
+
+@sessionSingleton()
+export class $1Service {
+
+  public async ${2:execute}() {
+    $0
+  }
+}
+endsnippet
+
+snippet fn
+($1) => $0
+endsnippet
+
