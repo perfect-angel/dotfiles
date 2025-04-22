@@ -55,8 +55,3 @@ fi
 [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
   source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
-
-# Guix
-     GUIX_PROFILE="/home/angel/.guix-profile"
-     . "$GUIX_PROFILE/etc/profile"
-

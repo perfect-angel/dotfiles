@@ -12,8 +12,6 @@
 
 ;;; Settings:
 (column-number-mode 1)               ; Column numbers
-(flymake-mode-on)                    ; syntax checking
-(fset 'yes-or-no-p 'y-or-n-p)        ; 2 lazy 2 type yes
 (global-auto-revert-mode 1)          ; Auto revert changed buffers
 (global-eldoc-mode 1)                ; global documentation
 (menu-bar-mode -1)                   ; Disable the menu bar
@@ -24,8 +22,6 @@
 (global-visual-line-mode 1)          ; Wrap lines
 (set-fill-column 80)                 ; TTY length
 
-
-
 ;;; Variables:
 (setq user-full-name "Angel Campbell")
 (setq user-mail-address "angel@acidburn.tech")
@@ -35,17 +31,19 @@
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil) ; Stop creating ~ backup files
 (setq y-or-n-p-use-read-key t) ; for embark
+(setq use-short-answers t)                ; 2 lazy 2 type yes
 (setq visible-bell t) ; Set up the visible bell
 
-(set-face-attribute 'default nil :font "Noto Mono" :height 180 :weight 'semi-light) ; font
+(set-face-attribute 'default nil :font "NotoMono NFM" :height 180 :weight 'semi-light) ; font
 
 ;;; Keymaps:
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
 
 ;;; Hooks:
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
+(add-hook 'prog-mode-hook 'flymake-mode) ; syntax checking
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
-(add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
+(add-hook 'prog-mode-hook 'outline-minor-mode) ; code folding (maybe use hs-minor-mode again)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
  
 ;;; Mac os specific settings:
@@ -57,7 +55,6 @@
 (require 'package)
 
 (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-(add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 (package-initialize)
@@ -69,11 +66,8 @@
 (setq use-package-always-ensure t)
 
 ;;; Windows
-(use-package exwm
-  :config
-  (require 'exwm)
-  (exwm-systemtray-mode 1))
-(use-package exwm-xrandr)
+;; (use-package exwm :config (require 'exwm) (exwm-systemtray-mode 1)) (use-package
+;;   exwm-xrandr)
 
 ;;; Discovery:
 (use-package elisp-demos) ; examples in help
@@ -96,7 +90,6 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)) 
 (use-package all-the-icons) ; Cute icons
-(use-package emojify) ; 😀
 (use-package spray ; speedreading
   :init
   (setq spray-wpm 500))
@@ -136,14 +129,39 @@
      (python . t)
      (js . t)))
   (org-directory "~/org")
+  (org-agenda-files (list org-directory)) 
+  (org-refile-targets
+        '((org-agenda-files . (:maxlevel . 2))
+          (nil . (:maxlevel . 2)))) 
   (org-default-notes-file "refile.org")
-  (org-agenda-files '("today.org" "refile.org"))
   (org-capture-templates
-   '(("t" "Todo" entry (file "~/org/refile.org") "* TODO %?")
-     ("j" "Journal" entry (file+olp+datetree "~/org/journal.org") "* %?"))))
+   '(("t" "Todo" entry (file "refile.org") "* TODO %?")
+     ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?"))))
 (use-package org-bullets
   :config
   (org-bullets-mode 1))
+
+;; presentations
+(defun me/org-present-start ()
+  (interactive)
+  (visual-fill-column-mode 1)
+  (widen)
+  (org-narrow-to-element))
+(defalias 'ps 'me/org-present-start "org present")
+
+(defun me/org-present-next ()
+  (interactive)
+  (widen)
+  (org-next-visible-heading)
+  (org-narrow-to-element))
+(defalias 'pn 'me/org-present-next "org-present-next")
+
+(defun me/org-present-previous()
+  (interactive)
+  (widen)
+  (org-previous-visible-heading)
+  (org-narrow-to-element))
+(defalias 'pp 'me/org-present-previous "org present previous")
 
 ;;; Internet
 (setq rcirc-default-nick "perfect_angel" ;; irc
@@ -158,10 +176,13 @@
 (use-package elfeed ;; RSS
   :config
   (setq elfeed-feeds
-	'("https://www.404media.co/rss")))
+	'("https://www.404media.co/rss"
+	  "https://news.ycombinator.com/rss")))
 
 ;(autoload 'notmuch "notmuch" "notmuch mail" t) ;; email
 ;(require 'notmuch)
+
+;; calendar: org import (ics?)
 
 ;;; Navigation:
 (use-package magit) ; git gud
@@ -176,12 +197,11 @@
 				(string-replace "[ \t]*" "" crm-separator)
 				(car args))
 			(cdr args)))))
-  (require 'vertico-directory)
   (setq vertico-cycle t)
   (vertico-mode))
 (use-package consult
   :config (require 'consult)
-  :bind (;; stolen from consult, todo clean this
+  :bind (;; stolen from consult, todo: clean this
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
          ("C-c k" . consult-kmacro)
@@ -212,7 +232,7 @@
          
          ("M-s d" . consult-find)                  
          ("M-s c" . consult-locate)
-         ("M-s g" . consult-grep)
+         ("M-s g" . consult-grep) ;;
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
@@ -244,7 +264,7 @@
 (use-package embark-consult
   :after embark
   :config 
- (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
+  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 
 (use-package consult-eglot-embark
   :config
@@ -252,10 +272,12 @@
 
 ;;; Completion:
 (use-package corfu
+  :custom
+  (corfu-auto t)         ; Enable auto completion
+  (corfu-auto-prefix 2)  ; Complete with less prefix keys
   :init
   (customize-set-variable 'corfu-cycle t)        ; Allows cycling through candidates
-  (customize-set-variable 'corfu-auto t)         ; Enable auto completion
-  (customize-set-variable 'corfu-auto-prefix 2)  ; Complete with less prefix keys
+  
   (global-corfu-mode)
   (when (require 'corfu-popupinfo nil :noerror)
     (corfu-popupinfo-mode 1)
@@ -269,13 +291,14 @@
 
 (use-package cape
   :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dict)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
 ;;; Debugging
-(use-package dap-mode
+(use-package dap-mode ;; todo maybe replace with dape
   :config
   (setq dap-gdb-debug-program '("rust-gdb" "-i" "dap"))
   (require 'dap-gdb))
@@ -317,17 +340,15 @@
   (emms-info-functions '(emms-info-native))
   :config
   (emms-all))
-(keymap-global-set "<WakeUp>" ;; navi 
-		(lambda ()
-		  (interactive)
-		  (play-sound-file "~/dotfiles/listen.wav")))
-
-(provide 'init)
+(keymap-global-set "C-M-<escape>" ;; navi todo replace
+		   (lambda ()
+		     (interactive)
+		     (play-sound-file "~/dotfiles/listen.wav")))
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
-;; - ement matrix client
-;; - mastodon
+;; - ement.el matrix client - matrix maybe over
+;; - mastodon.el
 ;; - bind <WakeUp>
 ;; - emms
 ;; - notmuch
