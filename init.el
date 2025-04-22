@@ -82,7 +82,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'misterioso)
+(load-theme 'modus-operandi-tinted)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
