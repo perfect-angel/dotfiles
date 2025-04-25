@@ -67,10 +67,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;; Windows
-;; (use-package exwm :config (require 'exwm) (exwm-systemtray-mode 1)) (use-package
-;;   exwm-xrandr)
-
 ;;; Discovery:
 (use-package elisp-demos) ; examples in help
 (use-package marginalia
@@ -135,8 +131,8 @@
   (org-directory "~/org")
   (org-agenda-files (list org-directory)) 
   (org-refile-targets
-        '((org-agenda-files . (:maxlevel . 2))
-          (nil . (:maxlevel . 2)))) 
+   '((org-agenda-files . (:maxlevel . 2))
+     (nil . (:maxlevel . 2)))) 
   (org-default-notes-file "refile.org")
   (org-capture-templates
    '(("t" "Todo" entry (file "refile.org") "* TODO %?")
@@ -183,8 +179,8 @@
 	'("https://www.404media.co/rss"
 	  "https://news.ycombinator.com/rss")))
 
-;(autoload 'notmuch "notmuch" "notmuch mail" t) ;; email
-;(require 'notmuch)
+					;(autoload 'notmuch "notmuch" "notmuch mail" t) ;; email
+					;(require 'notmuch)
 
 ;; calendar: org import (ics?)
 
@@ -324,6 +320,9 @@
  		   (lambda ()
  		     (interactive)
  		     (play-sound-file "~/dotfiles/listen.wav")))
+
+;;; Amen
+(server-start)
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
