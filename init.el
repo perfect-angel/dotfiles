@@ -2,42 +2,44 @@
 
 ;;; init --- Angel's init.el
 ;;; Commentary:
-;;; this is not a good endorsement of me as a serious person
+;;; this is not a good endorsement
+;;;   of me as a serious person
+
 ;;; Code:
 
-;;				YOU ARE *LOVED*
-;;			 YOU ARE *WORTHY* OF THAT LOVE
-;;			    YOU ARE *NOT* IN TROUBLE
-;;				 DRINK *WATER*
+;;	     YOU ARE *LOVED*
+;;     YOU ARE *WORTHY* OF THAT LOVE
+;;        YOU ARE *NOT* IN TROUBLE
+;;             DRINK *WATER*
 
 ;;; Settings:
-(column-number-mode 1)               ; Column numbers
-(global-auto-revert-mode 1)          ; Auto revert changed buffers
-(global-eldoc-mode 1)                ; global documentation
-(menu-bar-mode -1)                   ; Disable the menu bar
-(recentf-mode 1)                     ; what was i doing?
-(scroll-bar-mode -1)                 ; Disable visible scrollbar
-(tool-bar-mode -1)                   ; Disable the toolbar
-(tooltip-mode -1)                    ; Disable tooltips
-(global-visual-line-mode 1)          ; Wrap lines
-(set-fill-column 80)                 ; TTY length
+(column-number-mode 1)      ; Column numbers
+(global-auto-revert-mode 1) ; Auto revert changed buffers
+(global-eldoc-mode 1)       ; global documentation
+(menu-bar-mode -1)          ; Disable the menu bar
+(recentf-mode 1)            ; what was i doing?
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(global-visual-line-mode 1) ; Wrap lines
+(set-fill-column 80)        ; TTY length
 
 ;;; Variables:
 (setq user-full-name "Angel Campbell")
 (setq user-mail-address "angel@acidburn.tech")
-(setq-default fill-column 80) ; tty width
-(setq auto-save-default nil) ; Stop creating # auto save files
-(setq custom-file "~/.emacs.d/emacs-custom.el") ; Use non-source managed custom file
+(setq-default fill-column 80)                       ; tty width
+(setq auto-save-default nil)                        ; stop creating # auto save files
+(setq custom-file "~/.emacs.d/emacs-custom.el")     ; customization
 (setq inhibit-startup-message t) ; no startup message
-(setq make-backup-files nil) ; Stop creating ~ backup files
+(setq make-backup-files nil) ; stop creating ~ backup files
 (setq y-or-n-p-use-read-key t) ; for embark
 (setq use-short-answers t)                ; 2 lazy 2 type yes
-(setq visible-bell t) ; Set up the visible bell
+(setq visible-bell t) ; set up the visible bell
+(set-face-attribute 'default nil ; font
+		    :font "NotoMono Nerd Font Mono"
+		    :height 150)
+;; keybinds
 
-(set-face-attribute 'default nil :font "NotoMono NFM" :height 180 :weight 'semi-light) ; font
-
-;;; Keymaps:
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit) ; Make ESC quit prompts
 
 ;;; Hooks:
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
@@ -45,7 +47,7 @@
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'outline-minor-mode) ; code folding (maybe use hs-minor-mode again)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
- 
+
 ;;; Mac os specific settings:
 (when (eq system-type 'darwin) ; mac specific settings
   (setq mac-command-modifier 'meta)
@@ -82,7 +84,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'modus-operandi-tinted)
+(load-theme 'modus-vivendi-tinted)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
@@ -101,10 +103,11 @@
 (use-package savehist ; save command history
   :init
   (savehist-mode))
-(use-package visual-fill-column ;zen mode
-  :init
-  (setq visual-fill-column-center-text t))
-(use-package eat) ; terminal
+(use-package visual-fill-column) ;zen mode
+(use-package eat  ; terminal
+  :bind
+  (:map eat-mode-map
+	("M-o" . ace-window)))
 (use-package emmet-mode) ; html snippets
 
 ;;; Snippets:
@@ -120,8 +123,9 @@
 (use-package geiser-guile)
 (use-package rust-mode)
 
-;;; Org:
+;;; Org: 
 (use-package org
+  :bind ("C-c c" . 'org-capture)
   :custom
   (org-babel-load-languages
    '((emacs-lisp . t)
@@ -201,54 +205,30 @@
   (vertico-mode))
 (use-package consult
   :config (require 'consult)
-  :bind (;; stolen from consult, todo: clean this
+  :bind (;; general
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
          ("C-c k" . consult-kmacro)
          ("C-c m" . consult-man)
+         ("C-x M-:" . consult-complex-command)
+         ("C-x b" . consult-buffer)
+	 ("C-x B" . consult-buffer-other-tab)                
+         ("M-y" . consult-yank-pop)
          ("C-c i" . consult-info)
          ([remap Info-search] . consult-info)
-         ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)
-         ("C-x b" . consult-buffer)                
-         ("C-x 4 b" . consult-buffer-other-window) 
-         ("C-x 5 b" . consult-buffer-other-frame)  
-         ("C-x t b" . consult-buffer-other-tab)    
-         ("C-x r b" . consult-bookmark)            
-         ("C-x p b" . consult-project-buffer)      
-         
-         ("M-y" . consult-yank-pop)                
 	 ("C-s" . consult-line)
-         
-         ("M-g e" . consult-compile-error)
+	 
+         ;; goto         
          ("M-g f" . consult-flymake)               
          ("M-g g" . consult-goto-line)             
          ("M-g M-g" . consult-goto-line)           
          ("M-g o" . consult-outline)               
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         
+         ("M-g m" . consult-global-mark)
+	 
+         ;; search
          ("M-s d" . consult-find)                  
-         ("M-s c" . consult-locate)
-         ("M-s g" . consult-grep) ;;
-         ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         
-         ("M-s e" . consult-isearch-history)       
-         ("M-s l" . consult-line)                  
-         ("M-s L" . consult-line-multi)            
-         
-         :map minibuffer-local-map
-         ("M-s" . consult-history)                 
-         ("M-r" . consult-history))
+         ("M-s l" . consult-line))
   :init 
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
@@ -340,10 +320,10 @@
   (emms-info-functions '(emms-info-native))
   :config
   (emms-all))
-(keymap-global-set "C-M-<escape>" ;; navi todo replace
-		   (lambda ()
-		     (interactive)
-		     (play-sound-file "~/dotfiles/listen.wav")))
+(keymap-global-set "s-<delete>" ;; navi todo replace
+ 		   (lambda ()
+ 		     (interactive)
+ 		     (play-sound-file "~/dotfiles/listen.wav")))
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
@@ -353,3 +333,4 @@
 ;; - emms
 ;; - notmuch
 ;; - calendar
+;; - https://github.com/hsingko/emacs-obsidian-excalidraw
