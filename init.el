@@ -40,6 +40,10 @@
 		    :height 150)
 ;; keybinds
 
+;;; Apple
+(when (eq system-type 'darwin) ; mac specific settings
+  (setq mac-command-modifier 'meta)
+  (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
 
 ;;; Hooks:
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
