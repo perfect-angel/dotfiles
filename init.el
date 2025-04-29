@@ -84,7 +84,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'modus-vivendi-tinted)
+(load-theme 'modus-vivendi)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
