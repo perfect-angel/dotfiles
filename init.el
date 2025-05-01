@@ -49,7 +49,7 @@
 (add-hook 'prog-mode-hook 'electric-indent-mode) ; auto indent
 (add-hook 'prog-mode-hook 'flymake-mode) ; syntax checking
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
-(add-hook 'prog-mode-hook 'outline-minor-mode) ; code folding (maybe use hs-minor-mode again)
+(add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
 
 ;;; Mac os specific settings:
@@ -104,10 +104,7 @@
   :init
   (savehist-mode))
 (use-package visual-fill-column) ;zen mode
-(use-package eat  ; terminal
-  :bind
-  (:map eat-mode-map
-	("M-o" . ace-window)))
+(use-package vterm)  ; terminal
 (use-package emmet-mode) ; html snippets
 
 ;;; Snippets:
