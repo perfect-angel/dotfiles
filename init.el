@@ -21,7 +21,6 @@
 (scroll-bar-mode -1)        ; Disable visible scrollbar
 (tool-bar-mode -1)          ; Disable the toolbar
 (tooltip-mode -1)           ; Disable tooltips
-(global-visual-line-mode 1) ; Wrap lines
 (set-fill-column 80)        ; TTY length
 
 ;;; Variables:
@@ -38,9 +37,23 @@
 (set-face-attribute 'default nil ; font
 		    :font "NotoMono Nerd Font Mono"
 		    :height 150)
-;; keybinds
+;;; Keybinds:
+(global-set-key (kbd "C-z") #'undo)
+(global-unset-key (kbd "M-z"))
+;; poor woman's leader
+(bind-key "M-z /" 'consult-ripgrep) ;; M-s r
+(bind-key "M-z a" 'vterm)
+(bind-key "M-z b" 'consult-buffer)
+(bind-key "M-z c" 'org-capture)
+(defun me/find-init () (interactive) (find-file "~/dotfiles/init.el"))
+(bind-key "M-z e" 'me/find-init)
+(bind-key "M-z f" 'find-file)
+(bind-key "M-z g" 'magit-status)
+(bind-key "M-z s" 'split-window-horizontally)
+(bind-key "M-z v" 'split-window-vertically)
 
-;;; Apple
+
+;;; Apple:
 (when (eq system-type 'darwin) ; mac specific settings
   (setq mac-command-modifier 'meta)
   (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
@@ -51,6 +64,7 @@
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
+(add-hook 'org-mode-hook 'visual-line-mode) ; org line wrapping
 
 ;;; Mac os specific settings:
 (when (eq system-type 'darwin) ; mac specific settings
@@ -69,7 +83,7 @@
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (require 'use-package)
-(setq use-package-always-ensure t)  
+(setq use-package-always-ensure t)
 
 ;;; Discovery:
 (use-package elisp-demos) ; examples in help
@@ -84,7 +98,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'modus-vivendi)
+(load-theme 'tango)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
@@ -122,7 +136,6 @@
 
 ;;; Org: 
 (use-package org
-  :bind ("C-c c" . 'org-capture)
   :custom
   (org-babel-load-languages
    '((emacs-lisp . t)
@@ -323,7 +336,7 @@
  		     (play-sound-file "~/dotfiles/listen.wav")))
 
 ;;; Amen
-(server-start)
+(server-start 1)
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
