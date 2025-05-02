@@ -98,7 +98,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'tango)
+(load-theme 'wombat)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
