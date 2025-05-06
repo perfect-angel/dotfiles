@@ -63,12 +63,7 @@
 (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
 (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
-(add-hook 'org-mode-hook 'visual-line-mode) ; org line wrapping
 
-;;; Mac os specific settings:
-(when (eq system-type 'darwin) ; mac specific settings
-  (setq mac-command-modifier 'meta)
-  (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
 
 ;;; Packages:
 (require 'package)
@@ -156,19 +151,16 @@
 
 ;; presentations
 (defun me/org-present-start ()
-  (interactive)
   (visual-fill-column-mode 1)
   (widen)
   (org-narrow-to-element))
 
 (defun me/org-present-next ()
-  (interactive)
   (widen)
   (org-next-visible-heading)
   (org-narrow-to-element))
 
 (defun me/org-present-previous()
-  (interactive)
   (widen)
   (org-previous-visible-heading)
   (org-narrow-to-element))
@@ -176,6 +168,8 @@
 (bind-key "C-c p s" #'me/org-present-start 'org-mode-map)
 (bind-key "C-c p n" #'me/org-present-next 'org-mode-map)
 (bind-key "C-c p p" #'me/org-present-previous 'org-mode-map)
+
+(add-hook 'org-mode-hook 'visual-line-mode) ; org line wrapping
 
 ;;; Internet
 (setq rcirc-default-nick "perfect_angel" ;; irc
@@ -330,13 +324,13 @@
   (emms-info-functions '(emms-info-native))
   :config
   (emms-all))
+
 (keymap-global-set "s-<delete>" ;; navi todo replace
  		   (lambda ()
  		     (interactive)
  		     (play-sound-file "~/dotfiles/listen.wav")))
 
 ;;; Amen
-(server-start 1)
 
 ;; TODO:
 ;; - set certain packages to lazy to speed up load time
