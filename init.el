@@ -36,21 +36,20 @@
 (setq visible-bell t) ; set up the visible bell
 (set-face-attribute 'default nil ; font
 		    :font "NotoMono Nerd Font Mono"
-		    :height 150)
+		    :height 180)
 ;;; Keybinds:
 (global-set-key (kbd "C-z") #'undo)
-(global-unset-key (kbd "M-z"))
-;; poor woman's leader
-(bind-key "M-z /" 'consult-ripgrep) ;; M-s r
-(bind-key "M-z a" 'vterm)
-(bind-key "M-z b" 'consult-buffer)
-(bind-key "M-z c" 'org-capture)
+;; leader 🫡
+(bind-key "M-p /" 'consult-ripgrep) ;; M-s r
+(bind-key "M-p a" 'vterm)
+(bind-key "M-p b" 'consult-buffer)
+(bind-key "M-p c" 'org-capture)
 (defun me/find-init () (interactive) (find-file "~/dotfiles/init.el"))
-(bind-key "M-z e" 'me/find-init)
-(bind-key "M-z f" 'find-file)
-(bind-key "M-z g" 'magit-status)
-(bind-key "M-z s" 'split-window-horizontally)
-(bind-key "M-z v" 'split-window-vertically)
+(bind-key "M-p e" 'me/find-init)
+(bind-key "M-p f" 'find-file)
+(bind-key "M-p g" 'magit-status)
+(bind-key "M-p s" 'split-window-horizontally)
+(bind-key "M-p v" 'split-window-vertically)
 
 
 ;;; Apple:
@@ -98,7 +97,7 @@
   (marginalia-mode 1))
 
 ;;; Cosmetic:
-(load-theme 'wombat)
+(load-theme 'modus-vivendi)
 (use-package doom-modeline ; modeline
   :init (doom-modeline-mode 1))
 (use-package breadcrumb
@@ -161,21 +160,22 @@
   (visual-fill-column-mode 1)
   (widen)
   (org-narrow-to-element))
-(defalias 'ps 'me/org-present-start "org present")
 
 (defun me/org-present-next ()
   (interactive)
   (widen)
   (org-next-visible-heading)
   (org-narrow-to-element))
-(defalias 'pn 'me/org-present-next "org-present-next")
 
 (defun me/org-present-previous()
   (interactive)
   (widen)
   (org-previous-visible-heading)
   (org-narrow-to-element))
-(defalias 'pp 'me/org-present-previous "org present previous")
+
+(bind-key "C-c p s" #'me/org-present-start 'org-mode-map)
+(bind-key "C-c p n" #'me/org-present-next 'org-mode-map)
+(bind-key "C-c p p" #'me/org-present-previous 'org-mode-map)
 
 ;;; Internet
 (setq rcirc-default-nick "perfect_angel" ;; irc
