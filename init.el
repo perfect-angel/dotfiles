@@ -39,18 +39,21 @@
 		    :height 180)
 ;;; Keybinds:
 (global-set-key (kbd "C-z") #'undo)
+(bind-key "C-t" 'tab-new)
+
 ;; leader 🫡
 (bind-key "M-p /" 'consult-ripgrep) ;; M-s r
 (bind-key "M-p a" 'vterm)
 (bind-key "M-p b" 'consult-buffer)
 (bind-key "M-p c" 'org-capture)
+(bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
 (defun me/find-init () (interactive) (find-file "~/dotfiles/init.el"))
 (bind-key "M-p e" 'me/find-init)
 (bind-key "M-p f" 'find-file)
 (bind-key "M-p g" 'magit-status)
 (bind-key "M-p s" 'split-window-horizontally)
 (bind-key "M-p v" 'split-window-vertically)
-
+(bind-key "M-p h" 'hs-toggle-hiding)
 
 ;;; Apple:
 (when (eq system-type 'darwin) ; mac specific settings
@@ -114,6 +117,7 @@
 (use-package visual-fill-column) ;zen mode
 (use-package vterm)  ; terminal
 (use-package emmet-mode) ; html snippets
+(use-package dired-sidebar)
 
 ;;; Snippets:
 (use-package yasnippet

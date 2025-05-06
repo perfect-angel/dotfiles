@@ -59,7 +59,3 @@ if [ -f ~/.cargo/env ]; then
     . ~/.cargo/env
 fi
 
-# Emacs terminal
-[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
-  source "$EAT_SHELL_INTEGRATION_DIR/bash"
-
