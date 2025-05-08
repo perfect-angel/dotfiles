@@ -3,10 +3,11 @@
 #+DATE: 2024-12-26
 #+tags: emacs
 
+* Intro
 A literate configuration file for my emacs and system.
 
 
-#+begin_src emacs-lisp :exports none
+#+begin_src emacs-lisp :results none
   ;; config.el -- my emacs configuration. -*-lexical-binding: t-*-
   ;;
   ;; ⚠warning⚠: this is not a good endorsement of me as a serious person.
@@ -62,6 +63,7 @@ DRINK *WATER*
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
   (set-fill-column 80)        ; TTY length
+  (global-visual-line-mode 1) ; wrap lines
 
   ;;; Variables:
   (setq user-full-name "Angel Campbell")
@@ -99,11 +101,13 @@ DRINK *WATER*
   (bind-key "M-p b" 'consult-buffer)
   (bind-key "M-p c" 'org-capture)
   (bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
-  (defun me/find-init () (interactive) (find-file "~/dotfiles/init.el"))
-  (bind-key "M-p e" 'me/find-init)
+  (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
+  (bind-key "M-p e" 'me/find-config)
   (bind-key "M-p f" 'find-file)
   (bind-key "M-p g" 'magit-status)
-  (bind-key "M-p p" 'avy-goto-char-2)
+  (bind-key "M-p i" 'avy-goto-char-2)  
+  (bind-key "M-p p" 'project-find-file)
+  (bind-key "M-p M-p" 'project-find-file)
   (bind-key "M-p r" 'recentf)
   (bind-key "M-p s" 'split-window-horizontally)
   (bind-key "M-p v" 'split-window-vertically)
@@ -139,7 +143,6 @@ DRINK *WATER*
 * Navigation
 #+begin_src emacs-lisp
   (which-key-mode)
-  (use-package swiper :bind ("C-s" . #'swiper))
   (use-package ace-window :bind ("M-o" . ace-window))
   (use-package embark
     :config
@@ -152,19 +155,25 @@ DRINK *WATER*
 * Completion
 #+begin_src emacs-lisp
   (setopt completions-detailed t)
-  (fido-mode)
-  (icomplete-vertical-mode)
-  (completion-preview-mode)
-
+  (fido-vertical-mode)
+  (use-package corfu
+    :custom
+    (corfu-cycle t)
+    (completion-cycle-threshold 3)
+    (tab-always-indent 'complete)
+    (text-mode-ispell-word-completion nil)
+    :init
+    (global-corfu-mode)
+    (corfu-popupinfo-mode))
   (use-package orderless
     :init
-    (customize-set-variable 'completion-styles '(orderless basic))
+    (customize-set-variable 'completion-styles '(orderless basic flex))
     (customize-set-variable 'completion-category-overrides
                             '((file (styles . (partial-completion))))))
 #+end_src
 
 * Cosmetic
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
     (load-theme 'modus-vivendi)
     (use-package doom-modeline ; modeline
       :init (doom-modeline-mode 1))
@@ -176,7 +185,7 @@ DRINK *WATER*
 #+end_src
 
 * Utility
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package exec-path-from-shell ; set path to shellpath
     :config
     (exec-path-from-shell-initialize))
@@ -194,7 +203,7 @@ DRINK *WATER*
 #+end_src
 
 * Snippets
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package yasnippet
     :config
     (setq yasnippet-snippet-dirs '("~/dotfiles/snippets/"))
@@ -203,7 +212,7 @@ DRINK *WATER*
 #+end_src
 
 * Languages
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package markdown-mode)
   (use-package kubernetes)
   (use-package geiser-guile)
@@ -211,7 +220,7 @@ DRINK *WATER*
 #+end_src
 
 ** Treesitter
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package tree-sitter)
   (use-package treesit-auto)
   ;; (treesit-auto-install-all)
@@ -228,7 +237,7 @@ DRINK *WATER*
 #+end_src
 
 * LSP
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package eglot
     :hook ((rust-ts-mode
   	  rust-mode
@@ -242,7 +251,7 @@ DRINK *WATER*
 #+end_src
 
 * Debugging
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package dap-mode ;; todo maybe replace with dape
     :config
     (setq dap-gdb-debug-program '("rust-gdb" "-i" "dap"))
@@ -250,7 +259,7 @@ DRINK *WATER*
 #+end_src
 
 * Org
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (use-package org
     :custom
     (org-babel-load-languages
@@ -274,7 +283,7 @@ DRINK *WATER*
 #+end_src
 
 ** Presentations
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (defun me/org-present-start ()
     (interactive)
     (visual-fill-column-mode 1)
@@ -299,7 +308,7 @@ DRINK *WATER*
 #+end_src
 
 * Internet
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (setq rcirc-default-nick "perfect_angel" ;; irc
         rcirc-track-minor-mode 1
         rcirc-server-alist
@@ -322,7 +331,7 @@ DRINK *WATER*
 #+end_src
 
 * Novelty
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results none
   (keymap-global-set "s-<delete>" ;; navi todo replace
    		   (lambda ()
    		     (interactive)
