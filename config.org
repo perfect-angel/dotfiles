@@ -105,7 +105,8 @@ DRINK *WATER*
   (bind-key "M-p e" 'me/find-config)
   (bind-key "M-p f" 'find-file)
   (bind-key "M-p g" 'magit-status)
-  (bind-key "M-p i" 'avy-goto-char-2)  
+  (bind-key "M-p i" 'avy-goto-char-2)
+  (bind-key "M-p l" 'visual-fill-column-mode)
   (bind-key "M-p p" 'project-find-file)
   (bind-key "M-p M-p" 'project-find-file)
   (bind-key "M-p r" 'recentf)
@@ -186,20 +187,22 @@ DRINK *WATER*
 
 * Utility
 #+begin_src emacs-lisp :results none
-  (use-package exec-path-from-shell ; set path to shellpath
-    :config
-    (exec-path-from-shell-initialize))
-  (use-package savehist ; save command history
-    :init
-    (savehist-mode))
-  (use-package visual-fill-column) ; zen mode
-  (use-package vterm)  ; terminal
-  (use-package emmet-mode) ; html snippets
-  (use-package dired-sidebar) ; file tree
-  (use-package spray ; speedreading
-    :init
-    (setq spray-wpm 500))
-  (use-package magit) ; git gud
+      (use-package exec-path-from-shell ; set path to shellpath
+        :config
+        (exec-path-from-shell-initialize))
+      (use-package savehist ; save command history
+        :init
+        (savehist-mode))
+      (use-package visual-fill-column  ; zen mode
+        :custom
+        (visual-fill-column-center-text t))
+      (use-package vterm)  ; terminal
+      (use-package emmet-mode) ; html snippets
+      (use-package dired-sidebar) ; file tree
+      (use-package spray ; speedreading
+        :init
+        (setq spray-wpm 500))
+      (use-package magit) ; git gud
 #+end_src
 
 * Snippets
