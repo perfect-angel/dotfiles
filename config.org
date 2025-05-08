@@ -68,7 +68,7 @@ DRINK *WATER*
   (setq user-mail-address "angel@acidburn.tech")
   (setq-default fill-column 80)                       ; tty width
   (setq auto-save-default nil)                        ; stop creating # auto save files
-  (setq custom-file "~/.emacs.d/emacs-custom.el")     ; customization
+  (setq custom-file "~/dotfiles/emacs-custom.el")     ; customization
   (setq inhibit-startup-message t) ; no startup message
   (setq make-backup-files nil) ; stop creating ~ backup files
   (setq y-or-n-p-use-read-key t) ; for embark
@@ -76,7 +76,7 @@ DRINK *WATER*
   (setq visible-bell t) ; set up the visible bell
   (set-face-attribute 'default nil ; font
   		    :font "NotoMono Nerd Font Mono"
-  		    :height 180)
+  		    :height 200)
 #+end_src
 
 ** Apple
@@ -103,6 +103,8 @@ DRINK *WATER*
   (bind-key "M-p e" 'me/find-init)
   (bind-key "M-p f" 'find-file)
   (bind-key "M-p g" 'magit-status)
+  (bind-key "M-p p" 'avy-goto-char-2)
+  (bind-key "M-p r" 'recentf)
   (bind-key "M-p s" 'split-window-horizontally)
   (bind-key "M-p v" 'split-window-vertically)
   (bind-key "M-p h" 'hs-toggle-hiding)
@@ -136,24 +138,9 @@ DRINK *WATER*
 
 * Navigation
 #+begin_src emacs-lisp
-  (ido-mode)
-  (icomplete-vertical-mode)
-  (use-package ace-window :bind (("M-o" . ace-window)))
-  (use-package vertico
-    :init
-    (setq vertico-cycle t)
-    (vertico-mode))
-  (use-package swiper
-    :bind
-    ("C-s" . #'swiper-isearch))
-  (use-package counsel
-    :init
-    (counsel-mode))
-  (use-package orderless
-    :init
-    (customize-set-variable 'completion-styles '(orderless basic))
-    (customize-set-variable 'completion-category-overrides
-                            '((file (styles . (partial-completion))))))
+  (which-key-mode)
+  (use-package swiper :bind ("C-s" . #'swiper))
+  (use-package ace-window :bind ("M-o" . ace-window))
   (use-package embark
     :config
     (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
@@ -164,37 +151,28 @@ DRINK *WATER*
 
 * Completion
 #+begin_src emacs-lisp
-  (use-package corfu
-    :custom
-    (corfu-auto t)         ; Enable auto completion
-    (corfu-auto-prefix 2)  ; Complete with less prefix keys
-    :init
-    (customize-set-variable 'corfu-cycle t)        ; Allows cycling through candidates
-    
-    (global-corfu-mode)
-    (when (require 'corfu-popupinfo nil :noerror)
-      (corfu-popupinfo-mode 1)
-      (eldoc-add-command #'corfu-insert)))
+  (setopt completions-detailed t)
+  (fido-mode)
+  (icomplete-vertical-mode)
+  (completion-preview-mode)
 
-
-  (use-package cape
+  (use-package orderless
     :init
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-dict)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+    (customize-set-variable 'completion-styles '(orderless basic))
+    (customize-set-variable 'completion-category-overrides
+                            '((file (styles . (partial-completion))))))
 #+end_src
+
 * Cosmetic
 #+begin_src emacs-lisp
-  (load-theme 'modus-vivendi)
-  (use-package doom-modeline ; modeline
-    :init (doom-modeline-mode 1))
-  (use-package breadcrumb
-    :init (breadcrumb-mode))
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode)) 
-  (use-package all-the-icons) ; Cute icons
+    (load-theme 'modus-vivendi)
+    (use-package doom-modeline ; modeline
+      :init (doom-modeline-mode 1))
+    (use-package breadcrumb
+      :init (breadcrumb-mode))
+    (use-package rainbow-delimiters
+      :hook (prog-mode . rainbow-delimiters-mode)) 
+    (use-package all-the-icons) ; Cute icons
 #+end_src
 
 * Utility
@@ -235,10 +213,18 @@ DRINK *WATER*
 ** Treesitter
 #+begin_src emacs-lisp
   (use-package tree-sitter)
-  (use-package tree-sitter-indent)
-  (use-package tree-sitter-ispell)
-  (use-package tree-sitter-langs)
   (use-package treesit-auto)
+  ;; (treesit-auto-install-all)
+  (setq major-mode-remap-alist
+        '((yaml-mode . yaml-ts-mode)
+  	(bash-mode . bash-ts-mode)
+  	(js2-mode . js-ts-mode)
+  	(typescript-mode . typescript-ts-mode)
+  	(json-mode . json-ts-mode)
+  	(elixir-mode . elixir-ts-mode)
+  	(rust-mode . rust-ts-mode)
+  	(css-mode . css-ts-mode)
+  	(python-mode . python-ts-mode)))
 #+end_src
 
 * LSP
@@ -254,6 +240,7 @@ DRINK *WATER*
     :config
     (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
 #+end_src
+
 * Debugging
 #+begin_src emacs-lisp
   (use-package dap-mode ;; todo maybe replace with dape
