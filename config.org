@@ -2,12 +2,12 @@
 #+AUTHOR: Angel D. Campbell
 #+DATE: 2024-12-26
 #+tags: emacs
+#+PROPERTY: header-args :results none
 
 * Intro
 A literate configuration file for my emacs and system.
 
-
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp
   ;; config.el -- my emacs configuration. -*-lexical-binding: t-*-
   ;;
   ;; ⚠warning⚠: this is not a good endorsement of me as a serious person.
@@ -16,10 +16,10 @@ A literate configuration file for my emacs and system.
   ;; licensed under a creative commons attribution 4.0 international license.
   ;; see http://creativecommons.org/licenses/by/4.0/
   ;;
-  ;; author: angel d. campbell <https://sr.ht/~perfect-angel/>
+  ;; author: angel d. campbell <https://angeldcampbell.com/>
   ;; maintainer: angel d. campbell
   ;; created: december  26, 2024
-  ;; last edited: Jan 28, 2025
+  ;; last edited: May 8, 2025
   ;;
   ;; this file is not part of gnu emacs.
   ;;
@@ -28,13 +28,13 @@ A literate configuration file for my emacs and system.
 #+end_src
 
 #+begin_center
-YOU ARE *LOVED*
-YOU ARE *WORTHY* OF THAT LOVE
-YOU ARE *NOT* IN TROUBLE
-DRINK *WATER*
+                           YOU ARE *LOVED*
+                    YOU ARE *WORTHY* OF THAT LOVE
+                      YOU ARE *NOT* IN TROUBLE
+                            DRINK *WATER*
 #+end_center
 
-* Package Init
+* Packages
  
 #+begin_src emacs-lisp
   (require 'package)
@@ -52,35 +52,36 @@ DRINK *WATER*
 #+end_src
 
 * Settings
-
+** General
 #+begin_src emacs-lisp
   (column-number-mode 1)      ; Column numbers
   (global-auto-revert-mode 1) ; Auto revert changed buffers
   (global-eldoc-mode 1)       ; global documentation
-  (menu-bar-mode -1)          ; Disable the menu bar
   (recentf-mode 1)            ; what was i doing?
+  (menu-bar-mode -1)          ; Disable the menu bar
   (scroll-bar-mode -1)        ; Disable visible scrollbar
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
   (set-fill-column 80)        ; TTY length
   (global-visual-line-mode 1) ; wrap lines
-
+#+end_src
+** Variables
+#+begin_src emacs-lisp
   ;;; Variables:
-  (setq user-full-name "Angel Campbell")
-  (setq user-mail-address "angel@acidburn.tech")
-  (setq-default fill-column 80)                       ; tty width
-  (setq auto-save-default nil)                        ; stop creating # auto save files
+  (setq user-full-name "Angel D. Campbell")
+  (setq user-mail-address "angelcampbell@fastmail.com")
+  (setq-default fill-column 80) ; tty width
+  (setq auto-save-default nil)  ; stop creating # auto save files
   (setq custom-file "~/dotfiles/emacs-custom.el")     ; customization
   (setq inhibit-startup-message t) ; no startup message
   (setq make-backup-files nil) ; stop creating ~ backup files
   (setq y-or-n-p-use-read-key t) ; for embark
-  (setq use-short-answers t)                ; 2 lazy 2 type yes
+  (setq use-short-answers t)        ; 2 lazy 2 type yes
   (setq visible-bell t) ; set up the visible bell
   (set-face-attribute 'default nil ; font
   		    :font "NotoMono Nerd Font Mono"
   		    :height 200)
 #+end_src
-
 ** Apple
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin) ; mac specific settings
@@ -89,6 +90,7 @@ DRINK *WATER*
 #+end_src
 
 * Keybinds
+
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-z") #'undo)
   (bind-key "C-t" 'tab-new)
@@ -123,40 +125,47 @@ DRINK *WATER*
   (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
   (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
   (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
-  ;; org hooks
-  (add-hook 'org-mode-hook 'visual-line-mode) ; org line wrapping
 #+end_src
 
 * Discovery
 #+begin_src emacs-lisp
-  (use-package elisp-demos) ; examples in help
-  (use-package marginalia
-    :init
-    ;; Configure Marginalia
-    (customize-set-variable 'marginalia-annotators
-                            '(marginalia-annotators-heavy
-                              marginalia-annotators-light
-                              nil))
-    :config
-    (marginalia-mode 1))
+  (which-key-mode 1)
+  (use-package elisp-demos)                          ;; examples in help
+  (use-package marginalia :init (marginalia-mode 1)) ;; minibuffer margin help
 #+end_src
 
 * Navigation
 #+begin_src emacs-lisp
-  (which-key-mode)
   (use-package ace-window :bind ("M-o" . ace-window))
+  (use-package vertico
+    :custom (vertico-cycle t)
+    :init (vertico-mode))
+  (use-package embark-consult)
   (use-package embark
-    :config
+    :init
     (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
     (keymap-global-set "C-." 'embark-act)
     (keymap-global-set "C-;" 'embark-dwim)
     (setq prefix-help-command #'embark-prefix-help-command))
+  (use-package consult
+    :bind (("C-c M-x" . consult-mode-command)
+           ([remap Info-search] . consult-info)
+           ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+           ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+           ("C-s" . consult-line)
+           ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+           ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+           ("M-g m" . consult-global-mark)
+           ("M-g i" . consult-imenu)
+           ("M-g I" . consult-imenu-multi)
+           ("M-s r" . consult-ripgrep))
+    :init
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref))
 #+end_src
 
 * Completion
 #+begin_src emacs-lisp
-  (setopt completions-detailed t)
-  (fido-vertical-mode)
   (use-package corfu
     :custom
     (corfu-cycle t)
@@ -174,19 +183,41 @@ DRINK *WATER*
 #+end_src
 
 * Cosmetic
-#+begin_src emacs-lisp :results none
-    (load-theme 'modus-vivendi)
-    (use-package doom-modeline ; modeline
-      :init (doom-modeline-mode 1))
-    (use-package breadcrumb
-      :init (breadcrumb-mode))
-    (use-package rainbow-delimiters
-      :hook (prog-mode . rainbow-delimiters-mode)) 
-    (use-package all-the-icons) ; Cute icons
+#+begin_src emacs-lisp 
+  (load-theme 'modus-vivendi)
+  (use-package doom-modeline
+    :custom
+    (doom-modeline-major-mode-color-icon t)
+    (doom-modeline-buffer-state-icon t)
+    (doom-modeline-buffer-modification-icon t)
+    (doom-modeline-major-mode-icon t)
+    :init (doom-modeline-mode 1))
+  (use-package breadcrumb
+    :init (breadcrumb-mode))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode)) 
+  (use-package all-the-icons) ; don't forget to install
+  (use-package mini-frame :init (mini-frame-mode))
+  (use-package dashboard
+    :custom
+    (dashboard-items '((recents . 5)
+  		     (projects . 5)
+  		     (agenda . 5)))
+    (dashboard-set-file-icons t)
+    (dashboard-set-heading-icons t)
+    (dashboard-center-text t)
+    (dashboard-week-agenda t)
+    (dashboard-vertically-center-content t)
+    (dashboard-startup-banner "~/dotfiles/banner.png")
+    (dashboard-banner-logo-title ; Thomas 10
+     "I have cast fire upon the world, and see, I am guarding it until it blazes.")
+    (dashboard-footer-messages '("drink water"))
+    :config
+    (dashboard-setup-startup-hook))
 #+end_src
 
 * Utility
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
       (use-package exec-path-from-shell ; set path to shellpath
         :config
         (exec-path-from-shell-initialize))
@@ -206,7 +237,7 @@ DRINK *WATER*
 #+end_src
 
 * Snippets
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (use-package yasnippet
     :config
     (setq yasnippet-snippet-dirs '("~/dotfiles/snippets/"))
@@ -215,7 +246,7 @@ DRINK *WATER*
 #+end_src
 
 * Languages
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (use-package markdown-mode)
   (use-package kubernetes)
   (use-package geiser-guile)
@@ -223,7 +254,7 @@ DRINK *WATER*
 #+end_src
 
 ** Treesitter
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (use-package tree-sitter)
   (use-package treesit-auto)
   ;; (treesit-auto-install-all)
@@ -239,8 +270,8 @@ DRINK *WATER*
   	(python-mode . python-ts-mode)))
 #+end_src
 
-* LSP
-#+begin_src emacs-lisp :results none
+** LSP
+#+begin_src emacs-lisp 
   (use-package eglot
     :hook ((rust-ts-mode
   	  rust-mode
@@ -254,7 +285,7 @@ DRINK *WATER*
 #+end_src
 
 * Debugging
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (use-package dap-mode ;; todo maybe replace with dape
     :config
     (setq dap-gdb-debug-program '("rust-gdb" "-i" "dap"))
@@ -262,7 +293,7 @@ DRINK *WATER*
 #+end_src
 
 * Org
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (use-package org
     :custom
     (org-babel-load-languages
@@ -280,17 +311,12 @@ DRINK *WATER*
     (org-capture-templates
      '(("t" "Todo" entry (file "refile.org") "* TODO %?")
        ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?"))))
-  (use-package org-bullets
-    :init
-    (org-bullets-mode 1))
 #+end_src
 
 ** Presentations
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (defun me/org-present-start ()
     (interactive)
-    (visual-fill-column-mode 1)
-    (widen)
     (org-narrow-to-element))
 
   (defun me/org-present-next ()
@@ -304,14 +330,10 @@ DRINK *WATER*
     (widen)
     (org-previous-visible-heading)
     (org-narrow-to-element))
-
-  (bind-key "C-c p s" #'me/org-present-start 'org-mode-map)
-  (bind-key "C-c p n" #'me/org-present-next 'org-mode-map)
-  (bind-key "C-c p p" #'me/org-present-previous 'org-mode-map)
 #+end_src
 
 * Internet
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (setq rcirc-default-nick "perfect_angel" ;; irc
         rcirc-track-minor-mode 1
         rcirc-server-alist
@@ -334,11 +356,11 @@ DRINK *WATER*
 #+end_src
 
 * Novelty
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp 
   (keymap-global-set "s-<delete>" ;; navi todo replace
    		   (lambda ()
-   		     (interactive)
-   		     (play-sound-file "~/dotfiles/listen.wav")))
+   		     (Interactive)
+   		     (Play-Sound-File "~/Dotfiles/Listen.wav")))
 
 #+end_src
 
