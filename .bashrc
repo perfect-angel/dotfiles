@@ -59,3 +59,5 @@ if [ -f ~/.cargo/env ]; then
     . ~/.cargo/env
 fi
 
+# spellchecking
+DICPATH=~/lib/spelling

@@ -67,7 +67,6 @@ A literate configuration file for my emacs and system.
 #+end_src
 ** Variables
 #+begin_src emacs-lisp
-  ;;; Variables:
   (setq user-full-name "Angel D. Campbell")
   (setq user-mail-address "angelcampbell@fastmail.com")
   (setq-default fill-column 80) ; tty width
@@ -82,6 +81,7 @@ A literate configuration file for my emacs and system.
   		    :font "NotoMono Nerd Font Mono"
   		    :height 200)
 #+end_src
+
 ** Apple
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin) ; mac specific settings
@@ -113,6 +113,8 @@ A literate configuration file for my emacs and system.
   (bind-key "M-p M-p" 'project-find-file)
   (bind-key "M-p r" 'recentf)
   (bind-key "M-p s" 'split-window-horizontally)
+  (defun me/find-tasks () (interactive) (find-file "~/org/tasks.org"))
+  (bind-key "M-p t" 'me/find-tasks)
   (bind-key "M-p v" 'split-window-vertically)
   (bind-key "M-p h" 'hs-toggle-hiding)
 #+end_src
@@ -125,6 +127,35 @@ A literate configuration file for my emacs and system.
   (add-hook 'prog-mode-hook 'electric-pair-mode) ; auto pairs
   (add-hook 'prog-mode-hook 'hs-minor-mode) ; code folding
   (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
+#+end_src
+
+* Utility
+#+begin_src emacs-lisp 
+  (use-package exec-path-from-shell ; set path to shellpath
+    :config
+    (exec-path-from-shell-initialize))
+  (use-package savehist ; save command history
+    :init
+    (savehist-mode))
+  (use-package visual-fill-column  ; zen mode
+    :custom
+    (visual-fill-column-center-text t))
+  (use-package vterm)  ; terminal
+  (use-package emmet-mode) ; html snippets
+  (use-package dired-sidebar) ; file tree
+  (use-package spray ; speedreading
+    :init
+    (setq spray-wpm 500))
+  (use-package magit) ; git gud
+  (use-package devil ; comma (,) for modality
+    ;; (,x = C-x) (,mx = M-x) (,mmx = C-M-x) (,z<SPC> = C-<SPC>)
+    :custom
+    (devil-lighter " \U0001F608")
+    (devil-prompt "\U0001F608 %t")
+    :init (global-devil-mode))
+  (use-package simple-httpd) ; HTTP server
+  (use-package whisper
+    :load-path "~/lib/elisp") ; yapping
 #+end_src
 
 * Discovery
@@ -152,6 +183,7 @@ A literate configuration file for my emacs and system.
            ([remap Info-search] . consult-info)
            ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
            ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+           ("C-x C-b" . consult-buffer)              ;; orig. switch-to-buffer  	 
            ("C-s" . consult-line)
            ("M-y" . consult-yank-pop)                ;; orig. yank-pop
            ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
@@ -169,18 +201,20 @@ A literate configuration file for my emacs and system.
   (use-package corfu
     :custom
     (corfu-cycle t)
-    (completion-cycle-threshold 3)
-    (tab-always-indent 'complete)
-    (text-mode-ispell-word-completion nil)
     :init
     (global-corfu-mode)
     (corfu-popupinfo-mode))
   (use-package orderless
     :init
-    (customize-set-variable 'completion-styles '(orderless basic flex))
+    (customize-set-variable 'completion-styles '(orderless basic))
     (customize-set-variable 'completion-category-overrides
                             '((file (styles . (partial-completion))))))
-#+end_src
+  (use-package cape
+    :init
+    (add-hook 'completion-at-point-functions #'cape-dabbrev)
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-elisp-block))
+    #+end_src
 
 * Cosmetic
 #+begin_src emacs-lisp 
@@ -197,7 +231,13 @@ A literate configuration file for my emacs and system.
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)) 
   (use-package all-the-icons) ; don't forget to install
-  (use-package mini-frame :init (mini-frame-mode))
+  (use-package mini-frame
+    :custom
+    (mini-frame-show-parameters '((top . 0.25)
+  				(width . 0.7)
+  				(height . 10)
+  				(left . 0.5)))
+    :init (mini-frame-mode))
   (use-package dashboard
     :custom
     (dashboard-items '((recents . 5)
@@ -214,26 +254,6 @@ A literate configuration file for my emacs and system.
     (dashboard-footer-messages '("drink water"))
     :config
     (dashboard-setup-startup-hook))
-#+end_src
-
-* Utility
-#+begin_src emacs-lisp 
-      (use-package exec-path-from-shell ; set path to shellpath
-        :config
-        (exec-path-from-shell-initialize))
-      (use-package savehist ; save command history
-        :init
-        (savehist-mode))
-      (use-package visual-fill-column  ; zen mode
-        :custom
-        (visual-fill-column-center-text t))
-      (use-package vterm)  ; terminal
-      (use-package emmet-mode) ; html snippets
-      (use-package dired-sidebar) ; file tree
-      (use-package spray ; speedreading
-        :init
-        (setq spray-wpm 500))
-      (use-package magit) ; git gud
 #+end_src
 
 * Snippets
@@ -272,16 +292,16 @@ A literate configuration file for my emacs and system.
 
 ** LSP
 #+begin_src emacs-lisp 
-  (use-package eglot
-    :hook ((rust-ts-mode
-  	  rust-mode
-  	  typescript-ts-mode
-  	  javascript-ts-mode
-  	  elixir-ts-mode
-  	  terraform-ts-mode
-  	  terraform-mode) . eglot-ensure)
-    :config
-    (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
+    (use-package eglot
+      :hook ((rust-ts-mode
+    	  rust-mode
+    	  typescript-ts-mode
+    	  javascript-ts-mode
+    	  elixir-ts-mode
+    	  terraform-ts-mode
+    	  terraform-mode) . eglot-ensure)
+      :config
+      (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
 #+end_src
 
 * Debugging
