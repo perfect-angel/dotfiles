@@ -92,6 +92,7 @@ A literate configuration file for my emacs and system.
 * Keybinds
 
 #+begin_src emacs-lisp
+  (global-unset-key (kbd "M-z"))
   (global-set-key (kbd "C-z") #'undo)
   (bind-key "C-t" 'tab-new)
 #+end_src
@@ -130,7 +131,7 @@ A literate configuration file for my emacs and system.
 #+end_src
 
 * Utility
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (use-package exec-path-from-shell ; set path to shellpath
     :config
     (exec-path-from-shell-initialize))
@@ -383,6 +384,8 @@ A literate configuration file for my emacs and system.
    		     (Play-Sound-File "~/Dotfiles/Listen.wav")))
 
 #+end_src
+
+* AI
 
 * Amen
 🙏
