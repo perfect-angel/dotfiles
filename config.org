@@ -202,6 +202,7 @@ A literate configuration file for my emacs and system.
   (use-package corfu
     :custom
     (corfu-cycle t)
+    (tab-always-indent 'complete)
     :init
     (global-corfu-mode)
     (corfu-popupinfo-mode))
@@ -274,35 +275,16 @@ A literate configuration file for my emacs and system.
   (use-package rust-mode)
 #+end_src
 
-** Treesitter
-#+begin_src emacs-lisp 
-  (use-package tree-sitter)
-  (use-package treesit-auto)
-  ;; (treesit-auto-install-all)
-  (setq major-mode-remap-alist
-        '((yaml-mode . yaml-ts-mode)
-  	(bash-mode . bash-ts-mode)
-  	(js2-mode . js-ts-mode)
-  	(typescript-mode . typescript-ts-mode)
-  	(json-mode . json-ts-mode)
-  	(elixir-mode . elixir-ts-mode)
-  	(rust-mode . rust-ts-mode)
-  	(css-mode . css-ts-mode)
-  	(python-mode . python-ts-mode)))
-#+end_src
-
 ** LSP
 #+begin_src emacs-lisp 
-    (use-package eglot
-      :hook ((rust-ts-mode
-    	  rust-mode
-    	  typescript-ts-mode
-    	  javascript-ts-mode
-    	  elixir-ts-mode
-    	  terraform-ts-mode
-    	  terraform-mode) . eglot-ensure)
-      :config
-      (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
+  (use-package eglot
+    :hook ((rust-mode
+  	  typescript-mode
+  	  js2-mode
+  	  elixir-mode
+  	  terraform-mode) . eglot-ensure)
+    :config
+    (add-to-list 'eglot-server-programs '(elixir-ts-mode "~/lib/elixir-ls/language_server.sh")))
 #+end_src
 
 * Debugging
