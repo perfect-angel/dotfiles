@@ -97,7 +97,7 @@ for memory's sake.
   (setq visible-bell t) ; set up the visible bell
   (set-face-attribute 'default nil ; font
   		    :font "NotoMono Nerd Font Mono"
-  		    :height 200)
+  		    :height 180)
 #+end_src
 
 Apple specific settings
@@ -230,26 +230,18 @@ Apple specific settings
 
 * Cosmetic
 #+begin_src emacs-lisp 
-  (load-theme 'modus-vivendi)
+  (load-theme 'misterioso)
   (use-package doom-modeline
     :custom
     (doom-modeline-major-mode-color-icon t)
     (doom-modeline-buffer-state-icon t)
     (doom-modeline-buffer-modification-icon t)
-    (doom-modeline-major-mode-icon t)
     :init (doom-modeline-mode 1))
   (use-package breadcrumb
     :init (breadcrumb-mode))
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)) 
   (use-package all-the-icons) ; don't forget to install
-  (use-package mini-frame
-    :custom
-    (mini-frame-show-parameters '((top . 0.25)
-  				(width . 0.7)
-  				(height . 10)
-  				(left . 0.5)))
-    :init (mini-frame-mode))
   (use-package dashboard
     :custom
     (dashboard-items '((recents . 5)
