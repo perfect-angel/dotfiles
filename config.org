@@ -118,12 +118,13 @@ Apple specific settings
 
 ** Leader 🫡
 #+begin_src emacs-lisp
+  (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
+  (defun me/find-tasks () (interactive) (find-file "~/org/tasks.org"))
   (bind-key "S-SPC /" 'consult-ripgrep) ;; M-s r
   (bind-key "S-SPC a" 'vterm)
   (bind-key "S-SPC b" 'consult-buffer)
   (bind-key "S-SPC c" 'org-capture)
   (bind-key "S-SPC d" #'dired-sidebar-toggle-sidebar)
-  (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
   (bind-key "S-SPC e" 'me/find-config)
   (bind-key "S-SPC f" 'find-file)
   (bind-key "S-SPC g" 'magit-status)
@@ -132,7 +133,6 @@ Apple specific settings
   (bind-key "S-SPC p" 'project-find-file)
   (bind-key "S-SPC r" 'recentf)
   (bind-key "S-SPC s" 'split-window-horizontally)
-  (defun me/find-tasks () (interactive) (find-file "~/org/tasks.org"))
   (bind-key "S-SPC t" 'me/find-tasks)
   (bind-key "S-SPC v" 'split-window-vertically)
   (bind-key "S-SPC h" 'hs-toggle-hiding)

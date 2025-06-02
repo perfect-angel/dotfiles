@@ -33,7 +33,7 @@ vim.g.netrw_banner = 0
 vim.o.conceallevel = 2
 vim.o.concealcursor = 'nc'
 
-vim.g.UltiSnipsSnippetDirectories = {"~/dotfiles/snippets"}
+vim.g.UltiSnipsSnippetDirectories = { "~/dotfiles/snippets" }
 
 vim.o.background = "light"
 
@@ -158,81 +158,37 @@ require("lazy").setup({
   'nvim-tree/nvim-web-devicons', -- devicons
   'mechatroner/rainbow_csv',     -- pretty csv
   -- lsp
-  {
-    'neovim/nvim-lspconfig',
-    config = function()
-      vim.api.nvim_create_autocmd('LspAttach', {
-        desc = 'LSP actions',
-        callback = function(event)
-          local opts = { buffer = event.buf }
+ {
+	  'VonHeikemen/lsp-zero.nvim',
+	  dependencies = {
+		  -- LSP Support
+		  {'neovim/nvim-lspconfig'},
+		  {'williamboman/mason.nvim'},
+		  {'williamboman/mason-lspconfig.nvim'},
 
-          vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-          vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-          vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-          vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-          vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-          vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-          vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-          vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-          vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-          vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-        end
-      })
+		  -- Autocompletion
+		  {'hrsh7th/nvim-cmp'},
+		  {'hrsh7th/cmp-buffer'},
+		  {'hrsh7th/cmp-path'},
+		  {'saadparwaiz1/cmp_luasnip'},
+		  {'hrsh7th/cmp-nvim-lsp'},
+		  {'hrsh7th/cmp-nvim-lua'},
 
-      require('lspconfig').bashls.setup({})
-      require('lspconfig').cssls.setup({})
-      require('lspconfig').dockerls.setup({})
-      require('lspconfig').elixirls.setup({})
-      require('lspconfig').ember.setup({})
-      require('lspconfig').emmet_ls.setup({})
-      require('lspconfig').eslint.setup({})
-      require('lspconfig').jsonls.setup({})
-      require('lspconfig').lua_ls.setup({})
-      require('lspconfig').pyright.setup({})
-      require('lspconfig').rust_analyzer.setup({})
-      require('lspconfig').terraformls.setup({})
-      require('lspconfig').ts_ls.setup({})
-    end
+		  -- Snippets
+		  {'L3MON4D3/LuaSnip'},
+		  {'rafamadriz/friendly-snippets'},
+	  }
   },
-  { 'williamboman/mason.nvim',           opts = {} },
-  { 'williamboman/mason-lspconfig.nvim', opts = {} },
-  -- autocompletion
-  'hrsh7th/cmp-nvim-lsp',
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "saadparwaiz1/cmp_luasnip"
-    },
-    config = function()
-      local cmp = require('cmp')
-      cmp.setup({
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "ultisnips" },
-
-        }, {
-          { name = "buffer" },
-        }),
-        snippet = {
-          expand = function(args)
-            vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items
-        }),
-      })
-    end
-  },
-  -- snippets
-  "SirVer/ultisnips",
+          -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+          -- vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+          -- vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+          -- vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+          -- vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+          -- vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+          -- vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+          -- vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+          -- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+          -- vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   -- testing TODO: test in virtual window
   "vim-test/vim-test",
   -- navigation
@@ -263,42 +219,7 @@ require("lazy").setup({
     },
   },
   "nvim-treesitter/nvim-treesitter",
-  -- org
-  {
-    'nvim-orgmode/orgmode',
-    event = 'VeryLazy',
-    ft = { 'org' },
-    config = function()
-      -- Setup orgmode
-      require('orgmode').setup({
-        org_agenda_files = '~/org/**/*',
-        org_default_notes_file = '~/org/refile.org',
-        org_adapt_indentation = false,
-        org_capture_templates = {
-          t = { description = 'Task', template = '* TODO %?' },
-          j = {
-            description = 'Journal',
-            target = '~/org/journal.org',
-            template = '%?',
-            datetree = true
-          }
-        }
-      })
-    end,
-  },
-  {
-    "chipsenkbeil/org-roam.nvim",
-    opts = {
-      directory = "~/org/words",
-      org_files = { "~/org" }
-    }
-  },
-  "bullets-vim/bullets.vim",
   -- util
-  {
-    "knubie/vim-kitty-navigator",
-    build = "cp ./*.py ~/.config/kitty/",
-  },
   "nvim-lua/plenary.nvim",                 -- async lib for plugins
   { 'windwp/nvim-autopairs',  opts = {} }, -- autopairs
   { "kylechui/nvim-surround", opts = {} }, -- ysiw
@@ -311,8 +232,11 @@ require("lazy").setup({
   "tpope/vim-repeat",                      -- better .
   "tpope/vim-sensible",                    -- sensible defaults
   -- tools
-  { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
-  { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
+  { "michaelb/sniprun", branch = "master", build = "sh install.sh", opts = {} },
+  {
+    "folke/zen-mode.nvim",
+    opts = { window = { width = 80 } }
+  },
 })
 
 
