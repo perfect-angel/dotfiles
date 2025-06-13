@@ -97,7 +97,7 @@ for memory's sake.
   (setq visible-bell t) ; set up the visible bell
   (set-face-attribute 'default nil ; font
   		    :font "NotoMono Nerd Font Mono"
-  		    :height 180)
+  		    :height 200)
 #+end_src
 
 Apple specific settings
@@ -316,25 +316,6 @@ Apple specific settings
     (org-capture-templates
      '(("t" "Todo" entry (file "refile.org") "* TODO %?")
        ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?"))))
-#+end_src
-
-** Presentations
-#+begin_src emacs-lisp 
-  (defun me/org-present-start ()
-    (interactive)
-    (org-narrow-to-element))
-
-  (defun me/org-present-next ()
-    (interactive)
-    (widen)
-    (org-next-visible-heading)
-    (org-narrow-to-element))
-
-  (defun me/org-present-previous()
-    (interactive)
-    (widen)
-    (org-previous-visible-heading)
-    (org-narrow-to-element))
 #+end_src
 
 * Internet
