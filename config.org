@@ -13,9 +13,6 @@ YOU ARE =NOT= IN TROUBLE
 DRINK =WATER=
 #+end_center
 
-This file is tangled with org-mode. The bootstrap code is in my [[file:init.el][init.el]] and
-looks like this:
-
 #+begin_src emacs-lisp :tangle no
   ;; ~/.emacs.d/init.el
   (require 'org)

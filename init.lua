@@ -262,7 +262,9 @@ require("lazy").setup({
       },
     },
   },
+  -- lang
   "nvim-treesitter/nvim-treesitter",
+  "elixir-editors/vim-elixir",
   -- org
   {
     'nvim-orgmode/orgmode',
