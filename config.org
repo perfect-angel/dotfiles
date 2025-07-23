@@ -13,6 +13,8 @@ YOU ARE =NOT= IN TROUBLE
 DRINK =WATER=
 #+end_center
 
+This org file is tangled in my =init.el= which looks like this:
+
 #+begin_src emacs-lisp :tangle no
   ;; ~/.emacs.d/init.el
   (require 'org)
@@ -101,8 +103,16 @@ Apple specific settings
 
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin) ; mac specific settings
-    (setq mac-command-modifier 'meta)
+    (setq mac-command-modifier 'meta) ; use command as meta
     (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
+#+end_src
+
+* Evil
+#+begin_src emacs-lisp
+  (use-package evil
+    :init (evil-mode 1))
+  (use-package evil-org
+    :init (evil-org-mode 1))
 #+end_src
 
 * Keybinds
@@ -115,11 +125,11 @@ Apple specific settings
 
 ** Leader 🫡
 #+begin_src emacs-lisp
-  (bind-key "S-SPC /" 'consult-ripgrep) ;; M-s r
-  (bind-key "S-SPC a" 'vterm)
-  (bind-key "S-SPC b" 'consult-buffer)
-  (bind-key "S-SPC c" 'org-capture)
-  (bind-key "S-SPC d" #'dired-sidebar-toggle-sidebar)
+  (bind-key "M-p /" 'consult-ripgrep) ;; M-s r
+  (bind-key "M-p a" 'vterm)
+  (bind-key "M-p b" 'consult-buffer)
+  (bind-key "M-p c" 'org-capture)
+  (bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
   (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
   (bind-key "S-SPC e" 'me/find-config)
   (bind-key "S-SPC f" 'find-file)
