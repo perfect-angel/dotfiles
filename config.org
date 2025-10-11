@@ -7,11 +7,8 @@
 * Intro
 
 #+begin_center
-YOU ARE =LOVED=
-YOU ARE =WORTHY= OF THAT LOVE
-YOU ARE =NOT= IN TROUBLE
-DRINK =WATER=
-#+end_center
+
+
 
 This org file is tangled in my =init.el= which looks like this:
 
@@ -19,27 +16,13 @@ This org file is tangled in my =init.el= which looks like this:
   ;; ~/.emacs.d/init.el
   (require 'org)
   (org-babel-load-file "~/dotfiles/config.org")
-  (put 'narrow-to-region 'disabled nil)
 #+end_src
 
 All emacs lisp src blocks are automatically tangled, unless =:tangle no= is
 set. See the [[https://orgmode.org/manual/Extracting-Source-Code.html][org-mode manual]] for more info.
 
 #+begin_src emacs-lisp
-  ;; config.el -- my emacs configuration. -*-lexical-binding: t-*-
-  ;;
-  ;; ⚠warning⚠: this is not a good endorsement of me as a serious person.
-  ;;
-  ;; © 2024-2025 angel d. campbell
-  ;; licensed under a creative commons attribution 4.0 international license.
-  ;; see http://creativecommons.org/licenses/by/4.0/
-  ;;
-  ;; author: angel d. campbell <https://angeldcampbell.com/>
-  ;; maintainer: angel d. campbell
-  ;; created: december  26, 2024
-  ;; last edited: May 29, 2025
-  ;;
-  ;; this file is not part of gnu emacs.
+
  #+end_src
 
 * Packages
@@ -69,17 +52,18 @@ for memory's sake.
 * Settings
 
 #+begin_src emacs-lisp
-  (column-number-mode 1)      ; Column numbers
-  (global-auto-revert-mode 1) ; Auto revert changed buffers
-  (global-eldoc-mode 1)       ; global documentation
-  (recentf-mode 1)            ; what was i doing?
-  (menu-bar-mode -1)          ; Disable the menu bar
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fill-column 80)        ; TTY length
-  (auto-fill-mode 1)          ; auto wrap lines
-  (global-visual-line-mode 1) ; visually wrap lines
+  (column-number-mode 1)        ; Column numbers
+  (display-line-numbers-mode 1) ; Line numbers
+  (global-auto-revert-mode 1)   ; Auto revert changed buffers
+  (global-eldoc-mode 1)         ; global documentation
+  (recentf-mode 1)              ; what was i doing?
+  (menu-bar-mode -1)            ; Disable the menu bar
+  (scroll-bar-mode -1)          ; Disable visible scrollbar
+  (tool-bar-mode -1)            ; Disable the toolbar
+  (tooltip-mode -1)             ; Disable tooltips
+  (set-fill-column 80)          ; TTY length
+  (auto-fill-mode 1)            ; auto wrap lines
+  (global-visual-line-mode 1)   ; visually wrap lines
 #+end_src
 
 #+begin_src emacs-lisp
@@ -95,8 +79,8 @@ for memory's sake.
   (setq use-short-answers t)        ; 2 lazy 2 type yes
   (setq visible-bell t) ; set up the visible bell
   (set-face-attribute 'default nil ; font
-  		    :font "NotoMono Nerd Font Mono"
-  		    :height 180)
+  		    :font "Mononoki Nerd Font Mono"
+  		    :height 250)
 #+end_src
 
 Apple specific settings
@@ -105,14 +89,6 @@ Apple specific settings
   (when (eq system-type 'darwin) ; mac specific settings
     (setq mac-command-modifier 'meta) ; use command as meta
     (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
-#+end_src
-
-* Evil
-#+begin_src emacs-lisp
-  (use-package evil
-    :init (evil-mode 1))
-  (use-package evil-org
-    :init (evil-org-mode 1))
 #+end_src
 
 * Keybinds
@@ -124,26 +100,21 @@ Apple specific settings
 #+end_src
 
 ** Leader 🫡
-#+begin_src emacs-lisp
-  (bind-key "M-p /" 'consult-ripgrep) ;; M-s r
-  (bind-key "M-p a" 'vterm)
-  (bind-key "M-p b" 'consult-buffer)
-  (bind-key "M-p c" 'org-capture)
-  (bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
-  (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
-  (bind-key "S-SPC e" 'me/find-config)
-  (bind-key "S-SPC f" 'find-file)
-  (bind-key "S-SPC g" 'magit-status)
-  (bind-key "S-SPC i" 'avy-goto-char-2)
-  (bind-key "S-SPC l" 'visual-fill-column-mode)
-  (bind-key "S-SPC p" 'project-find-file)
-  (bind-key "S-SPC r" 'recentf)
-  (bind-key "S-SPC s" 'split-window-horizontally)
-  (defun me/find-tasks () (interactive) (find-file "~/org/tasks.org"))
-  (bind-key "S-SPC t" 'me/find-tasks)
-  (bind-key "S-SPC v" 'split-window-vertically)
-  (bind-key "S-SPC h" 'hs-toggle-hiding)
-#+end_src
+#   (bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
+#   (defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
+#   (bind-key "S-SPC e" 'me/find-config)
+#   (bind-key "S-SPC f" 'find-file)
+#   (bind-key "S-SPC g" 'magit-status)
+#   (bind-key "S-SPC i" 'avy-goto-char-2)
+#   (bind-key "S-SPC l" 'visual-fill-column-mode)
+#   (bind-key "S-SPC p" 'project-find-file)
+#   (bind-key "S-SPC r" 'recentf)
+#   (bind-key "S-SPC s" 'split-window-horizontally)
+#   (defun me/find-tasks () (interactive) (find-file "~/org/tasks.org"))
+#   (bind-key "S-SPC t" 'me/find-tasks)
+#   (bind-key "S-SPC v" 'split-window-vertically)
+#   (bind-key "S-SPC h" 'hs-toggle-hiding)
+# #+end_src
 
 * Hooks
 #+begin_src emacs-lisp
@@ -179,7 +150,7 @@ Apple specific settings
 * Discovery
 #+begin_src emacs-lisp
   (which-key-mode 1)
-  (use-package elisp-demos)                          ;; examples in help
+  (use-package elisp-demos)                          ;; Examples in help
   (use-package marginalia :init (marginalia-mode 1)) ;; minibuffer margin help
 #+end_src
 
@@ -237,7 +208,7 @@ Apple specific settings
 
 * Cosmetic
 #+begin_src emacs-lisp 
-  (load-theme 'misterioso)
+  (load-theme 'modus-vivendi)
   (use-package doom-modeline
     :custom
     (doom-modeline-major-mode-color-icon t)
@@ -249,22 +220,6 @@ Apple specific settings
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)) 
   (use-package all-the-icons) ; don't forget to install
-  (use-package dashboard
-    :custom
-    (dashboard-items '((recents . 5)
-  		     (projects . 5)
-  		     (agenda . 5)))
-    (dashboard-set-file-icons t)
-    (dashboard-set-heading-icons t)
-    (dashboard-center-text t)
-    (dashboard-week-agenda t)
-    (dashboard-vertically-center-content t)
-    (dashboard-startup-banner "~/dotfiles/banner.png")
-    (dashboard-banner-logo-title ; Thomas 10
-     "I have cast fire upon the world, and see, I am guarding it until it blazes.")
-    (dashboard-footer-messages '("drink water"))
-    :config
-    (dashboard-setup-startup-hook))
 #+end_src
 
 * Snippets
