@@ -67,7 +67,7 @@
 (global-unset-key (kbd "M-z"))
 (global-set-key (kbd "C-z") #'undo)
 (bind-key "M-p d" #'dired-sidebar-toggle-sidebar)
-(defun me/find-config () (interactive) (find-file "~/dotfiles/config.org"))
+(defun me/find-config () (interactive) (find-file "~/dotfiles/init.el"))
 (bind-key "M-p e" 'me/find-config)
 (bind-key "M-p f" 'find-file)
 (bind-key "M-p g" 'magit-status)
