@@ -10,8 +10,6 @@ export PATH=/opt/homebrew/bin:$PATH
 export PATH=/opt/homebrew/sbin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
-export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
-export PATH=$HOME/opt/homebrew/Cellar/erlang/27.3/lib/erlang/erts-15.2.3/bin:$PATH
 [ -f ~/.cargo/env ] && source ~/.cargo/env
 
 
@@ -30,9 +28,6 @@ else
   export EDITOR='nvim'
 fi
 
-export FZF_DEFAULT_COMMAND="rg --files --hidden"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # aliases
 [ -f ~/dotfiles/.bash_aliases ] && source ~/dotfiles/.bash_aliases
 
@@ -48,8 +43,3 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-
-
-[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
-  source "$EAT_SHELL_INTEGRATION_DIR/zsh"

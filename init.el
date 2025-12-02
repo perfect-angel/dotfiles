@@ -44,10 +44,10 @@
 (tooltip-mode -1)             ; Disable tooltips
 (set-fill-column 80)          ; TTY length
 (auto-fill-mode 1)            ; auto wrap lines
-(global-visual-line-mode 1)   ; visually wrap lines
 (setq user-full-name "Angel D. Campbell")
 (setq user-mail-address "angelcampbell@fastmail.com")
 (setq-default fill-column 80) ; tty width
+(setq-default truncate-lines t) ; truncate lines
 (setq auto-save-default nil)  ; stop creating # auto save files
 (setq custom-file "~/dotfiles/emacs-custom.el")     ; customization
 (setq inhibit-startup-message t) ; no startup message
@@ -58,7 +58,7 @@
 (setq visible-bell t)            ; set up the visible bell
 (set-face-attribute 'default nil ; font
   		  :font "Mononoki Nerd Font Mono"
-  		  :height 250)
+  		  :height 200)
 (when (eq system-type 'darwin)               ; mac specific settings
   (setq mac-command-modifier 'meta)          ; use command as meta
   (global-set-key [kp-delete] 'delete-char)) ; fix mac delete
@@ -105,10 +105,8 @@
   :init
   (setq spray-wpm 500))
 (use-package magit) ; git gud
-(use-package simple-httpd) ; HTTP server
 
 ;; Discovery
-(which-key-mode 1)
 (use-package elisp-demos)                          ;; Examples in help
 (use-package marginalia :init (marginalia-mode 1)) ;; minibuffer margin help
 
@@ -129,7 +127,7 @@
          ([remap Info-search] . consult-info)
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x C-b" . consult-buffer)              ;; orig. switch-to-buffer  	 
+         ("C-x C-b" . consult-buffer)              ;; orig. switch-to-buffer
          ("C-s" . consult-line)
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
@@ -161,7 +159,7 @@
   (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
 ;; Cosmetic
-(load-theme 'modus-vivendi)
+(load-theme 'wombat)
 (use-package breadcrumb
   :init (breadcrumb-mode))
 (use-package rainbow-delimiters
@@ -210,16 +208,6 @@
   (org-capture-templates
    '(("t" "Todo" entry (file "refile.org") "* TODO %?")
      ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?"))))
-
-;; Internet
-(setq rcirc-default-nick "perfect_angel" ;; irc
-      rcirc-track-minor-mode 1
-      rcirc-server-alist
-      '(("irc.libera.chat"
-    	 :channels ("#emacs" "##rust")
-    	 :nick "perfect_angel"
-    	 :port 6697
-    	 :encryption tls)))
 
 ;; Amen 🙏
 

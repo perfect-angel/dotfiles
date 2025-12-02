@@ -32,10 +32,8 @@ vim.o.smartcase = true
 vim.g.netrw_banner = 0
 vim.o.conceallevel = 2
 vim.o.concealcursor = 'nc'
-
-vim.g.UltiSnipsSnippetDirectories = {"~/dotfiles/snippets"}
-
 vim.o.background = "light"
+vim.g.UltiSnipsSnippetDirectories = {"~/dotfiles/snippets"}
 
 --------------------------------------------------------------------------------
 
@@ -125,7 +123,7 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
--- ------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- XXX PACKAGES
 vim.cmd([[packadd cfilter]])
