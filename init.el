@@ -112,51 +112,18 @@
 
 ;; Navigation
 (use-package ace-window :bind ("M-o" . ace-window))
-(use-package vertico
-  :custom (vertico-cycle t)
-  :init (vertico-mode))
-(use-package embark-consult)
 (use-package embark
   :init
   (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
   (keymap-global-set "C-." 'embark-act)
   (keymap-global-set "C-;" 'embark-dwim)
   (setq prefix-help-command #'embark-prefix-help-command))
-(use-package consult
-  :bind (("C-c M-x" . consult-mode-command)
-         ([remap Info-search] . consult-info)
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x C-b" . consult-buffer)              ;; orig. switch-to-buffer
-         ("C-s" . consult-line)
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-g m" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ("M-s r" . consult-ripgrep))
-  :init
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref))
 
 ;; Completion
-(use-package corfu
-  :custom
-  (corfu-cycle t)
-  (tab-always-indent 'complete)
-  :init
-  (global-corfu-mode)
-  (corfu-popupinfo-mode))
-(use-package orderless
-  :init
-  (customize-set-variable 'completion-styles '(orderless basic))
-  (customize-set-variable 'completion-category-overrides
-                          '((file (styles . (partial-completion))))))
-(use-package cape
-  :init
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block))
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq completion-styles '(basic partial-completion))
 
 ;; Cosmetic
 (load-theme 'wombat)
