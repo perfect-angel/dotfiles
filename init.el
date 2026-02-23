@@ -53,7 +53,6 @@
 (setq inhibit-startup-message t) ; no startup message
 (setq make-backup-files nil)     ; stop creating ~ backup files
 (setq word-wrap t)
-(setq y-or-n-p-use-read-key t)   ; for embark
 (setq use-short-answers t)       ; 2 lazy 2 type yes
 (setq visible-bell t)            ; set up the visible bell
 (set-face-attribute 'default nil ; font
@@ -89,92 +88,66 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ; line numbers
 
 ;; Utility
-(use-package exec-path-from-shell ; set path to shellpath
-  :config
-  (exec-path-from-shell-initialize))
-(use-package savehist ; save command history
-  :init
-  (savehist-mode))
-(use-package visual-fill-column  ; zen mode
+(savehist-mode 1)
+(use-package visual-fill-column
   :custom
   (visual-fill-column-center-text t))
-(use-package vterm)  ; terminal
-(use-package emmet-mode) ; html snippets
-(use-package dired-sidebar) ; file tree
-(use-package spray ; speedreading
+(use-package vterm)
+(use-package spray
   :init
   (setq spray-wpm 500))
-(use-package magit) ; git gud
+(use-package magit)
 
 ;; Discovery
-(use-package elisp-demos)                          ;; Examples in help
-(use-package marginalia :init (marginalia-mode 1)) ;; minibuffer margin help
 
 ;; Navigation
-(use-package ace-window :bind ("M-o" . ace-window))
-(use-package embark
-  :init
-  (keymap-global-set "<remap> <describe-bindings>" #'embark-bindings)
-  (keymap-global-set "C-." 'embark-act)
-  (keymap-global-set "C-;" 'embark-dwim)
-  (setq prefix-help-command #'embark-prefix-help-command))
+(winner-mode 1)
 
 ;; Completion
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (setq completion-styles '(basic partial-completion))
+(global-set-key (kbd "TAB") #'completion-at-point)
 
 ;; Cosmetic
 (load-theme 'wombat)
-(use-package breadcrumb
-  :init (breadcrumb-mode))
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)) 
-(use-package all-the-icons) ; don't forget to install
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; Snippets
-(use-package yasnippet
-  :config
-  (setq yasnippet-snippet-dirs '("~/dotfiles/snippets/"))
-  (yas-global-mode 1))
-(use-package yasnippet-snippets)
+(abbrev-mode 1)
 
 ;; Languages
 (use-package markdown-mode)
 (use-package kubernetes)
 (use-package geiser-guile)
-(use-package rust-mode)
 
 ;; LSP
-(use-package eglot
-  :hook ((rust-mode
-  	typescript-mode
-  	js2-mode
-  	elixir-mode
-  	terraform-mode) . eglot-ensure)
-  :config
-  (add-to-list 'eglot-server-programs '(elixir-mode
-					"~/lib/elixir-ls/language_server.sh")))
+(require 'eglot)
+(add-hook 'rust-mode-hook #'eglot-ensure)
+(add-hook 'typescript-mode-hook #'eglot-ensure)
+(add-hook 'js2-mode-hook #'eglot-ensure)
+(add-hook 'elixir-mode-hook #'eglot-ensure)
+(add-hook 'terraform-mode-hook #'eglot-ensure)
+(add-to-list 'eglot-server-programs '(elixir-mode . ("~/lib/elixir-ls/language_server.sh")))
 
 ;; Org
-(use-package org
-  :custom
-  (org-babel-load-languages
-   '((emacs-lisp . t)
-     (shell . t)
-     (clojure . t)
-     (python . t)
-     (js . t)))
-  (org-directory "~/org")
-  (org-agenda-files (list org-directory)) 
-  (org-refile-targets
-   '((org-agenda-files . (:maxlevel . 2))
-     (nil . (:maxlevel . 2)))) 
-  (org-default-notes-file "refile.org")
-  (org-capture-templates
-   '(("t" "Todo" entry (file "refile.org") "* TODO %?")
-     ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?"))))
+(setq org-babel-load-languages
+      '((emacs-lisp . t)
+        (shell . t)
+        (clojure . t)
+        (python . t)
+        (js . t)))
+(setq org-directory "~/org")
+(setq org-agenda-files (list org-directory))
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 2))
+        (nil . (:maxlevel . 2))))
+(setq org-default-notes-file "refile.org")
+(setq org-capture-templates
+      '(("t" "Todo" entry (file "refile.org") "* TODO %?")
+        ("j" "Journal" entry (file+olp+datetree "journal.org") "* %?")))
 
 ;; Amen 🙏
 
