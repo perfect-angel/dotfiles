@@ -144,13 +144,12 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
       "b0o/schemastore.nvim",
     },
     config = function()
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+      capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
       vim.api.nvim_create_autocmd("LspAttach", {
         desc = "LSP actions",
@@ -189,14 +188,28 @@ require("lazy").setup({
         },
       }
 
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = "rounded",
-        silent = true,
-      })
+      vim.lsp.handlers["textDocument/hover"] = function(_, result, _, config)
+        if result and result.contents then
+          vim.lsp.util.open_floating_preview(result.contents, nil, vim.tbl_extend("force", {
+            border = "rounded",
+            silent = true,
+          }, config or {}))
+        end
+      end
 
-      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = "rounded",
-      })
+      vim.lsp.handlers["textDocument/signatureHelp"] = function(_, result, _, config)
+        if not result or not result.signatures or #result.signatures == 0 then
+          return
+        end
+        local markdown_lines = vim.lsp.util.convert_signature_help_to_markdown_lines(result, vim.bo.filetype, {
+          markdown = { "markdown" },
+        })
+        if markdown_lines and #markdown_lines > 0 then
+          vim.lsp.util.open_floating_preview(markdown_lines, "markdown", vim.tbl_extend("force", {
+            border = "rounded",
+          }, config or {}))
+        end
+      end
 
       vim.api.nvim_create_autocmd("LspAttach", {
         desc = "Enable inlay hints",
@@ -217,140 +230,139 @@ require("lazy").setup({
             package_uninstalled = "✗",
           },
         },
-      }
-
-      require("mason-lspconfig").setup {
         ensure_installed = {
-          "bashls",
-          "cssls",
-          "dockerls",
-          "elixirls",
-          "ember",
-          "emmet_ls",
-          "eslint",
-          "jsonls",
-          "lua_ls",
+          "bash-language-server",
+          "css-lsp",
+          "dockerfile-language-server",
+          "elixir-ls",
+          "ember-language-server",
+          "emmet-ls",
+          "eslint-lsp",
+          "json-lsp",
+          "lua-language-server",
           "pyright",
+          "rust-analyzer",
+          "terraform-ls",
+          "typescript-language-server",
+        },
+      }
+
+      -- LSP server configurations using vim.lsp.config
+      local servers = {
+        { "bashls" },
+        {
+          "cssls",
+          settings = {
+            css = { validate = true },
+            scss = { validate = true },
+            less = { validate = true },
+          },
+        },
+        { "dockerls" },
+        {
+          "elixirls",
+          cmd = { "elixir-ls" },
+        },
+        { "ember" },
+        {
+          "emmet_ls",
+          filetypes = {
+            "html",
+            "typescriptreact",
+            "javascriptreact",
+            "css",
+            "sass",
+            "scss",
+            "less",
+            "svelte",
+            "vue",
+          },
+        },
+        {
+          "eslint",
+          on_attach = function(client, bufnr)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              command = "EslintFixAll",
+            })
+          end,
+        },
+        {
+          "jsonls",
+          settings = {
+            json = {
+              schemas = require("schemastore").json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+        {
+          "lua_ls",
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { "vim" },
+              },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+                checkThirdParty = false,
+              },
+              telemetry = { enable = false },
+              hint = { enable = true },
+            },
+          },
+        },
+        {
+          "pyright",
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = "basic",
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
+        {
           "rust_analyzer",
-          "terraformls",
+          settings = {
+            ["rust-analyzer"] = {
+              check = { command = "clippy" },
+              cargo = { loadOutDirsFromCheck = true },
+              procMacro = { enable = true },
+            },
+          },
+        },
+        { "terraformls" },
+        {
           "ts_ls",
-        },
-        automatic_installation = { enable = true },
-      }
-
-      local lspconfig = require "lspconfig"
-
-      lspconfig.bashls.setup { capabilities = capabilities }
-
-      lspconfig.cssls.setup {
-        capabilities = capabilities,
-        settings = {
-          css = { validate = true },
-          scss = { validate = true },
-          less = { validate = true },
-        },
-      }
-
-      lspconfig.dockerls.setup { capabilities = capabilities }
-
-      lspconfig.elixirls.setup {
-        capabilities = capabilities,
-        cmd = { "elixir-ls" },
-      }
-
-      lspconfig.ember.setup { capabilities = capabilities }
-
-      lspconfig.emmet_ls.setup {
-        capabilities = capabilities,
-        filetypes = {
-          "html",
-          "typescriptreact",
-          "javascriptreact",
-          "css",
-          "sass",
-          "scss",
-          "less",
-          "svelte",
-          "vue",
-        },
-      }
-
-      lspconfig.eslint.setup {
-        capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            command = "EslintFixAll",
-          })
-        end,
-      }
-
-      lspconfig.jsonls.setup {
-        capabilities = capabilities,
-        settings = {
-          json = {
-            schemas = require("schemastore").json.schemas(),
-            validate = { enable = true },
-          },
-        },
-      }
-
-      lspconfig.lua_ls.setup {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
-              checkThirdParty = false,
-            },
-            telemetry = { enable = false },
-            hint = { enable = true },
-          },
-        },
-      }
-
-      lspconfig.pyright.setup {
-        capabilities = capabilities,
-        settings = {
-          python = {
-            analysis = {
-              typeCheckingMode = "basic",
-              autoSearchPaths = true,
-              useLibraryCodeForTypes = true,
+          init_options = {
+            plugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = vim.fn.stdpath "data" ..
+                "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+                languages = { "vue" },
+              },
             },
           },
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         },
       }
 
-      lspconfig.rust_analyzer.setup {
-        capabilities = capabilities,
-        settings = {
-          ["rust-analyzer"] = {
-            check = { command = "clippy" },
-            cargo = { loadOutDirsFromCheck = true },
-            procMacro = { enable = true },
-          },
-        },
-      }
+      -- Set shared capabilities for all servers
+      vim.lsp.config("*", { capabilities = capabilities })
 
-      lspconfig.terraformls.setup { capabilities = capabilities }
-
-      lspconfig.ts_ls.setup {
-        capabilities = capabilities,
-        init_options = {
-          plugins = {
-            {
-              name = "@vue/typescript-plugin",
-              location = vim.fn.stdpath "data" .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
-              languages = { "vue" },
-            },
-          },
-        },
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-      }
+      -- Configure and enable each server
+      for _, server in ipairs(servers) do
+        local name = server[1]
+        local config = server[2]
+        if config then
+          vim.lsp.config(name, config)
+        end
+        vim.lsp.enable(name)
+      end
     end,
   },
   -- formatting
@@ -524,7 +536,6 @@ require("lazy").setup({
   -- lang
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
     config = function()
       require("nvim-treesitter").setup {
         ensure_installed = {
@@ -614,7 +625,7 @@ require("lazy").setup({
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
-vim.cmd([[colo habamax]])
+vim.cmd([[colo retrobox]])
 
 -- XXX CONFIGS
 -- Project config
