@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-global, redundant-parameter
+--- @diagnostic disable: undefined-global, redundant-parameter
 -- ANGEL CAMPBELL'S WONDERFUL HORRIBLE VIM CONFIG
 -- note: this is not a good endorsement
 --       of me as a serious person
@@ -11,7 +11,7 @@
 ------------------------------------------------------------
 
 -- XXX SETTINGS
-vim.g.qf_join_changes = true -- for editing quickfix
+vim.g.qf_join_changes = true
 vim.o.hlsearch = false
 vim.o.expandtab = true
 vim.o.tabstop = 4
@@ -31,24 +31,20 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.g.netrw_banner = 0
 vim.o.conceallevel = 2
-vim.o.concealcursor = 'nc'
+vim.o.concealcursor = "nc"
 vim.o.background = "light"
-vim.g.UltiSnipsSnippetDirectories = {"~/dotfiles/snippets"}
-
---------------------------------------------------------------------------------
 
 -- XXX KEYMAPPINGS
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
---tabs
+-- tabs
 vim.keymap.set("n", "H", "gT")
 vim.keymap.set("n", "L", "gt")
 
 -- resize
 vim.keymap.set("n", "<Left>", ":vertical res -5<CR>")
 vim.keymap.set("n", "<Right>", ":vertical res +5<CR>")
-
 vim.keymap.set("n", "<Up>", ":res +5<CR>")
 vim.keymap.set("n", "<Down>", ":res -5<CR>")
 
@@ -61,21 +57,20 @@ vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 
 -- others
-vim.keymap.set("i", "<C-c>", "<ESC>")      -- C-c actually ESC
-vim.keymap.set("i", "jj", "<ESC>")         -- jj in insert to ESC
-vim.keymap.set("n", "!", ":!")             -- Shell commands
-vim.keymap.set("n", "-", ":25Lex %:h<CR>") -- Cwd explorer
-vim.keymap.set("n", "/", "/\\v")           -- Magic search
-vim.keymap.set("n", "<BS>", ":b#<CR>")     -- Backspace jumps buffers
-vim.keymap.set("n", "?", "?\\v")           -- Magic backwards search
-vim.keymap.set("n", "Q", "@q")             -- One button macros
-vim.keymap.set("n", "q:", ":q")            -- No q:
+vim.keymap.set("i", "<C-c>", "<ESC>")
+vim.keymap.set("i", "jj", "<ESC>")
+vim.keymap.set("n", "!", ":!")
+vim.keymap.set("n", "-", ":25Lex %:h<CR>")
+vim.keymap.set("n", "/", "/\\v")
+vim.keymap.set("n", "<BS>", ":b#<CR>")
+vim.keymap.set("n", "?", "?\\v")
+vim.keymap.set("n", "Q", "@q")
+vim.keymap.set("n", "q:", ":q")
 
 -- leader mappings
 vim.keymap.set("n", "<leader>/", ":Telescope grep_string<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
--- vim.keymap.set("n", "<leader><leader>", "Telescope current_buffer_fuzzy_find")
 vim.keymap.set("n", "<leader>a", ":te<CR>")
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 vim.keymap.set("n", "<leader>c", ":Telescope lsp_dynamic_workspace_symbols<CR>")
@@ -95,7 +90,6 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
--- vim.keymap.set("n", "<leader>o", "used by orgmode")
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -108,10 +102,8 @@ vim.keymap.set("n", "<leader>tf", ":TestFile<CR>")
 vim.keymap.set("n", "<leader>ti", ":TestVisit<CR>")
 vim.keymap.set("n", "<leader>va", ":e ~/dotfiles/.bash_aliases<CR>")
 vim.keymap.set("n", "<leader>vd", ":e ~/local-init.lua<CR>")
-vim.keymap.set("n", "<leader>vk", ":e ~/.config/kitty/kitty.conf<CR>")
 vim.keymap.set("n", "<leader>vv", ":e ~/dotfiles/init.lua<CR>")
 vim.keymap.set("n", "<leader>vl", ":e ./.nvim/init.lua<CR>")
-vim.keymap.set("n", "<leader>vv", ":e ~/dotfiles/init.lua<CR>")
 vim.keymap.set("n", "<leader>vz", ":e ~/dotfiles/.zshrc<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader>y", ':let @+ = expand("%")<cr>')
@@ -123,8 +115,6 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
---------------------------------------------------------------------------------
-
 -- XXX PACKAGES
 vim.cmd([[packadd cfilter]])
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -134,7 +124,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
@@ -145,91 +135,360 @@ vim.g["test#strategy"] = "asyncrun"
 
 require("lazy").setup({
   -- cosmetic
-  'stevearc/dressing.nvim',      -- better UI
-  "nvim-lualine/lualine.nvim",   -- status line
-  'nvim-tree/nvim-web-devicons', -- devicons
-  'mechatroner/rainbow_csv',     -- pretty csv
+  "stevearc/dressing.nvim",
+  "nvim-lualine/lualine.nvim",
+  "nvim-tree/nvim-web-devicons",
+  "mechatroner/rainbow_csv",
   -- lsp
   {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+      "b0o/schemastore.nvim",
+    },
     config = function()
-      vim.api.nvim_create_autocmd('LspAttach', {
-        desc = 'LSP actions',
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        desc = "LSP actions",
         callback = function(event)
           local opts = { buffer = event.buf }
 
-          vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-          vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-          vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-          vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-          vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-          vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-          vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-          vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-          vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-          vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-        end
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+          vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
+          vim.keymap.set({ "n", "x" }, "<F3>", function()
+            vim.lsp.buf.format { async = true }
+          end, opts)
+          vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opts)
+        end,
       })
 
-      require('lspconfig').bashls.setup({})
-      require('lspconfig').cssls.setup({})
-      require('lspconfig').dockerls.setup({})
-      require('lspconfig').elixirls.setup({})
-      require('lspconfig').ember.setup({})
-      require('lspconfig').emmet_ls.setup({})
-      require('lspconfig').eslint.setup({})
-      require('lspconfig').jsonls.setup({})
-      require('lspconfig').lua_ls.setup({})
-      require('lspconfig').pyright.setup({})
-      require('lspconfig').rust_analyzer.setup({})
-      require('lspconfig').terraformls.setup({})
-      require('lspconfig').ts_ls.setup({})
-    end
+      vim.diagnostic.config {
+        virtual_text = {
+          prefix = "●",
+          spacing = 2,
+        },
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+        float = {
+          border = "rounded",
+          source = true,
+          header = "",
+          prefix = "",
+        },
+      }
+
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = "rounded",
+        silent = true,
+      })
+
+      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = "rounded",
+      })
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        desc = "Enable inlay hints",
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.server_capabilities.inlayHintProvider then
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+          end
+        end,
+      })
+
+      require("mason").setup {
+        ui = {
+          border = "rounded",
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
+        },
+      }
+
+      require("mason-lspconfig").setup {
+        ensure_installed = {
+          "bashls",
+          "cssls",
+          "dockerls",
+          "elixirls",
+          "ember",
+          "emmet_ls",
+          "eslint",
+          "jsonls",
+          "lua_ls",
+          "pyright",
+          "rust_analyzer",
+          "terraformls",
+          "ts_ls",
+        },
+        automatic_installation = { enable = true },
+      }
+
+      local lspconfig = require "lspconfig"
+
+      lspconfig.bashls.setup { capabilities = capabilities }
+
+      lspconfig.cssls.setup {
+        capabilities = capabilities,
+        settings = {
+          css = { validate = true },
+          scss = { validate = true },
+          less = { validate = true },
+        },
+      }
+
+      lspconfig.dockerls.setup { capabilities = capabilities }
+
+      lspconfig.elixirls.setup {
+        capabilities = capabilities,
+        cmd = { "elixir-ls" },
+      }
+
+      lspconfig.ember.setup { capabilities = capabilities }
+
+      lspconfig.emmet_ls.setup {
+        capabilities = capabilities,
+        filetypes = {
+          "html",
+          "typescriptreact",
+          "javascriptreact",
+          "css",
+          "sass",
+          "scss",
+          "less",
+          "svelte",
+          "vue",
+        },
+      }
+
+      lspconfig.eslint.setup {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+      }
+
+      lspconfig.jsonls.setup {
+        capabilities = capabilities,
+        settings = {
+          json = {
+            schemas = require("schemastore").json.schemas(),
+            validate = { enable = true },
+          },
+        },
+      }
+
+      lspconfig.lua_ls.setup {
+        capabilities = capabilities,
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = { enable = false },
+            hint = { enable = true },
+          },
+        },
+      }
+
+      lspconfig.pyright.setup {
+        capabilities = capabilities,
+        settings = {
+          python = {
+            analysis = {
+              typeCheckingMode = "basic",
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+            },
+          },
+        },
+      }
+
+      lspconfig.rust_analyzer.setup {
+        capabilities = capabilities,
+        settings = {
+          ["rust-analyzer"] = {
+            check = { command = "clippy" },
+            cargo = { loadOutDirsFromCheck = true },
+            procMacro = { enable = true },
+          },
+        },
+      }
+
+      lspconfig.terraformls.setup { capabilities = capabilities }
+
+      lspconfig.ts_ls.setup {
+        capabilities = capabilities,
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = vim.fn.stdpath "data" .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+              languages = { "vue" },
+            },
+          },
+        },
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      }
+    end,
   },
-  { 'williamboman/mason.nvim',           opts = {} },
-  { 'williamboman/mason-lspconfig.nvim', opts = {} },
+  -- formatting
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<F3>",
+        function()
+          require("conform").format { async = true, lsp_format = "fallback" }
+        end,
+        mode = { "n", "v" },
+        desc = "Format buffer",
+      },
+    },
+    opts = {
+      format_on_save = {
+        timeout_ms = 1000,
+        lsp_format = "fallback",
+      },
+      formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "ruff_format", "ruff_fix" },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        typescript = { "prettierd", "prettier", stop_after_first = true },
+        typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+        css = { "prettierd", "prettier", stop_after_first = true },
+        html = { "prettierd", "prettier", stop_after_first = true },
+        json = { "prettierd", "prettier", stop_after_first = true },
+        yaml = { "prettierd", "prettier", stop_after_first = true },
+        markdown = { "prettierd", "prettier", stop_after_first = true },
+        rust = { "rustfmt" },
+        elixir = { "mix" },
+        terraform = { "terraform_fmt" },
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
+    },
+  },
+  -- linting
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      local lint = require "lint"
+
+      lint.linters_by_ft = {
+        javascript = { "eslint" },
+        javascriptreact = { "eslint" },
+        typescript = { "eslint" },
+        typescriptreact = { "eslint" },
+        python = { "ruff" },
+        lua = { "luacheck" },
+        terraform = { "terraform_validate" },
+        dockerfile = { "hadolint" },
+      }
+
+      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+        group = lint_augroup,
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+    end,
+  },
   -- autocompletion
   {
-    'hrsh7th/nvim-cmp',
+    "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
-      "saadparwaiz1/cmp_luasnip"
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
     },
     config = function()
-      local cmp = require('cmp')
-      cmp.setup({
+      local cmp = require "cmp"
+      local luasnip = require "luasnip"
+
+      require("luasnip.loaders.from_vscode").lazy_load()
+
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert {
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm { select = true },
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        },
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "ultisnips" },
-
+          { name = "luasnip" },
+          { name = "path" },
         }, {
           { name = "buffer" },
         }),
-        snippet = {
-          expand = function(args)
-            vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items
-        }),
-      })
-    end
+      }
+    end,
   },
-  -- snippets
-  "SirVer/ultisnips",
-  -- testing TODO: test in virtual window
+  -- testing
   "vim-test/vim-test",
   -- navigation
-  'nvim-telescope/telescope.nvim',
+  "nvim-telescope/telescope.nvim",
   {
-    "folke/flash.nvim", -- fast s and r
+    "folke/flash.nvim",
     keys = {
       { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
       { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
@@ -238,106 +497,127 @@ require("lazy").setup({
       { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
     },
   },
-  "stefandtw/quickfix-reflector.vim", -- edit quickfix search
+  "stefandtw/quickfix-reflector.vim",
   {
-    "folke/which-key.nvim",           -- leader key hints
+    "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = { preset = "modern" },
+    opts = {
+      preset = "modern",
+      spec = {
+        { "<leader>l", group = "diagnostics" },
+        { "<leader>v", group = "vim config" },
+        { "<leader>s", group = "splits" },
+        { "<leader>t", group = "tests" },
+        { "<leader>g", group = "git" },
+      },
+    },
     keys = {
       {
         "<leader>?",
         function()
-          require("which-key").show({ global = false })
+          require("which-key").show { global = false }
         end,
         desc = "Buffer Local Keymaps (which-key)",
       },
     },
   },
   -- lang
-  "nvim-treesitter/nvim-treesitter",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter").setup {
+        ensure_installed = {
+          "bash",
+          "c",
+          "css",
+          "dockerfile",
+          "elixir",
+          "heex",
+          "html",
+          "javascript",
+          "json",
+          "lua",
+          "markdown",
+          "markdown_inline",
+          "python",
+          "rust",
+          "terraform",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "vue",
+          "yaml",
+        },
+        auto_install = true,
+        highlight = { enable = true },
+        indent = { enable = true },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<C-Space>",
+            node_incremental = "<C-Space>",
+            scope_incremental = false,
+            node_decremental = "<bs>",
+          },
+        },
+      }
+    end,
+  },
   "elixir-editors/vim-elixir",
   -- org
   {
-    'nvim-orgmode/orgmode',
-    event = 'VeryLazy',
-    ft = { 'org' },
+    "nvim-orgmode/orgmode",
+    event = "VeryLazy",
+    ft = { "org" },
     config = function()
-      -- Setup orgmode
-      require('orgmode').setup({
-        org_agenda_files = '~/org/**/*',
-        org_default_notes_file = '~/org/refile.org',
+      require("orgmode").setup {
+        org_agenda_files = { "~/org/**/*" },
+        org_default_notes_file = "~/org/refile.org",
         org_adapt_indentation = false,
         org_capture_templates = {
-          t = { description = 'Task', template = '* TODO %?', target = '~/org/tasks.org' },
+          t = { description = "Task", template = "* TODO %?", target = { "~/org/tasks.org" } },
           j = {
-            description = 'Journal',
-            target = '~/org/journal.org',
-            template = '%?',
-            datetree = true
-          }
-        }
-      })
+            description = "Journal",
+            target = { "~/org/journal.org" },
+            template = "%?",
+            datetree = true,
+          },
+        },
+      }
     end,
   },
   {
     "chipsenkbeil/org-roam.nvim",
     opts = {
       directory = "~/org/words",
-      org_files = { "~/org" }
-    }
+      org_files = { "~/org" },
+    },
   },
   "bullets-vim/bullets.vim",
   -- util
-  {
-    "knubie/vim-kitty-navigator",
-    build = "cp ./*.py ~/.config/kitty/",
-  },
-  "nvim-lua/plenary.nvim",                 -- async lib for plugins
-  { 'windwp/nvim-autopairs',  opts = {} }, -- autopairs
-  { "kylechui/nvim-surround", opts = {} }, -- ysiw
-  "tpope/vim-rsi",                         -- emacs readline bindings
-  "tpope/vim-fugitive",                    -- git
-  "tpope/vim-rhubarb",                     -- github
-  "tpope/vim-abolish",                     -- substitution
-  "tpope/vim-vinegar",                     -- netrw improvements
-  "tpope/vim-commentary",                  -- comments
-  "tpope/vim-repeat",                      -- better .
-  "tpope/vim-sensible",                    -- sensible defaults
+  "nvim-lua/plenary.nvim",
+  { "windwp/nvim-autopairs",  opts = {} },
+  { "kylechui/nvim-surround", opts = {} },
+  "tpope/vim-rsi",
+  "tpope/vim-fugitive",
+  "tpope/vim-rhubarb",
+  "tpope/vim-abolish",
+  "tpope/vim-vinegar",
+  "tpope/vim-commentary",
+  "tpope/vim-repeat",
+  "tpope/vim-sensible",
   -- tools
   { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
   { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
 })
 
-
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
 vim.cmd([[colo habamax]])
-
---------------------------------------------------------------------------------
-
--- XXX AUTOCOMMANDS
-
--- vim.cmd [[au! FileType netrw nm <buffer> <C-l> <C-w>l]]
--- vim.cmd [[au! BufEnter *.heex setlocal ft=eelixir]]
--- vim.cmd [[au! BufEnter *.mdx setlocal ft=markdown]]
--- vim.cmd [[au! TermOpen * setlocal nonumber norelativenumber bufhidden=hide]]
--- vim.cmd [[au! FileType typescript,typescriptreact setlocal foldmethod=indent]]
--- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>i :lua require("typescript").actions.addMissingImports()<CR>]]
--- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>u :lua require("typescript").actions.removeUnused()<CR>]]
--- vim.cmd [[au! FileType typescript,typescriptreact nn <localleader>x :lua require("typescript").actions.fixAll()<CR>]]
--- vim.cmd [[au! BufEnter journal.md nn <C-n> <C-x>k ]]
--- vim.cmd [[au! BufEnter journal.md lua require('cmp').setup.buffer { enabled = false }]]
--- vim.cmd [[au! BufWritePre *.json,*.lua,*.tf lua vim.lsp.buf.format()]]
--- vim.cmd [[au! BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll]]
---------------------------------------------------------------------------------
 
 -- XXX CONFIGS
 -- Project config
 if vim.fn.filereadable("./.nvim/init.lua") == 1 then
   dofile("./.nvim/init.lua")
 end
--- Device config
--- if vim.fn.filereadable(os.getenv("home") .. "local-init.lua") == 1 then
---   dofile(os.getenv("home") .. "local-init.lua")
--- end
---
