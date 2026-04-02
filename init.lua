@@ -342,7 +342,7 @@ require("lazy").setup({
               {
                 name = "@vue/typescript-plugin",
                 location = vim.fn.stdpath "data" ..
-                "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+                    "/mason/packages/vue-language-server/node_modules/@vue/language-server",
                 languages = { "vue" },
               },
             },
@@ -625,7 +625,7 @@ require("lazy").setup({
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
-vim.cmd([[colo retrobox]])
+vim.cmd([[colo habamax]])
 
 -- XXX CONFIGS
 -- Project config
