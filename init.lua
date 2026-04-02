@@ -68,7 +68,7 @@ vim.keymap.set("n", "Q", "@q")
 vim.keymap.set("n", "q:", ":q")
 
 -- leader mappings
-vim.keymap.set("n", "<leader>/", ":Telescope grep_string<CR>")
+vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
 vim.keymap.set("n", "<leader>a", ":te<CR>")
