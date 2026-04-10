@@ -1,2 +1,2 @@
 * DOTFILES
-configuration, mostly emacs
+configuration, mostly nvim
