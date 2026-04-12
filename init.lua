@@ -11,6 +11,7 @@
 ------------------------------------------------------------
 
 -- XXX SETTINGS
+vim.env.NVIM_LISTEN_address = "/tmp/nvim-" .. vim.env.USER
 vim.g.qf_join_changes = true
 vim.o.hlsearch = false
 vim.o.expandtab = true
@@ -32,7 +33,7 @@ vim.o.smartcase = true
 vim.g.netrw_banner = 0
 vim.o.conceallevel = 2
 vim.o.concealcursor = "nc"
-vim.o.background = "light"
+vim.o.background = "dark"
 
 -- XXX KEYMAPPINGS
 vim.g.mapleader = " "
@@ -67,6 +68,15 @@ vim.keymap.set("n", "?", "?\\v")
 vim.keymap.set("n", "Q", "@q")
 vim.keymap.set("n", "q:", ":q")
 
+vim.cmd([[
+function! ClerkShow()
+  exe "w"
+  exe "ConjureEval (nextjournal.clerk/show! \"" . expand("%:p") . "\")"
+endfunction
+
+nmap <silent> <localleader>cs :execute ClerkShow()<CR>
+]])
+
 -- leader mappings
 vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
@@ -82,7 +92,7 @@ vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
 vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
 vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
-vim.keymap.set("n", "<leader>j", ":Telescope current_buffer_fuzzy_find")
+vim.keymap.set("n", "<leader>j", ":Telescope current_buffer_fuzzy_find<CR>")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setqflist)
@@ -115,6 +125,11 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
+-- obsidian
+vim.keymap.set("n", "<leader>oo", ":ObsidianOpen<CR>")
+vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>")
+vim.keymap.set("n", "<leader>ot", ":ObsidianTOC<CR>")
+
 -- XXX PACKAGES
 vim.cmd([[packadd cfilter]])
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -139,11 +154,13 @@ require("lazy").setup({
   "nvim-lualine/lualine.nvim",
   "nvim-tree/nvim-web-devicons",
   "mechatroner/rainbow_csv",
+  "kivanceski/rsvp.nvim",
   -- lsp
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
       "b0o/schemastore.nvim",
     },
@@ -230,26 +247,31 @@ require("lazy").setup({
             package_uninstalled = "✗",
           },
         },
+      }
+
+      require("mason-lspconfig").setup {
         ensure_installed = {
-          "bash-language-server",
-          "css-lsp",
-          "dockerfile-language-server",
-          "elixir-ls",
-          "ember-language-server",
-          "emmet-ls",
-          "eslint-lsp",
-          "json-lsp",
-          "lua-language-server",
+          "bashls",
+          "clojure_lsp",
+          "cssls",
+          "dockerls",
+          "elixirls",
+          "ember",
+          "emmet_ls",
+          "eslint",
+          "jsonls",
+          "lua_ls",
           "pyright",
-          "rust-analyzer",
-          "terraform-ls",
-          "typescript-language-server",
+          "rust_analyzer",
+          "terraformls",
+          "ts_ls",
         },
       }
 
       -- LSP server configurations using vim.lsp.config
       local servers = {
         { "bashls" },
+        { "clojure_lsp" },
         {
           "cssls",
           settings = {
@@ -280,7 +302,7 @@ require("lazy").setup({
         },
         {
           "eslint",
-          on_attach = function(client, bufnr)
+          on_attach = function(_, bufnr)
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
               command = "EslintFixAll",
@@ -419,7 +441,7 @@ require("lazy").setup({
         typescript = { "eslint" },
         typescriptreact = { "eslint" },
         python = { "ruff" },
-        lua = { "luacheck" },
+
         terraform = { "terraform_validate" },
         dockerfile = { "hadolint" },
       }
@@ -434,6 +456,7 @@ require("lazy").setup({
     end,
   },
   -- autocompletion
+  { "L3MON4D3/LuaSnip",       run = "make install_jsregexp" },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -489,6 +512,7 @@ require("lazy").setup({
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "path" },
+          { name = "obsidian" },
         }, {
           { name = "buffer" },
         }),
@@ -541,6 +565,8 @@ require("lazy").setup({
         ensure_installed = {
           "bash",
           "c",
+          "clojure",
+          "comment",
           "css",
           "dockerfile",
           "elixir",
@@ -576,35 +602,12 @@ require("lazy").setup({
     end,
   },
   "elixir-editors/vim-elixir",
-  -- org
-  {
-    "nvim-orgmode/orgmode",
-    event = "VeryLazy",
-    ft = { "org" },
-    config = function()
-      require("orgmode").setup {
-        org_agenda_files = { "~/org/**/*" },
-        org_default_notes_file = "~/org/refile.org",
-        org_adapt_indentation = false,
-        org_capture_templates = {
-          t = { description = "Task", template = "* TODO %?", target = { "~/org/tasks.org" } },
-          j = {
-            description = "Journal",
-            target = { "~/org/journal.org" },
-            template = "%?",
-            datetree = true,
-          },
-        },
-      }
-    end,
-  },
-  {
-    "chipsenkbeil/org-roam.nvim",
-    opts = {
-      directory = "~/org/words",
-      org_files = { "~/org" },
-    },
-  },
+  -- clojure
+  "Olical/conjure",
+  { "PaterJason/cmp-conjure", lazy = true },
+  "clojure-vim/vim-jack-in",
+  "tpope/vim-dispatch",
+  "radenling/vim-dispatch-neovim",
   "bullets-vim/bullets.vim",
   -- util
   "nvim-lua/plenary.nvim",
@@ -621,11 +624,38 @@ require("lazy").setup({
   -- tools
   { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
   { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
+  -- obsidian
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*",
+    lazy = true,
+    ft = "markdown",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+      "nvim-telescope/telescope.nvim",
+    },
+    opts = {
+      workspaces = {
+        {
+          name = "wiki",
+          path = "~/things/wiki",
+        },
+      },
+      -- use [[wikilinks]] instead of markdown links
+      note_frontmatter_func = function(note)
+        return {
+          id = note.id,
+          tags = note.tags,
+        }
+      end,
+    },
+  },
 })
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])
-vim.cmd([[colo habamax]])
+vim.cmd([[colo catppuccin]])
 
 -- XXX CONFIGS
 -- Project config

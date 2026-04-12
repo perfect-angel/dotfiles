@@ -1,0 +1,8 @@
+#!/bin/sh
+# Start PipeWire, kill PulseAudio if running
+
+if command -v pipewire >/dev/null 2>&1; then
+  pkill -9 pulseaudio 2>/dev/null
+  pipewire &
+  wireplumber &
+fi
