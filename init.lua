@@ -84,7 +84,7 @@ vim.keymap.set("n", "<leader><CR>", ":")
 vim.keymap.set("n", "<leader>a", ":te<CR>")
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 vim.keymap.set("n", "<leader>c", ":Telescope lsp_dynamic_workspace_symbols<CR>")
-vim.keymap.set("n", "<leader>d", ":25Lex<CR>")
+vim.keymap.set("n", "<leader>d", ":25vsplit .<CR>")
 vim.keymap.set("n", "<leader>e", ':e <C-R>=expand("%:p:h")<CR>/<C-n>')
 vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>")
 vim.keymap.set("n", "<leader>gd", ":Git diff origin/main...HEAD %<CR>")
@@ -628,10 +628,10 @@ require("lazy").setup({
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
   "tpope/vim-abolish",
-  "tpope/vim-vinegar",
   "tpope/vim-commentary",
   "tpope/vim-repeat",
   "tpope/vim-sensible",
+  { "stevearc/oil.nvim",   opts = {} },
   "folke/snacks.nvim",
   -- tools
   { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
