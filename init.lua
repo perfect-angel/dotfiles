@@ -100,6 +100,10 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
+vim.keymap.set("n", "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end,
+  { desc = "Ask opencode…" })
+vim.keymap.set("n", "<leader>os", function() require("opencode").select() end, { desc = "Execute opencode action…" })
+vim.keymap.set("n", "<leader>oo", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -125,10 +129,10 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
--- obsidian
-vim.keymap.set("n", "<leader>oo", ":ObsidianOpen<CR>")
-vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>")
-vim.keymap.set("n", "<leader>ot", ":ObsidianTOC<CR>")
+-- -- obsidian
+-- vim.keymap.set("n", "<leader>oo", ":ObsidianOpen<CR>")
+-- vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>")
+-- vim.keymap.set("n", "<leader>ot", ":ObsidianTOC<CR>")
 
 -- XXX PACKAGES
 vim.cmd([[packadd cfilter]])
@@ -155,6 +159,13 @@ require("lazy").setup({
   "nvim-tree/nvim-web-devicons",
   "mechatroner/rainbow_csv",
   "kivanceski/rsvp.nvim",
+  {
+    'goolord/alpha-nvim',
+    dependencies = { 'nvim-mini/mini.icons' },
+    config = function()
+      require 'alpha'.setup(require 'alpha.themes.theta'.config)
+    end
+  },
   -- lsp
   {
     "neovim/nvim-lspconfig",
@@ -621,6 +632,7 @@ require("lazy").setup({
   "tpope/vim-commentary",
   "tpope/vim-repeat",
   "tpope/vim-sensible",
+  "folke/snacks.nvim",
   -- tools
   { "michaelb/sniprun",    branch = "master",                 build = "sh install.sh", opts = {} },
   { "folke/zen-mode.nvim", opts = { window = { width = 60 } } },
@@ -651,6 +663,30 @@ require("lazy").setup({
       end,
     },
   },
+  -- AI
+  {
+    "nickjvandyke/opencode.nvim",
+    version = "*", -- Latest stable release
+    dependencies = { "folke/snacks.nvim" },
+    config = function()
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any; goto definition on the type or field for details
+      }
+
+      vim.o.autoread = true -- Required for `opts.events.reload`
+
+      vim.keymap.set({ "n", "x" }, "go", function() return require("opencode").operator("@this ") end,
+        { desc = "Add range to opencode", expr = true })
+      vim.keymap.set("n", "goo", function() return require("opencode").operator("@this ") .. "_" end,
+        { desc = "Add line to opencode", expr = true })
+
+      vim.keymap.set("n", "<S-C-u>", function() require("opencode").command("session.half.page.up") end,
+        { desc = "Scroll opencode up" })
+      vim.keymap.set("n", "<S-C-d>", function() require("opencode").command("session.half.page.down") end,
+        { desc = "Scroll opencode down" })
+    end,
+  }
 })
 
 vim.cmd([[filetype plugin indent on]])
