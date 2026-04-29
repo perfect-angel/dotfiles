@@ -70,7 +70,7 @@ vim.keymap.set("n", "q:", ":q")
 vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>")
 vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
 vim.keymap.set("n", "<leader><CR>", ":")
-vim.keymap.set("n", "<leader>a", ":te<CR>")
+vim.keymap.set("n", "<leader>a", ":ToggleTerm<CR>")
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 vim.keymap.set("n", "<leader>c", ":Telescope lsp_dynamic_workspace_symbols<CR>")
 vim.keymap.set("n", "<leader>d", ":25vsplit .<CR>")
@@ -173,6 +173,7 @@ vim.pack.add({
   { src = 'https://github.com/tpope/vim-sensible' },
   { src = 'https://github.com/stevearc/oil.nvim' },
   { src = 'https://github.com/folke/snacks.nvim' },
+  { src = "https://github.com/akinsho/toggleterm.nvim" },
   -- tools
   { src = 'https://github.com/michaelb/sniprun',                 branch = 'master' },
   { src = 'https://github.com/folke/zen-mode.nvim' },
@@ -690,6 +691,9 @@ require("oil").setup {}
 
 -- zen-mode
 require("zen-mode").setup { window = { width = 60 } }
+
+-- toggleterm.nvim
+require("toggleterm").setup()
 
 -- snacks.nvim
 require("snacks").setup()
