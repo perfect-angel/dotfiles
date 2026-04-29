@@ -89,10 +89,10 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
-vim.keymap.set("n", "<leader>oa", function() require("pi-mono").ask("@this: ", { submit = true }) end,
-  { desc = "Ask pi-mono…" })
-vim.keymap.set("n", "<leader>os", function() require("pi-mono").select() end, { desc = "Execute pi-mono action…" })
-vim.keymap.set("n", "<leader>oo", function() require("pi-mono").toggle() end, { desc = "Toggle pi-mono" })
+-- vim.keymap.set("n", "<leader>oa", function() require("pi-mono").ask("@this: ", { submit = true }) end,
+--   { desc = "Ask pi-mono…" })
+-- vim.keymap.set("n", "<leader>os", function() require("pi-mono").select() end, { desc = "Execute pi-mono action…" })
+-- vim.keymap.set("n", "<leader>oo", function() require("pi-mono").toggle() end, { desc = "Toggle pi-mono" })
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -178,7 +178,7 @@ vim.pack.add({
   { src = 'https://github.com/michaelb/sniprun',                 branch = 'master' },
   { src = 'https://github.com/folke/zen-mode.nvim' },
   -- AI
-  { src = 'https://github.com/badlogic/pi-mono.nvim',            branch = 'main' },
+  -- { src = 'https://github.com/badlogic/pi-mono.nvim',            branch = 'main' },
   -- snippets
   { src = 'https://github.com/L3MON4D3/LuaSnip' },
   { src = 'https://github.com/rafamadriz/friendly-snippets' },
