@@ -38,8 +38,6 @@ export VISUAL=$EDITOR
 # Local (nonmanaged) zsh config ~/.zshrc.local
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
-[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh
-
 # fzf
 source <(fzf --zsh)
 
@@ -58,6 +56,8 @@ esac
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# opencode
-export PATH=$HOME/.opencode/bin:$PATH
+# local neovim
 export PATH="$HOME/.local/nvim/bin:$PATH"
+
+# mise
+[ -x ~/.local/bin/mise ] && eval "$(~/.local/bin/mise activate zsh)"

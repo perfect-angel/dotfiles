@@ -50,7 +50,6 @@ vim.keymap.set("n", "<Down>", ":res -5<CR>")
 
 -- terminal
 vim.keymap.set("t", "jj", "<C-\\><C-n>")
-vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h")
 vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j")
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
@@ -66,16 +65,6 @@ vim.keymap.set("n", "<BS>", ":b#<CR>")
 vim.keymap.set("n", "?", "?\\v")
 vim.keymap.set("n", "Q", "@q")
 vim.keymap.set("n", "q:", ":q")
-
--- copy to local config for clerk
--- vim.cmd([[
--- function! ClerkShow()
---   exe "w"
---   exe "ConjureEval (nextjournal.clerk/show! \"" . expand("%:p") . "\")"
--- endfunction
-
--- nmap <silent> <localleader>cs :execute ClerkShow()<CR>
--- ]])
 
 -- leader mappings
 vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>")
@@ -100,10 +89,10 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
-vim.keymap.set("n", "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end,
-  { desc = "Ask opencode…" })
-vim.keymap.set("n", "<leader>os", function() require("opencode").select() end, { desc = "Execute opencode action…" })
-vim.keymap.set("n", "<leader>oo", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
+vim.keymap.set("n", "<leader>oa", function() require("pi-mono").ask("@this: ", { submit = true }) end,
+  { desc = "Ask pi-mono…" })
+vim.keymap.set("n", "<leader>os", function() require("pi-mono").select() end, { desc = "Execute pi-mono action…" })
+vim.keymap.set("n", "<leader>oo", function() require("pi-mono").toggle() end, { desc = "Toggle pi-mono" })
 vim.keymap.set("n", "<leader>p", ":cw<CR>")
 vim.keymap.set("n", "<leader>q", ":qa<CR>")
 vim.keymap.set("n", "<leader>r", ":%s/")
@@ -114,13 +103,11 @@ vim.keymap.set("n", "<leader>sl", ":vsplit<CR><C-w>l")
 vim.keymap.set("n", "<leader>tt", ":TestNearest<CR>")
 vim.keymap.set("n", "<leader>tf", ":TestFile<CR>")
 vim.keymap.set("n", "<leader>ti", ":TestVisit<CR>")
-vim.keymap.set("n", "<leader>uo", ":ObsidianOpen<CR>")
-vim.keymap.set("n", "<leader>uu", ":ObsidianSearch<CR>")
 vim.keymap.set("n", "<leader>va", ":e ~/dotfiles/.bash_aliases<CR>")
 vim.keymap.set("n", "<leader>vd", ":e ~/local-init.lua<CR>")
 vim.keymap.set("n", "<leader>vl", ":e ./.nvim/init.lua<CR>")
 vim.keymap.set("n", "<leader>vti", ":e ~/things/wiki/index.md<CR>")
-vim.keymap.set("n", "<leader>vtt", ":e ~/things/wiki/tasks.md<CR>")
+vim.keymap.set("n", "<leader>vtt", ":e ~/things/todo.txt<CR>")
 vim.keymap.set("n", "<leader>vv", ":e ~/dotfiles/init.lua<CR>")
 vim.keymap.set("n", "<leader>vz", ":e ~/dotfiles/.zshrc<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
@@ -134,10 +121,6 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
--- -- obsidian
--- vim.keymap.set("n", "<leader>oo", ":ObsidianOpen<CR>")
--- vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>")
--- vim.keymap.set("n", "<leader>ot", ":ObsidianTOC<CR>")
 
 -- XXX PACKAGES (vim.pack - Neovim's built-in plugin manager)
 -- Install plugins by running :sync (or vim.pack.start())
@@ -193,10 +176,8 @@ vim.pack.add({
   -- tools
   { src = 'https://github.com/michaelb/sniprun',                 branch = 'master' },
   { src = 'https://github.com/folke/zen-mode.nvim' },
-  -- obsidian
-  { src = 'https://github.com/epwalsh/obsidian.nvim',            tag = 'v3.9.0' },
   -- AI
-  { src = 'https://github.com/nickjvandyke/opencode.nvim',       branch = 'main' },
+  { src = 'https://github.com/badlogic/pi-mono.nvim',            branch = 'main' },
   -- snippets
   { src = 'https://github.com/L3MON4D3/LuaSnip' },
   { src = 'https://github.com/rafamadriz/friendly-snippets' },
@@ -207,6 +188,67 @@ vim.pack.add({
   { src = 'https://github.com/hrsh7th/cmp-buffer' },
   { src = 'https://github.com/hrsh7th/cmp-path' },
 })
+
+-- XXX JOURNAL
+-- WriteJournal: Open journal with today's entry, creating the date hierarchy if needed
+local function WriteJournal()
+  local journal_path = vim.fn.expand("~/things/wiki/journal.md")
+  local today = os.date("*t")
+
+  -- Get day name
+  local day_names = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" }
+  local day_name = day_names[today.wday]
+
+  -- Get month name
+  local month_names = { "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" }
+  local month_name = month_names[today.month]
+
+  local year = tostring(today.year)
+  local month = string.format("%02d", today.month)
+  local day = string.format("%02d", today.day)
+  local date_id = year .. "-" .. month .. "-" .. day
+
+  -- Build hierarchy lines
+  local year_header = "## " .. year
+  local month_header = "### " .. year .. "-" .. month .. " " .. month_name
+  local day_header = "#### " .. date_id .. " " .. day_name
+
+  -- Open the journal file
+  vim.cmd("e " .. journal_path)
+  vim.cmd("normal! G")
+
+  local content = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+
+  -- Check if today's entry exists
+  if not content:match(date_id) then
+    local new_entry = {}
+
+    -- Check if year header exists, if not add it
+    if not content:match(year_header:gsub("%-%", "%-%%-")) then
+      vim.list_extend(new_entry, { "", year_header })
+    end
+
+    -- Check if month header exists, if not add it
+    local month_pattern = month_header:gsub("%-%", "%-%%-"):gsub("%(", "%("):gsub("%)", "%)")
+    if not content:match(month_header) then
+      vim.list_extend(new_entry, { "", month_header })
+    end
+
+    -- Always add day header
+    vim.list_extend(new_entry, { "", day_header })
+
+    vim.api.nvim_buf_set_lines(0, -1, -1, false, new_entry)
+  end
+
+  -- Search for today's entry and position cursor
+  vim.cmd("normal! G")
+  vim.cmd('/\\<' .. date_id .. '\\<CR>')
+  vim.cmd("normal! j")
+  vim.cmd("startinsert")
+end
+
+vim.keymap.set("n", "<leader>vj", WriteJournal, { desc = "WriteJournal: Create today's journal entry" })
 
 vim.g.AutoPairsMapCR = 0
 vim.g["test#strategy"] = "asyncrun"
@@ -652,8 +694,16 @@ require("zen-mode").setup { window = { width = 60 } }
 -- snacks.nvim
 require("snacks").setup()
 
--- opencode.nvim
-vim.g.opencode_opts = {}
+-- pi-mono.nvim
+vim.g.pi_opts = {
+  binary = "pi-mono",
+  provider = {
+    enabled = "snacks",
+    snacks = {
+      win = { position = "right", enter = false },
+    },
+  },
+}
 vim.o.autoread = true
 
 -- nvim-snippets (disabled - requires nvim-cmp)
@@ -661,21 +711,6 @@ vim.o.autoread = true
 --   search_paths = { "~/dotfiles/snippets" },
 -- })
 
--- obsidian.nvim
-require("obsidian").setup({
-  workspaces = {
-    {
-      name = "wiki",
-      path = "~/things/wiki",
-    },
-  },
-  note_frontmatter_func = function(note)
-    return {
-      id = note.id,
-      tags = note.tags,
-    }
-  end,
-})
 
 vim.cmd([[filetype plugin indent on]])
 vim.cmd([[syntax enable]])

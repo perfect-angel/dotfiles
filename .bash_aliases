@@ -26,6 +26,7 @@ alias gsup='git push --recurse-submodules=on-demand'
 
 # No time to type those other letters
 alias ec="emacsclient"
+alias nv="nvr -s"
 
 # easier xclipping
 alias xclip="xclip -selection c"
@@ -80,7 +81,3 @@ read_secret () {
     aws secretsmanager get-secret-value --secret-id $1 --query SecretString --output text
 }
 alias tf=terraform
-
-alias livebook="docker run -p 8080:8080 -p 8081:8081 --pull always -u $(id -u):$(id -g) -v $(pwd):/data livebook/livebook"
-
-alias occcc=opencode
