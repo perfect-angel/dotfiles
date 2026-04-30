@@ -27,7 +27,7 @@ vim.o.clipboard = "unnamedplus"
 vim.o.foldmethod = "expr"
 vim.o.wrap = false
 vim.o.foldlevel = 99
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.g.netrw_banner = 0
@@ -79,8 +79,7 @@ vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>")
 vim.keymap.set("n", "<leader>gd", ":Git diff origin/main...HEAD %<CR>")
 vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
-vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
-vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
+vim.keymap.set("n", "<leader>i", ":echo unused<CR>")
 vim.keymap.set("n", "<leader>j", ":Telescope current_buffer_fuzzy_find<CR>")
 vim.keymap.set("n", "<leader>k", ":q<CR>")
 vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
@@ -89,6 +88,7 @@ vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 vim.keymap.set("n", "<leader>n", ":tabe<CR>")
+vim.keymap.set("n", "<leader>o", "echo unused<CR>")
 -- vim.keymap.set("n", "<leader>oa", function() require("pi-mono").ask("@this: ", { submit = true }) end,
 --   { desc = "Ask pi-mono…" })
 -- vim.keymap.set("n", "<leader>os", function() require("pi-mono").select() end, { desc = "Execute pi-mono action…" })
@@ -104,6 +104,7 @@ vim.keymap.set("n", "<leader>tt", ":TestNearest<CR>")
 vim.keymap.set("n", "<leader>tf", ":TestFile<CR>")
 vim.keymap.set("n", "<leader>ti", ":TestVisit<CR>")
 vim.keymap.set("n", "<leader>va", ":e ~/dotfiles/.bash_aliases<CR>")
+vim.keymap.set("n", "<leader>u", ":echo unused<CR>")
 vim.keymap.set("n", "<leader>vd", ":e ~/local-init.lua<CR>")
 vim.keymap.set("n", "<leader>vl", ":e ./.nvim/init.lua<CR>")
 vim.keymap.set("n", "<leader>vti", ":e ~/things/wiki/index.md<CR>")
@@ -121,6 +122,10 @@ vim.keymap.set("n", "<leader>z", function()
   end
 end)
 
+-- Built-in tools
+vim.keymap.set("n", "<leader>U", vim.cmd.UndotreeToggle, { desc = "Toggle Undotree" })
+vim.keymap.set("n", "<leader>dt", vim.cmd.DiffTool, { desc = "Open DiffTool" })
+
 
 -- XXX PACKAGES (vim.pack - Neovim's built-in plugin manager)
 -- Install plugins by running :sync (or vim.pack.start())
@@ -129,7 +134,6 @@ vim.pack.add({
   -- cosmetic
   { src = 'https://github.com/stevearc/dressing.nvim' },
   { src = 'https://github.com/nvim-lualine/lualine.nvim' },
-  { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
   { src = 'https://github.com/mechatroner/rainbow_csv' },
   { src = 'https://github.com/goolord/alpha-nvim' },
   { src = 'https://github.com/nvim-mini/mini.icons' },
@@ -175,7 +179,6 @@ vim.pack.add({
   { src = 'https://github.com/folke/snacks.nvim' },
   { src = "https://github.com/akinsho/toggleterm.nvim" },
   -- tools
-  { src = 'https://github.com/michaelb/sniprun',                 branch = 'master' },
   { src = 'https://github.com/folke/zen-mode.nvim' },
   -- AI
   -- { src = 'https://github.com/badlogic/pi-mono.nvim',            branch = 'main' },
@@ -256,6 +259,9 @@ vim.g["test#strategy"] = "asyncrun"
 
 -- Enable nvim-cmp for completion
 vim.opt.completeopt = "menu,menuone,noselect"
+
+-- Enable native built-in autocomplete XXX
+vim.opt.autocomplete = true
 
 -- nvim-cmp setup
 local cmp = require("cmp")
@@ -548,24 +554,9 @@ vim.keymap.set("o", "r", function() require("flash").remote() end, { desc = "Rem
 vim.keymap.set({ "o", "x" }, "R", function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
 vim.keymap.set("c", "<c-s>", function() require("flash").toggle() end, { desc = "Toggle Flash Search" })
 
--- Telescope keymaps
-vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>")
-vim.keymap.set("n", "<leader>;", ":Telescope commands<CR>")
-vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
-vim.keymap.set("n", "<leader>c", ":Telescope lsp_dynamic_workspace_symbols<CR>")
-vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>")
-vim.keymap.set("n", "<leader>h", ":Telescope help_tags<CR>")
-vim.keymap.set("n", "<leader>j", ":Telescope current_buffer_fuzzy_find<CR>")
-vim.keymap.set("n", "<leader>m", ":Telescope oldfiles<CR>")
 
--- vim-test keymaps
-vim.keymap.set("n", "<leader>tt", ":TestNearest<CR>")
-vim.keymap.set("n", "<leader>tf", ":TestFile<CR>")
-vim.keymap.set("n", "<leader>ti", ":TestVisit<CR>")
 
--- Sniprun keymaps
-vim.keymap.set("n", "<leader>i", ":SnipRun<CR>")
-vim.keymap.set("v", "<leader>i", ":SnipRun<CR>")
+
 
 -- Which-key extra keymap
 vim.keymap.set("n", "<leader>?", function()
@@ -672,11 +663,13 @@ require("nvim-treesitter").setup {
 require("which-key").setup {
   preset = "modern",
   spec = {
-    { "<leader>l", group = "diagnostics" },
-    { "<leader>v", group = "vim config" },
-    { "<leader>s", group = "splits" },
-    { "<leader>t", group = "tests" },
-    { "<leader>g", group = "git" },
+    { "<leader>l",  group = "diagnostics" },
+    { "<leader>v",  group = "vim config" },
+    { "<leader>s",  group = "splits" },
+    { "<leader>t",  group = "tests" },
+    { "<leader>g",  group = "git" },
+    { "<leader>U",  desc = "Undotree" },
+    { "<leader>dt", desc = "DiffTool" },
   },
 }
 
@@ -698,7 +691,7 @@ require("toggleterm").setup()
 -- snacks.nvim
 require("snacks").setup()
 
--- pi-mono.nvim
+-- pi-mono.nvim currently unused TODO
 vim.g.pi_opts = {
   binary = "pi-mono",
   provider = {
@@ -710,7 +703,7 @@ vim.g.pi_opts = {
 }
 vim.o.autoread = true
 
--- nvim-snippets (disabled - requires nvim-cmp)
+-- nvim-snippets (disabled - requires nvim-cmp) TODO
 -- require("snippets").setup({
 --   search_paths = { "~/dotfiles/snippets" },
 -- })
